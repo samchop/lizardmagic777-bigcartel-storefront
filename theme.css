@@ -3987,5 +3987,131 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
   .lm-coven__form { flex-direction: column; }
 }
 
+/* ==========================================================================
+   LIZARD MAGIC · HEADER + FOOTER (every page)
+   ========================================================================== */
+
+.lm-announce {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  padding: 10px 44px;
+  background: var(--lm-ink);
+  font: 700 10px/1.6 var(--lm-font-caps);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--lm-sand);
+}
+.lm-announce__today { color: var(--lm-gold); }
+
+.lm-header {
+  display: block;
+  max-width: none;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: left;
+  border-bottom: var(--lm-rule);
+}
+.lm-header .lm-header__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 44px;
+  font: 700 11px var(--lm-font-caps);
+  letter-spacing: 3px;
+  line-height: 1;
+}
+.lm-header .lm-header__inner * { text-transform: uppercase; }
+.lm-header__left { display: flex; align-items: center; }
+.lm-header .lm-header__nav ul { display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.lm-header .lm-header__inner a,
+.lm-header .lm-header__inner button {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1.5px solid transparent;
+  background: none;
+  color: var(--lm-cream);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+.lm-header .lm-header__inner a:hover,
+.lm-header .lm-header__inner button:hover,
+.lm-header .lm-header__inner a:focus-visible,
+.lm-header .lm-header__inner button:focus-visible {
+  color: var(--lm-gold);
+  border-bottom: 1.5px solid var(--lm-gold);
+  text-decoration: none;
+}
+.lm-header .lm-header__nav a[aria-current="page"] { color: var(--lm-gold); }
+.lm-header .lm-header__inner .lm-header__menu { display: none; }
+.lm-header .lm-header__inner .lm-header__brand {
+  padding: 0;
+  border: 0;
+  font: 400 42px/1 var(--lm-font-display);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+.lm-header .lm-header__inner .lm-header__brand:hover { border: 0; }
+.lm-header__right { display: flex; justify-content: flex-end; align-items: center; gap: 24px; }
+.lm-header .lm-header__inner .lm-header__cart { color: var(--lm-gold); }
+.lm-header .lm-header__inner .lm-header__cart:hover { color: var(--lm-cream); border-bottom-color: var(--lm-cream); }
+
+.lm-footer {
+  padding: 20px 44px;
+  background: transparent;
+  color: #c9a98a;
+  font: 700 10px/1.6 var(--lm-font-caps);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.lm-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  max-width: 1192px;
+  margin: 0 auto;
+}
+footer.lm-footer * { text-transform: uppercase; }
+.lm-footer a { color: inherit; transition: color .2s ease; }
+.lm-footer a:hover { color: var(--lm-gold); text-decoration: none; }
+.lm-footer__links ul { display: flex; flex-wrap: wrap; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.lm-footer__links li + li::before { content: "·"; margin: 0 10px; }
+.lm-footer .footer-custom-content { max-width: 1192px; margin: 0 auto 12px; text-transform: none; letter-spacing: 0; font: 400 12px/1.6 var(--lm-font-mono); }
+body:not([data-bc-page-type="home"]) #main { padding-top: 48px; }
+.lm-footer__credit { display: flex; justify-content: center; margin-top: 16px; opacity: .7; }
+
+@media screen and (max-width: 900px) {
+  .lm-header .lm-header__inner { padding: 18px 32px; gap: 16px; }
+  .lm-header .lm-header__nav ul { column-gap: 18px; }
+  .lm-header .lm-header__inner .lm-header__brand { font-size: 34px; }
+}
+
+/* Matches "Home · mobile": MENU · wordmark · CART */
+@media screen and (max-width: 768px) {
+  .lm-announce { padding: 10px 16px; font-size: 8px; letter-spacing: 2px; }
+  .lm-announce__label, .lm-announce__sep, .lm-announce__extra { display: none; }
+
+  .lm-header .lm-header__inner { padding: 16px 20px; font-size: 10px; letter-spacing: 2px; }
+  .lm-header .lm-header__inner .lm-header__menu { display: inline-flex; }
+  .lm-header .lm-header__inner .lm-header__search { display: none; }
+  .lm-header .lm-header__inner .lm-header__brand { font: 900 28px/1 var(--lm-font-gothic); }
+
+  .lm-footer { padding: 24px 20px 28px; }
+  .lm-footer__inner { flex-direction: column; text-align: center; gap: 14px; }
+}
+
 /* NCL Enigmatic: paste its @font-face rule here (see README). Until then the
    display type falls back to Grenze Gotisch. */

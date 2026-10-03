@@ -26,6 +26,19 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
   mailing-list form URL to show the email field. Otherwise the button links
   to Instagram (if set) or the contact page.
 
+## Header + footer (layout.html)
+
+- **Announcement bar:** today's affirmation, followed by the Announcement
+  text from Customize Design. If that's empty it shows "Live arrival
+  guaranteed · Free shipping over $500".
+- **Header:** Live Geckos / Merch / Care Guide on the left, the store name as
+  the wordmark in the middle, Search and Cart on the right. On phones it's
+  MENU · wordmark · CART.
+- **Footer:** @lizardmagic777 (links to Instagram when that's set in
+  Customize), your custom pages except the Care Guide, Big Cartel's required
+  pages and Contact, then "Made & raised with love in Texas".
+- The affirmation list lives in the script near the end of `layout.html`.
+
 ## NCL Enigmatic
 
 The headline font is a commercial font, so it is not committed to this public

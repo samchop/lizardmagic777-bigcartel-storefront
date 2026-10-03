@@ -275,21 +275,8 @@
 </div>
 
 <script>
-  /* Lizard Magic: daily affirmation + name sigils */
+  /* Lizard Magic: name sigils */
   (function () {
-    var affirmations = [
-      'I am a vessel of infinite abundance.',
-      'What I nurture, nurtures me.',
-      'Scarcity has no address in my home.',
-      'I climb toward the gold.',
-      'My patience is a spell that always works.'
-    ];
-    var now = new Date();
-    var day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
-    document.querySelectorAll('[data-lm-affirmation]').forEach(function (el) {
-      el.textContent = affirmations[day % affirmations.length];
-    });
-
     // A sigil is built from its words: vowels and repeated letters drop out,
     // and what's left is traced on a three-ring letter wheel.
     function sigil(text, ring) {
