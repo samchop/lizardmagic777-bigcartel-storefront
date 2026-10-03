@@ -1,0 +1,375 @@
+{% comment %}Initialize key template variables{% endcomment %}
+{% assign has_slideshow = false %}
+{% if theme.image_sets.slideshow.size > 0 %}{% assign has_slideshow = true %}{% endif %}
+
+{% assign has_hero_image = false %}
+{% if theme.images.welcome_image != blank %}{% assign has_hero_image = true %}{% endif %}
+
+{% assign has_image = false %}
+{% if has_slideshow or has_hero_image %}
+  {% assign has_image = true %}
+{% endif %}
+
+{% assign has_welcome_content = false %}
+{% if theme.welcome_text != blank or theme.welcome_button_text != blank %}
+  {% assign has_welcome_content = true %}
+{% endif %}
+
+{% if has_image %}
+  <div class="home-hero home-hero--{{ theme.welcome_image_width }} {% if has_slideshow %}home-hero--slideshow{% endif %} {% unless theme.images.welcome_image != blank or has_slideshow %}home-hero--no-image{% endunless %}">
+    {% if has_slideshow %}
+      <div class="splide home-slideshow" data-autoplay="{{ theme.homepage_slideshow_autoplay }}">
+        <div class="splide__track">
+          <div class="splide__list">
+            {% for image in theme.image_sets.slideshow %}
+              <div class="splide__slide"{% if theme.welcome_image_link != blank %} title="{{ theme.welcome_image_link }}"{% endif %}>
+                <img
+                  alt="Slideshow image {{ forloop.index }}"
+                  {% if forloop.index == 1 %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                  class="slideshow-image"
+                  srcset="{{ image.url | constrain: 1068 }}, {{ image.url | constrain: 2136 }} 2x"
+                  src="{{ image.url | constrain: 1068 }}">
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% elsif has_hero_image %}
+      <img
+        alt=""
+        class="home-hero-image lazyload blur-up"
+        src="{{ theme.images.welcome_image.url | constrain: 400 }}"
+        data-srcset="
+          {{ theme.images.welcome_image.url | constrain: 800 }} 800w,
+          {{ theme.images.welcome_image.url | constrain: 1200 }} 1200w,
+          {{ theme.images.welcome_image.url | constrain: 1600 }} 1600w,
+          {{ theme.images.welcome_image.url | constrain: 2000 }} 2000w,
+        "
+        data-sizes="auto"
+        {% if theme.welcome_image_link != blank %}title="{{ theme.welcome_image_link }}"{% endif %}
+      >
+    {% endif %}
+    {% if has_slideshow == false %}
+      <div class="home-hero-overlay"></div>
+    {% endif %}
+    {% if has_image and has_welcome_content %}
+      <div class="home-hero-content home-hero-content--slideshow">
+        {% if theme.welcome_text != blank %}
+          <div class="home-hero-text">{{ theme.welcome_text }}</div>
+        {% endif %}
+        {% if theme.welcome_button_text != blank %}
+          <a href="{% if theme.welcome_button_behavior == 'scroll' %}#{% elsif theme.welcome_button_link != blank %}{{ theme.welcome_button_link }}{% else %}/products{% endif %}" class="home-hero-button">{{ theme.welcome_button_text }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% if theme.home_featured_video_url %}
+  {% assign featured_video_header = t['home.featured_video'] %}
+  <div class="home-featured-video-section">
+    {% if featured_video_header != blank %}
+      <h1 class="page-title">{{ featured_video_header }}</h1>
+    {% endif %}
+    <div id="featured-video"></div>
+  </div>
+{% endif %}
+
+<div class="home-content">
+  {%- assign can_show_categories = false -%}
+  {%- if theme.featured_categories > 0 and categories.active.size > 0 -%}
+    {%- assign can_show_categories = true -%}
+  {%- endif -%}
+
+  <div class="home-featured-products">
+    <div class="featured-container">
+      {% assign featured_header = t['home.featured'] %}
+      {% assign featured_text = theme.homepage_featured_text %}
+      {% assign featured_text_position = theme.homepage_featured_text_position %}
+
+      {% comment %} Show featured text above when position is "above" OR when there are no featured products and no featured categories {% endcomment %}
+      {% if featured_text != blank %}
+        {% assign show_above = false %}
+        {% if featured_text_position == "above" %}
+          {% assign show_above = true %}
+        {% endif %}
+        {% if theme.featured_products == 0 and can_show_categories == false %}
+          {% assign show_above = true %}
+        {% endif %}
+        {% if show_above %}
+          <div class="featured-message">{{ featured_text }}</div>
+        {% endif %}
+      {% endif %}
+
+      {% if theme.featured_products > 0 %}
+        <h1 class="featured-title">{{ featured_header }}</h1>
+      {% endif %}
+
+      {% comment %} Only show within if we have products AND position is within {% endcomment %}
+      {% if featured_text != blank and featured_text_position == "within" and theme.featured_products > 0 %}
+        <div class="featured-message">{{ featured_text }}</div>
+      {% endif %}
+    </div>
+
+    {% if theme.featured_products > 0 %}
+      {% paginate products from products.current by theme.featured_products order:theme.featured_order %}
+        {% assign num_results = paginate.items %}
+        {% if paginate.next.is_link %}
+          {% assign num_results = paginate.current_offset | plus: paginate.page_size %}
+        {% endif %}
+        {% if products != blank %}
+          <div class="product-list-container">
+            <div class="product-list product-list--{{ theme.featured_products_layout }} {% if num_results < 3 %}product-list--center{% endif %}">
+              {% for product in products %}
+                {% assign image_width = product.image.width | times: 1.0 %}
+                {% assign image_height = product.image.height | times: 1.0 %}
+                {% assign aspect_ratio = image_width | divided_by: image_height %}
+                {% assign product_status = '' %}
+                {% case product.status %}
+                  {% when 'active' %}
+                    {% if product.on_sale %}
+                      {% assign product_status = t['products.on_sale'] %}
+                    {% endif %}
+                  {% when 'sold-out' %}
+                    {% assign product_status = t['products.sold_out'] %}
+                  {% when 'coming-soon' %}
+                    {% assign product_status = t['products.coming_soon'] %}
+                {% endcase %}
+                {% capture image_class %}
+                  {% if product.image.height > product.image.width %}
+                    image-tall
+                  {% elsif product.image.height < product.image.width %}
+                    image-wide
+                  {% else %}
+                    image-square
+                  {% endif %}
+                {% endcapture %}
+                {% capture status_class %}{% if product.status == 'active' and product.on_sale %}status-primary{% else %}status-secondary{% endif %}{% endcapture %}
+                <div class="product-list-thumb {{ product.css_class }}">
+                  <a class="product-list-link {% if theme.featured_products_layout != 'alternating' %}product-list-link--{{ theme.product_grid_info }}{% endif %} {{ theme.alternating_product_image_style }}" href="{{ product.url }}" title="{{ product.name | escape }}">
+                    <div class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}">
+                      <img
+                        alt=""
+                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
+                        src="{{ product.image | product_image_url | constrain: 20 }}"
+                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
+                        data-srcset="
+                          {{ product.image | product_image_url | constrain: 240 }} 240w,
+                          {{ product.image | product_image_url | constrain: 320 }} 320w,
+                          {{ product.image | product_image_url | constrain: 400 }} 400w,
+                          {{ product.image | product_image_url | constrain: 540 }} 540w,
+                          {{ product.image | product_image_url | constrain: 600 }} 600w,
+                          {{ product.image | product_image_url | constrain: 800 }} 800w,
+                          {{ product.image | product_image_url | constrain: 960 }} 960w
+                        "
+                        data-sizes="auto"
+                      >
+                      {% if product_status != blank %}<div class="product-list-thumb-status {{ status_class }}">{{ product_status }}</div>{% endif %}
+                    </div>
+                    <div class="product-list-thumb-info">
+                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ product.name }}</div>
+                      <div class="product-list-thumb-price">
+                        {% assign hide_price = false %}
+                        {% if product.status == 'sold-out' and theme.show_sold_out_product_prices == false %}
+                          {% assign hide_price = true %}
+                        {% endif -%}
+                        {% if product.status == 'coming-soon' and theme.show_coming_soon_product_prices == false %}
+                          {% assign hide_price = true %}
+                        {% endif %}
+
+                        {% if product.has_password_protection and theme.show_password_protected_product_prices == false %}
+                          {% assign hide_price = true %}
+                        {% endif %}
+                        {% unless hide_price %}
+                          {{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}
+
+                          {% if product.price_suffix != blank %}
+                            {% assign variable_price_shown = true %}
+                            {% if theme.product_variable_pricing_display_format == "min_only" or theme.product_variable_pricing_display_format == "max_only" %}
+                              {% assign variable_price_shown = false %}
+                            {% endif %}
+
+                            {% if product.variable_pricing and variable_price_shown %}
+                              {% assign formatted_suffix = '(' | append: product.price_suffix | append: ')' %}
+                            {% else %}
+                              {% assign formatted_suffix = product.price_suffix %}
+                            {% endif %}
+                            <span class="price-suffix">{{ formatted_suffix }}</span>
+                          {% endif %}
+                        {% endunless %}
+                      </div>
+                      {% unless hide_price %}
+                        {% if product.options.size > 1 and theme.show_product_variant_count_in_grid %}
+                          <div class="product-list-thumb-options-description">
+                            {{ product.options.size }} {{ t['products.variants'] }}
+                          </div>
+                        {% endif %}
+                      {% endunless %}
+                      {% if theme.featured_products_layout == 'alternating' %}
+                        <button class="button product-list-shop-now">{{ t['navigation.shop'] }}</button>
+                      {% endif %}
+
+                      {% if product_status != blank %}<div class="product-list-thumb-status {{ status_class }}">{{ product_status }}</div>{% endif %}
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+          </div>
+        </div>
+        {% else %}
+          <div class="message-banner message-banner--centered message-banner--no-bg">{{ t['products.no_products'] }}</div>
+        {% endif %}
+      {% endpaginate %}
+    {% endif %}
+  </div>
+  {% if can_show_categories %}
+    {% assign category_collages_enabled = false %}
+    {% if theme.features.has_theme_category_collages %}
+      {% assign category_collages_enabled = true %}
+    {% endif %}
+    <div class="featured-categories" data-category-collages-enabled="{{ category_collages_enabled }}">
+      {% if t['home.featured_categories'] %}
+        <h2 class="featured-title">{{ t['home.featured_categories'] }}</h2>
+      {% endif %}
+      {% comment %}Show featured text with "within" position when there are no featured products{% endcomment %}
+      {% if theme.homepage_featured_text != blank and theme.homepage_featured_text_position == "within" and theme.featured_products == 0 %}
+        <div class="featured-message">{{ theme.homepage_featured_text }}</div>
+      {% endif %}
+      {% assign category_list_style = theme.home_page_categories_style %}
+      <div class="product-list product-list--center category-list category-list--{{ category_list_style }} {% if num_results < 3 %}product-list--center{% endif %}">
+        {% for category in categories.active limit:theme.featured_categories %}
+          {% if theme.home_page_categories_style == "text" %}
+            <a class="button button--secondary" href="{{ category.url }}">{{ category.name }}</a>
+          {% else %}
+            <div class="product-list-thumb category">
+              <a class="product-list-link category-link category-link--{{ theme.home_page_categories_name_style }}" href="{{ category.url }}" title="{{ category.name | escape }}">
+                {% comment %}Determine if category collages should be enabled based on feature flag setting{% endcomment %}
+                {% if category_collages_enabled == false %}
+                  {% for product in category.products limit:1 %}
+                    {% assign image_width = product.image.width | times: 1.0 %}
+                    {% assign image_height = product.image.height | times: 1.0 %}
+                    {% assign aspect_ratio = image_width | divided_by: image_height %}
+
+                    {% capture image_class %}
+                      {% if product.image.height > product.image.width %}
+                        image-tall
+                      {% elsif product.image.height < product.image.width %}
+                        image-wide
+                      {% else %}
+                        image-square
+                      {% endif %}
+                    {% endcapture %}
+
+                    <div class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}">
+                      <img
+                        alt=""
+                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
+                        src="{{ product.image | product_image_url | constrain: 20 }}"
+                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
+                        data-srcset="
+                          {{ product.image | product_image_url | constrain: 240 }} 240w,
+                          {{ product.image | product_image_url | constrain: 320 }} 320w,
+                          {{ product.image | product_image_url | constrain: 400 }} 400w,
+                          {{ product.image | product_image_url | constrain: 540 }} 540w,
+                          {{ product.image | product_image_url | constrain: 600 }} 600w,
+                          {{ product.image | product_image_url | constrain: 800 }} 800w,
+                          {{ product.image | product_image_url | constrain: 960 }} 960w
+                        "
+                        data-sizes="auto"
+                      >
+                    </div>
+                    <div class="product-list-thumb-info">
+                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ category.name }}</div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                
+                  {% if category.products.size > 0 %}
+                    {% assign first_product = category.products.first %}
+                    {% assign image_width = first_product.image.width | times: 1.0 %}
+                    {% assign image_height = first_product.image.height | times: 1.0 %}
+                    {% assign aspect_ratio = image_width | divided_by: image_height %}
+                    
+                    {% comment %}
+                      Determine which image URLs to use based on the image style setting
+                    {% endcomment %}
+                    {% assign image_urls = "" %}
+        
+                    {% if theme.home_page_categories_image_style == "grid" %}
+                      {% capture image_urls %}
+                        [{% for product in category.products limit:6 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
+                      {% endcapture %}
+                    {% elsif theme.home_page_categories_image_style == "strip" %}
+                      {% capture image_urls %}
+                        [{% for product in category.products limit:4 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
+                      {% endcapture %}
+                    {% elsif theme.home_page_categories_image_style == "featured" %}
+                      {% capture image_urls %}
+                        [{% for product in category.products limit:4 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
+                      {% endcapture %}
+                    {% else %}
+                      {% comment %} Fallback to single image (first product) {% endcomment %}
+                      {% capture image_urls %}
+                        ["{{ first_product.image | product_image_url | constrain: 800 }}"]
+                      {% endcapture %}
+                    {% endif %}
+
+                    <div
+                      class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}" 
+                      id="category-collage-{{ category.id }}"
+                      data-image-urls='{{ image_urls | strip }}'
+                      data-image-style="{{ theme.home_page_categories_image_style }}"
+                    >
+                      <!-- Default placeholder while image is being loaded -->
+                      <img
+                        alt=""
+                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
+                        src="{{ first_product.image | product_image_url | constrain: 30 }}"
+                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
+                      >
+                    </div>
+                    <div class="product-list-thumb-info">
+                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ category.name }}</div>
+                      {% if theme.home_page_categories_product_count_display %}
+                        <div class="product-list-thumb-price category-count">
+                          {{ category.products.size | pluralize: t['products.product'], t['products.products'] }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {%- comment -%}
+    All products button should appear after the last featured section
+    ONLY when eligible (i.e., when there are more products than currently displayed)
+  {%- endcomment -%}
+  {%- if products.all.size > 0 -%}
+    {%- assign show_all_products_button = false -%}
+
+    {%- comment -%} Case 1: Featured products are shown - only eligible if there are more products than displayed {%- endcomment -%}
+    {%- if theme.featured_products > 0 -%}
+      {%- assign total_products = products.all.size -%}
+      {%- assign displayed_products = theme.featured_products -%}
+      {%- if displayed_products < total_products -%}
+        {%- assign show_all_products_button = true -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- comment -%} Case 2: No featured products shown - eligible because products aren't displayed yet {%- endcomment -%}
+      {%- assign show_all_products_button = true -%}
+    {%- endif -%}
+
+    {%- if theme.homepage_show_all_items_link and show_all_products_button -%}
+      {%- assign all_products_button_text = t['navigation.all_products'] -%}
+      {%- if all_products_button_text != blank -%}
+        <a class="button button--centered button--secondary all-products-button" href="/products">{{ all_products_button_text }}</a>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+</div>
