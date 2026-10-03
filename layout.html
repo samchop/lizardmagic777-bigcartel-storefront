@@ -30,7 +30,7 @@
   <body id="{{ page.permalink }}" class="{{ page.category }} preloader transition-preloader" data-bc-page-type="{% if page.category == 'custom' %}custom{% else %}{{ page.permalink }}{% endif %}">
     {% comment %} Lizard Magic announcement bar: today's affirmation, then the Customize announcement text (or the defaults) {% endcomment %}
     <div class="lm-announce" role="complementary" aria-label="Announcements">
-      <span class="lm-announce__today">✦ <span class="lm-announce__label">Today: </span><span data-lm-affirmation>I am a vessel of infinite abundance.</span></span>
+      <span class="lm-announce__today">✦ <span data-lm-affirmation>I am a vessel of infinite abundance ✦</span></span>
       {% if theme.announcement_message_text != blank %}
         <span class="lm-announce__sep" aria-hidden="true">·</span><span class="lm-announce__extra">{{ theme.announcement_message_text }}</span>
       {% else %}
