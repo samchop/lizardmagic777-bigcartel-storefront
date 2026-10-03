@@ -1,375 +1,318 @@
-{% comment %}Initialize key template variables{% endcomment %}
-{% assign has_slideshow = false %}
-{% if theme.image_sets.slideshow.size > 0 %}{% assign has_slideshow = true %}{% endif %}
+{% comment %}
+  Lizard Magic home page.
+  Built from the "Crested Gecko Store Mockups" design (Home · desktop / Home · mobile).
+  Styles live at the bottom of theme.css under "LIZARD MAGIC · HOME".
 
-{% assign has_hero_image = false %}
-{% if theme.images.welcome_image != blank %}{% assign has_hero_image = true %}{% endif %}
+  Things you can change without touching the markup below:
+  - lm_geckos_permalink / lm_merch_permalink: the category permalinks used for the
+    "Chosen this cycle" and "Merch" sections.
+  - lm_newsletter_action: paste a mailing-list form action URL (Mailchimp, Kit, etc.)
+    to turn on the email signup. Leave it blank to show an Instagram link instead.
+  - Hero image: upload the Lizard Magic seal as the Welcome image in
+    Customize Design > Home. It sits inside the magic circle.
+  - Gecko morph / sex line: the first line of each product's description is shown
+    under the gecko's name (e.g. "Extreme Harlequin · Female").
+{% endcomment %}
+{% assign lm_geckos_permalink = 'live-geckos' %}
+{% assign lm_merch_permalink = 'merch' %}
+{% assign lm_featured_limit = 4 %}
+{% assign lm_merch_limit = 3 %}
+{% assign lm_newsletter_action = '' %}
 
-{% assign has_image = false %}
-{% if has_slideshow or has_hero_image %}
-  {% assign has_image = true %}
+{% assign lm_geckos = nil %}
+{% assign lm_merch = nil %}
+{% for category in categories.active %}
+  {% if category.permalink == lm_geckos_permalink %}{% assign lm_geckos = category %}{% endif %}
+  {% if category.permalink == lm_merch_permalink %}{% assign lm_merch = category %}{% endif %}
+{% endfor %}
+
+{% assign lm_care_url = nil %}
+{% for custom_page in pages.custom_pages %}
+  {% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}
+{% endfor %}
+
+{% assign lm_geckos_url = '/products' %}
+{% assign lm_available = 0 %}
+{% if lm_geckos %}
+  {% assign lm_geckos_url = lm_geckos.url %}
+  {% for product in lm_geckos.products %}
+    {% if product.status == 'active' %}{% assign lm_available = lm_available | plus: 1 %}{% endif %}
+  {% endfor %}
 {% endif %}
+{% assign lm_merch_url = '/products' %}
+{% if lm_merch %}{% assign lm_merch_url = lm_merch.url %}{% endif %}
 
-{% assign has_welcome_content = false %}
-{% if theme.welcome_text != blank or theme.welcome_button_text != blank %}
-  {% assign has_welcome_content = true %}
-{% endif %}
+{% comment %} Alchemical element glyphs, reused by the promise bar and the care rites {% endcomment %}
+{% capture lm_glyph_fire %}<polygon points="20,5 36,33 4,33"/>{% endcapture %}
+{% capture lm_glyph_water %}<polygon points="4,7 36,7 20,35"/>{% endcapture %}
+{% capture lm_glyph_air %}<polygon points="20,5 36,33 4,33"/><line x1="10" y1="22" x2="30" y2="22"/>{% endcapture %}
+{% capture lm_glyph_earth %}<polygon points="4,7 36,7 20,35"/><line x1="10" y1="18" x2="30" y2="18"/>{% endcapture %}
+{% capture lm_glyph_aether %}<circle cx="20" cy="20" r="14"/><circle class="lm-glyph-dot" cx="20" cy="20" r="3"/>{% endcapture %}
 
-{% if has_image %}
-  <div class="home-hero home-hero--{{ theme.welcome_image_width }} {% if has_slideshow %}home-hero--slideshow{% endif %} {% unless theme.images.welcome_image != blank or has_slideshow %}home-hero--no-image{% endunless %}">
-    {% if has_slideshow %}
-      <div class="splide home-slideshow" data-autoplay="{{ theme.homepage_slideshow_autoplay }}">
-        <div class="splide__track">
-          <div class="splide__list">
-            {% for image in theme.image_sets.slideshow %}
-              <div class="splide__slide"{% if theme.welcome_image_link != blank %} title="{{ theme.welcome_image_link }}"{% endif %}>
-                <img
-                  alt="Slideshow image {{ forloop.index }}"
-                  {% if forloop.index == 1 %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
-                  class="slideshow-image"
-                  srcset="{{ image.url | constrain: 1068 }}, {{ image.url | constrain: 2136 }} 2x"
-                  src="{{ image.url | constrain: 1068 }}">
-              </div>
-            {% endfor %}
-          </div>
-        </div>
+<div class="lm-home">
+
+  {% comment %} ============ HERO ============ {% endcomment %}
+  <section class="lm-hero lm-wrap">
+    <div class="lm-hero__copy">
+      <span class="lm-eyebrow lm-desktop-only">Crested geckos · Hand-raised · Est. 777</span>
+      <h1 class="lm-hero__title">Geckos raised with intention<span class="lm-desktop-only">, sent out with abundance</span></h1>
+      <p class="lm-hero__text lm-desktop-only">Every gecko leaves us with its lineage papers, its own sigil and lifetime keeper support. We're breeding for color, calm and good energy.</p>
+      <p class="lm-hero__text lm-mobile-only">Lineage papers, a personal sigil and lifetime support with every gecko.</p>
+      <div class="lm-hero__actions">
+        <a class="lm-btn lm-btn--solid" href="{{ lm_geckos_url }}">Shop live geckos</a>
+        <a class="lm-btn lm-btn--outline lm-desktop-only" href="{{ lm_merch_url }}">Shop merch</a>
       </div>
-    {% elsif has_hero_image %}
-      <img
-        alt=""
-        class="home-hero-image lazyload blur-up"
-        src="{{ theme.images.welcome_image.url | constrain: 400 }}"
-        data-srcset="
-          {{ theme.images.welcome_image.url | constrain: 800 }} 800w,
-          {{ theme.images.welcome_image.url | constrain: 1200 }} 1200w,
-          {{ theme.images.welcome_image.url | constrain: 1600 }} 1600w,
-          {{ theme.images.welcome_image.url | constrain: 2000 }} 2000w,
-        "
-        data-sizes="auto"
-        {% if theme.welcome_image_link != blank %}title="{{ theme.welcome_image_link }}"{% endif %}
-      >
-    {% endif %}
-    {% if has_slideshow == false %}
-      <div class="home-hero-overlay"></div>
-    {% endif %}
-    {% if has_image and has_welcome_content %}
-      <div class="home-hero-content home-hero-content--slideshow">
-        {% if theme.welcome_text != blank %}
-          <div class="home-hero-text">{{ theme.welcome_text }}</div>
-        {% endif %}
-        {% if theme.welcome_button_text != blank %}
-          <a href="{% if theme.welcome_button_behavior == 'scroll' %}#{% elsif theme.welcome_button_link != blank %}{{ theme.welcome_button_link }}{% else %}/products{% endif %}" class="home-hero-button">{{ theme.welcome_button_text }}</a>
-        {% endif %}
+      <div class="lm-hero__stats lm-desktop-only">
+        <span><b>{{ lm_available }}</b> available now</span>
+        <span><b>Mon–Wed</b> shipping</span>
       </div>
-    {% endif %}
-  </div>
-{% endif %}
-
-{% if theme.home_featured_video_url %}
-  {% assign featured_video_header = t['home.featured_video'] %}
-  <div class="home-featured-video-section">
-    {% if featured_video_header != blank %}
-      <h1 class="page-title">{{ featured_video_header }}</h1>
-    {% endif %}
-    <div id="featured-video"></div>
-  </div>
-{% endif %}
-
-<div class="home-content">
-  {%- assign can_show_categories = false -%}
-  {%- if theme.featured_categories > 0 and categories.active.size > 0 -%}
-    {%- assign can_show_categories = true -%}
-  {%- endif -%}
-
-  <div class="home-featured-products">
-    <div class="featured-container">
-      {% assign featured_header = t['home.featured'] %}
-      {% assign featured_text = theme.homepage_featured_text %}
-      {% assign featured_text_position = theme.homepage_featured_text_position %}
-
-      {% comment %} Show featured text above when position is "above" OR when there are no featured products and no featured categories {% endcomment %}
-      {% if featured_text != blank %}
-        {% assign show_above = false %}
-        {% if featured_text_position == "above" %}
-          {% assign show_above = true %}
-        {% endif %}
-        {% if theme.featured_products == 0 and can_show_categories == false %}
-          {% assign show_above = true %}
-        {% endif %}
-        {% if show_above %}
-          <div class="featured-message">{{ featured_text }}</div>
-        {% endif %}
-      {% endif %}
-
-      {% if theme.featured_products > 0 %}
-        <h1 class="featured-title">{{ featured_header }}</h1>
-      {% endif %}
-
-      {% comment %} Only show within if we have products AND position is within {% endcomment %}
-      {% if featured_text != blank and featured_text_position == "within" and theme.featured_products > 0 %}
-        <div class="featured-message">{{ featured_text }}</div>
-      {% endif %}
     </div>
 
-    {% if theme.featured_products > 0 %}
-      {% paginate products from products.current by theme.featured_products order:theme.featured_order %}
-        {% assign num_results = paginate.items %}
-        {% if paginate.next.is_link %}
-          {% assign num_results = paginate.current_offset | plus: paginate.page_size %}
-        {% endif %}
-        {% if products != blank %}
-          <div class="product-list-container">
-            <div class="product-list product-list--{{ theme.featured_products_layout }} {% if num_results < 3 %}product-list--center{% endif %}">
-              {% for product in products %}
-                {% assign image_width = product.image.width | times: 1.0 %}
-                {% assign image_height = product.image.height | times: 1.0 %}
-                {% assign aspect_ratio = image_width | divided_by: image_height %}
-                {% assign product_status = '' %}
-                {% case product.status %}
-                  {% when 'active' %}
-                    {% if product.on_sale %}
-                      {% assign product_status = t['products.on_sale'] %}
-                    {% endif %}
-                  {% when 'sold-out' %}
-                    {% assign product_status = t['products.sold_out'] %}
-                  {% when 'coming-soon' %}
-                    {% assign product_status = t['products.coming_soon'] %}
-                {% endcase %}
-                {% capture image_class %}
-                  {% if product.image.height > product.image.width %}
-                    image-tall
-                  {% elsif product.image.height < product.image.width %}
-                    image-wide
-                  {% else %}
-                    image-square
-                  {% endif %}
-                {% endcapture %}
-                {% capture status_class %}{% if product.status == 'active' and product.on_sale %}status-primary{% else %}status-secondary{% endif %}{% endcapture %}
-                <div class="product-list-thumb {{ product.css_class }}">
-                  <a class="product-list-link {% if theme.featured_products_layout != 'alternating' %}product-list-link--{{ theme.product_grid_info }}{% endif %} {{ theme.alternating_product_image_style }}" href="{{ product.url }}" title="{{ product.name | escape }}">
-                    <div class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}">
-                      <img
-                        alt=""
-                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
-                        src="{{ product.image | product_image_url | constrain: 20 }}"
-                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
-                        data-srcset="
-                          {{ product.image | product_image_url | constrain: 240 }} 240w,
-                          {{ product.image | product_image_url | constrain: 320 }} 320w,
-                          {{ product.image | product_image_url | constrain: 400 }} 400w,
-                          {{ product.image | product_image_url | constrain: 540 }} 540w,
-                          {{ product.image | product_image_url | constrain: 600 }} 600w,
-                          {{ product.image | product_image_url | constrain: 800 }} 800w,
-                          {{ product.image | product_image_url | constrain: 960 }} 960w
-                        "
-                        data-sizes="auto"
-                      >
-                      {% if product_status != blank %}<div class="product-list-thumb-status {{ status_class }}">{{ product_status }}</div>{% endif %}
-                    </div>
-                    <div class="product-list-thumb-info">
-                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ product.name }}</div>
-                      <div class="product-list-thumb-price">
-                        {% assign hide_price = false %}
-                        {% if product.status == 'sold-out' and theme.show_sold_out_product_prices == false %}
-                          {% assign hide_price = true %}
-                        {% endif -%}
-                        {% if product.status == 'coming-soon' and theme.show_coming_soon_product_prices == false %}
-                          {% assign hide_price = true %}
-                        {% endif %}
+    <div class="lm-hero__circle">
+      <svg class="lm-circle" viewBox="0 0 700 700" aria-hidden="true">
+        <defs><path id="lm-hero-ring" d="M350,350 m-300,0 a300,300 0 1,1 600,0 a300,300 0 1,1 -600,0"/></defs>
+        <circle class="lm-circle__outer" cx="350" cy="350" r="338"/>
+        <circle cx="350" cy="350" r="268"/>
+        <circle class="lm-circle__thin" cx="350" cy="350" r="256"/>
+        <polygon points="350,94 572,478 128,478"/>
+        <polygon points="350,606 128,222 572,222"/>
+        <circle class="lm-circle__dash" cx="350" cy="350" r="150"/>
+        <g class="lm-circle__ring">
+          <text><textPath href="#lm-hero-ring">I AM A VESSEL OF INFINITE ABUNDANCE ✦ WHAT I NURTURE NURTURES ME ✦ OBLITERATE SCARCITY MINDSET ✦</textPath></text>
+        </g>
+        <g class="lm-circle__glyph" transform="translate(330,10)"><polygon points="20,5 36,33 4,33"/></g>
+        <g class="lm-circle__glyph" transform="translate(650,330)"><polygon points="4,7 36,7 20,35"/></g>
+        <g class="lm-circle__glyph" transform="translate(330,650)"><polygon points="4,7 36,7 20,35"/><line x1="10" y1="18" x2="30" y2="18"/></g>
+        <g class="lm-circle__glyph" transform="translate(10,330)"><polygon points="20,5 36,33 4,33"/><line x1="10" y1="22" x2="30" y2="22"/></g>
+      </svg>
+      {% if theme.images.welcome_image != blank %}
+        <img
+          class="lm-hero__seal"
+          alt="{{ store.name | escape }} seal"
+          fetchpriority="high"
+          src="{{ theme.images.welcome_image.url | constrain: 800 }}"
+          srcset="{{ theme.images.welcome_image.url | constrain: 400 }} 400w, {{ theme.images.welcome_image.url | constrain: 800 }} 800w, {{ theme.images.welcome_image.url | constrain: 1200 }} 1200w"
+          sizes="(max-width: 900px) 60vw, 380px"
+        >
+      {% else %}
+        <div class="lm-hero__seal lm-hero__seal--sigil" data-lm-sigil="{{ store.name | escape }}" data-lm-sigil-ring="44"></div>
+      {% endif %}
+    </div>
+  </section>
 
-                        {% if product.has_password_protection and theme.show_password_protected_product_prices == false %}
-                          {% assign hide_price = true %}
-                        {% endif %}
-                        {% unless hide_price %}
-                          {{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}
+  {% comment %} ============ PROMISES ============ {% endcomment %}
+  <section class="lm-promises" aria-label="Our promises">
+    <div class="lm-promise">
+      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_fire }}</svg>
+      <div><h2 class="lm-promise__title">Live arrival, period.</h2><p class="lm-promise__body">Overnight shipping, insulated + insured.</p></div>
+    </div>
+    <div class="lm-promise">
+      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_earth }}</svg>
+      <div><h2 class="lm-promise__title">Lineage available</h2><p class="lm-promise__body">Sire, dam and hatch date for every gecko produced here.</p></div>
+    </div>
+    <div class="lm-promise">
+      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_air }}</svg>
+      <div><h2 class="lm-promise__title">Lovingly raised</h2><p class="lm-promise__body">Tended to and doted on by me personally!</p></div>
+    </div>
+    <div class="lm-promise">
+      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_water }}</svg>
+      <div><h2 class="lm-promise__title">Lifetime support</h2><p class="lm-promise__body">Get assistance with your gecko at anytime.</p></div>
+    </div>
+  </section>
 
-                          {% if product.price_suffix != blank %}
-                            {% assign variable_price_shown = true %}
-                            {% if theme.product_variable_pricing_display_format == "min_only" or theme.product_variable_pricing_display_format == "max_only" %}
-                              {% assign variable_price_shown = false %}
-                            {% endif %}
-
-                            {% if product.variable_pricing and variable_price_shown %}
-                              {% assign formatted_suffix = '(' | append: product.price_suffix | append: ')' %}
-                            {% else %}
-                              {% assign formatted_suffix = product.price_suffix %}
-                            {% endif %}
-                            <span class="price-suffix">{{ formatted_suffix }}</span>
-                          {% endif %}
-                        {% endunless %}
-                      </div>
-                      {% unless hide_price %}
-                        {% if product.options.size > 1 and theme.show_product_variant_count_in_grid %}
-                          <div class="product-list-thumb-options-description">
-                            {{ product.options.size }} {{ t['products.variants'] }}
-                          </div>
-                        {% endif %}
-                      {% endunless %}
-                      {% if theme.featured_products_layout == 'alternating' %}
-                        <button class="button product-list-shop-now">{{ t['navigation.shop'] }}</button>
-                      {% endif %}
-
-                      {% if product_status != blank %}<div class="product-list-thumb-status {{ status_class }}">{{ product_status }}</div>{% endif %}
-                    </div>
-                  </a>
-                </div>
-              {% endfor %}
-          </div>
+  {% comment %} ============ CHOSEN THIS CYCLE ============ {% endcomment %}
+  <section class="lm-band lm-featured">
+    <div class="lm-wrap">
+      <div class="lm-section-head">
+        <div class="lm-section-head__titles">
+          <span class="lm-eyebrow lm-desktop-only">Available now</span>
+          <h2 class="lm-display lm-display--xl">Chosen this cycle</h2>
         </div>
-        {% else %}
-          <div class="message-banner message-banner--centered message-banner--no-bg">{{ t['products.no_products'] }}</div>
-        {% endif %}
-      {% endpaginate %}
-    {% endif %}
-  </div>
-  {% if can_show_categories %}
-    {% assign category_collages_enabled = false %}
-    {% if theme.features.has_theme_category_collages %}
-      {% assign category_collages_enabled = true %}
-    {% endif %}
-    <div class="featured-categories" data-category-collages-enabled="{{ category_collages_enabled }}">
-      {% if t['home.featured_categories'] %}
-        <h2 class="featured-title">{{ t['home.featured_categories'] }}</h2>
-      {% endif %}
-      {% comment %}Show featured text with "within" position when there are no featured products{% endcomment %}
-      {% if theme.homepage_featured_text != blank and theme.homepage_featured_text_position == "within" and theme.featured_products == 0 %}
-        <div class="featured-message">{{ theme.homepage_featured_text }}</div>
-      {% endif %}
-      {% assign category_list_style = theme.home_page_categories_style %}
-      <div class="product-list product-list--center category-list category-list--{{ category_list_style }} {% if num_results < 3 %}product-list--center{% endif %}">
-        {% for category in categories.active limit:theme.featured_categories %}
-          {% if theme.home_page_categories_style == "text" %}
-            <a class="button button--secondary" href="{{ category.url }}">{{ category.name }}</a>
-          {% else %}
-            <div class="product-list-thumb category">
-              <a class="product-list-link category-link category-link--{{ theme.home_page_categories_name_style }}" href="{{ category.url }}" title="{{ category.name | escape }}">
-                {% comment %}Determine if category collages should be enabled based on feature flag setting{% endcomment %}
-                {% if category_collages_enabled == false %}
-                  {% for product in category.products limit:1 %}
-                    {% assign image_width = product.image.width | times: 1.0 %}
-                    {% assign image_height = product.image.height | times: 1.0 %}
-                    {% assign aspect_ratio = image_width | divided_by: image_height %}
+        <a class="lm-link-arrow lm-desktop-only" href="{{ lm_geckos_url }}">View all {% if lm_available > 0 %}{{ lm_available }} {% endif %}geckos →</a>
+      </div>
 
-                    {% capture image_class %}
-                      {% if product.image.height > product.image.width %}
-                        image-tall
-                      {% elsif product.image.height < product.image.width %}
-                        image-wide
-                      {% else %}
-                        image-square
-                      {% endif %}
-                    {% endcapture %}
-
-                    <div class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}">
+      {% assign lm_shown = 0 %}
+      <div class="lm-gecko-grid">
+        {% if lm_geckos %}
+          {% for product in lm_geckos.products %}
+            {% if product.status == 'active' and lm_shown < lm_featured_limit %}
+              {% assign lm_shown = lm_shown | plus: 1 %}
+              {% assign lm_morph = product.description | strip_html | strip | newline_to_br | split: '<br />' | first | strip | truncate: 48 %}
+              <article class="lm-gecko">
+                <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
+                  <div class="lm-gecko__arch">
+                    {% if product.image != blank %}
                       <img
                         alt=""
-                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
-                        src="{{ product.image | product_image_url | constrain: 20 }}"
-                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
-                        data-srcset="
-                          {{ product.image | product_image_url | constrain: 240 }} 240w,
-                          {{ product.image | product_image_url | constrain: 320 }} 320w,
-                          {{ product.image | product_image_url | constrain: 400 }} 400w,
-                          {{ product.image | product_image_url | constrain: 540 }} 540w,
-                          {{ product.image | product_image_url | constrain: 600 }} 600w,
-                          {{ product.image | product_image_url | constrain: 800 }} 800w,
-                          {{ product.image | product_image_url | constrain: 960 }} 960w
-                        "
-                        data-sizes="auto"
+                        loading="lazy"
+                        src="{{ product.image | product_image_url | constrain: 600 }}"
+                        srcset="{{ product.image | product_image_url | constrain: 320 }} 320w, {{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 900 }} 900w"
+                        sizes="(max-width: 900px) 45vw, 290px"
                       >
-                    </div>
-                    <div class="product-list-thumb-info">
-                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ category.name }}</div>
-                    </div>
-                  {% endfor %}
-                {% else %}
-                
-                  {% if category.products.size > 0 %}
-                    {% assign first_product = category.products.first %}
-                    {% assign image_width = first_product.image.width | times: 1.0 %}
-                    {% assign image_height = first_product.image.height | times: 1.0 %}
-                    {% assign aspect_ratio = image_width | divided_by: image_height %}
-                    
-                    {% comment %}
-                      Determine which image URLs to use based on the image style setting
-                    {% endcomment %}
-                    {% assign image_urls = "" %}
-        
-                    {% if theme.home_page_categories_image_style == "grid" %}
-                      {% capture image_urls %}
-                        [{% for product in category.products limit:6 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
-                      {% endcapture %}
-                    {% elsif theme.home_page_categories_image_style == "strip" %}
-                      {% capture image_urls %}
-                        [{% for product in category.products limit:4 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
-                      {% endcapture %}
-                    {% elsif theme.home_page_categories_image_style == "featured" %}
-                      {% capture image_urls %}
-                        [{% for product in category.products limit:4 %}"{{ product.image | product_image_url | constrain: 400 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]
-                      {% endcapture %}
                     {% else %}
-                      {% comment %} Fallback to single image (first product) {% endcomment %}
-                      {% capture image_urls %}
-                        ["{{ first_product.image | product_image_url | constrain: 800 }}"]
-                      {% endcapture %}
+                      <span class="lm-placeholder">[ gecko photo ]</span>
                     {% endif %}
-
-                    <div
-                      class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}" 
-                      id="category-collage-{{ category.id }}"
-                      data-image-urls='{{ image_urls | strip }}'
-                      data-image-style="{{ theme.home_page_categories_image_style }}"
-                    >
-                      <!-- Default placeholder while image is being loaded -->
-                      <img
-                        alt=""
-                        class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
-                        src="{{ first_product.image | product_image_url | constrain: 30 }}"
-                        {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
-                      >
-                    </div>
-                    <div class="product-list-thumb-info">
-                      <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ category.name }}</div>
-                      {% if theme.home_page_categories_product_count_display %}
-                        <div class="product-list-thumb-price category-count">
-                          {{ category.products.size | pluralize: t['products.product'], t['products.products'] }}
-                        </div>
-                      {% endif %}
-                    </div>
-                  {% endif %}
+                  </div>
+                  <div class="lm-gecko__sigil" data-lm-sigil="{{ product.name | escape }}" aria-hidden="true"></div>
+                </a>
+                <div class="lm-gecko__row">
+                  <h3 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h3>
+                  <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
+                </div>
+                {% if lm_morph != blank %}<span class="lm-gecko__morph">{{ lm_morph }}</span>{% endif %}
+                {% if product.options.size == 1 %}
+                  <form class="lm-gecko__add" method="post" action="/cart">
+                    <input type="hidden" name="cart[add][id]" value="{{ product.options.first.id }}">
+                    <button type="submit" class="lm-btn lm-btn--ghost">Add to cart</button>
+                  </form>
+                {% else %}
+                  <a class="lm-btn lm-btn--ghost lm-gecko__add" href="{{ product.url }}">Choose options</a>
                 {% endif %}
-              </a>
+              </article>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if lm_shown == 0 %}
+        <p class="lm-empty">The next clutch is still in the egg. Check back soon, or join the list below for the next drop.</p>
+      {% endif %}
+
+      <a class="lm-btn lm-btn--ghost lm-mobile-only lm-featured__all" href="{{ lm_geckos_url }}">View all{% if lm_available > 0 %} {{ lm_available }}{% endif %}</a>
+    </div>
+  </section>
+
+  {% comment %} ============ MERCH ============ {% endcomment %}
+  {% if lm_merch and lm_merch.products.size > 0 %}
+    <section class="lm-merch lm-wrap">
+      <div class="lm-merch__intro">
+        <span class="lm-eyebrow">Merch</span>
+        <h2 class="lm-display lm-display--lg">Wear the protocol</h2>
+        <p class="lm-muted">Seals, tees and talismans to carry the abundance with you.</p>
+        <a class="lm-link-arrow" href="{{ lm_merch_url }}">Shop all merch →</a>
+      </div>
+      <div class="lm-merch__grid">
+        {% for product in lm_merch.products limit: lm_merch_limit %}
+          <a class="lm-merch__item" href="{{ product.url }}">
+            <div class="lm-merch__image">
+              {% if product.image != blank %}
+                <img
+                  alt=""
+                  loading="lazy"
+                  src="{{ product.image | product_image_url | constrain: 500 }}"
+                  srcset="{{ product.image | product_image_url | constrain: 300 }} 300w, {{ product.image | product_image_url | constrain: 500 }} 500w, {{ product.image | product_image_url | constrain: 800 }} 800w"
+                  sizes="(max-width: 900px) 45vw, 280px"
+                >
+              {% else %}
+                <span class="lm-placeholder">[ product shot ]</span>
+              {% endif %}
             </div>
-          {% endif %}
+            <div class="lm-merch__meta">
+              <span>{{ product.name }}</span>
+              <span class="lm-gold">{% if product.status == 'sold-out' %}{{ t['products.sold_out'] }}{% else %}{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}{% endif %}</span>
+            </div>
+          </a>
         {% endfor %}
       </div>
-    </div>
+    </section>
   {% endif %}
 
-  {%- comment -%}
-    All products button should appear after the last featured section
-    ONLY when eligible (i.e., when there are more products than currently displayed)
-  {%- endcomment -%}
-  {%- if products.all.size > 0 -%}
-    {%- assign show_all_products_button = false -%}
+  {% comment %} ============ CARE RITES + MUDRA ============ {% endcomment %}
+  <section class="lm-rites-row">
+    <div class="lm-rites">
+      <div class="lm-section-head">
+        <div class="lm-section-head__titles">
+          <span class="lm-eyebrow">Care guide</span>
+          <h2 class="lm-display lm-display--lg">The five elemental rites</h2>
+        </div>
+        {% if lm_care_url %}<a class="lm-link-arrow" href="{{ lm_care_url }}">Read →</a>{% endif %}
+      </div>
+      <div class="lm-rites__grid">
+        {% capture lm_rite_open %}{% if lm_care_url %}<a class="lm-rite" href="{{ lm_care_url }}">{% else %}<div class="lm-rite">{% endif %}{% endcapture %}
+        {% capture lm_rite_close %}{% if lm_care_url %}</a>{% else %}</div>{% endif %}{% endcapture %}
+        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_air }}</svg><span class="lm-rite__element">Air</span><span class="lm-rite__name">The Vessel</span>{{ lm_rite_close }}
+        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_fire }}</svg><span class="lm-rite__element">Fire</span><span class="lm-rite__name">Warmth</span>{{ lm_rite_close }}
+        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_water }}</svg><span class="lm-rite__element">Water</span><span class="lm-rite__name">Mist</span>{{ lm_rite_close }}
+        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_earth }}</svg><span class="lm-rite__element">Earth</span><span class="lm-rite__name">Sustenance</span>{{ lm_rite_close }}
+        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_aether }}</svg><span class="lm-rite__element">Aether</span><span class="lm-rite__name">Communion</span>{{ lm_rite_close }}
+      </div>
+    </div>
 
-    {%- comment -%} Case 1: Featured products are shown - only eligible if there are more products than displayed {%- endcomment -%}
-    {%- if theme.featured_products > 0 -%}
-      {%- assign total_products = products.all.size -%}
-      {%- assign displayed_products = theme.featured_products -%}
-      {%- if displayed_products < total_products -%}
-        {%- assign show_all_products_button = true -%}
-      {%- endif -%}
-    {%- else -%}
-      {%- comment -%} Case 2: No featured products shown - eligible because products aren't displayed yet {%- endcomment -%}
-      {%- assign show_all_products_button = true -%}
-    {%- endif -%}
+    <div class="lm-mudra">
+      {% comment %} Swap the sigil for the Kubera hand illustration once it's drawn {% endcomment %}
+      <div class="lm-mudra__frame" data-lm-sigil="Kubera for abundance" aria-hidden="true"></div>
+      <div class="lm-mudra__copy">
+        <span class="lm-eyebrow lm-eyebrow--sm">Mudra of the month</span>
+        <h2 class="lm-display lm-display--md">Kubera · for abundance</h2>
+        <p class="lm-muted lm-desktop-only">Touch the tips of your thumb, index and middle fingers together, and fold the other two into your palm. Hold it for three breaths while you say today's affirmation.</p>
+        <p class="lm-muted lm-mobile-only">Thumb, index and middle tips together. Three breaths.</p>
+      </div>
+    </div>
+  </section>
 
-    {%- if theme.homepage_show_all_items_link and show_all_products_button -%}
-      {%- assign all_products_button_text = t['navigation.all_products'] -%}
-      {%- if all_products_button_text != blank -%}
-        <a class="button button--centered button--secondary all-products-button" href="/products">{{ all_products_button_text }}</a>
-      {%- endif -%}
-    {%- endif -%}
-  {%- endif -%}
+  {% comment %} ============ AFFIRMATION + SIGNUP ============ {% endcomment %}
+  <section class="lm-band lm-coven">
+    <div class="lm-wrap lm-coven__inner">
+      <p class="lm-display lm-display--md lm-coven__aff">“<span data-lm-affirmation>I am a vessel of infinite abundance.</span>”</p>
+      <div class="lm-coven__signup">
+        <span class="lm-coven__label">Join the coven: new drops + a weekly affirmation</span>
+        {% if lm_newsletter_action != blank %}
+          <form class="lm-coven__form" method="post" action="{{ lm_newsletter_action }}" target="_blank">
+            <label class="lm-visually-hidden" for="lm-coven-email">Email address</label>
+            <input id="lm-coven-email" type="email" name="EMAIL" placeholder="your@email.com" required>
+            <button type="submit" class="lm-btn lm-btn--solid">Subscribe</button>
+          </form>
+        {% elsif pages.subscribe_page %}
+          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="{{ pages.subscribe_page.url }}">{{ t['navigation.subscribe'] }}</a></div>
+        {% elsif theme.instagram_url != blank %}
+          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="{{ theme.instagram_url }}">Follow @lizardmagic777</a></div>
+        {% else %}
+          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="/contact">Get in touch</a></div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
 </div>
+
+<script>
+  /* Lizard Magic: daily affirmation + name sigils */
+  (function () {
+    var affirmations = [
+      'I am a vessel of infinite abundance.',
+      'What I nurture, nurtures me.',
+      'Scarcity has no address in my home.',
+      'I climb toward the gold.',
+      'My patience is a spell that always works.'
+    ];
+    var now = new Date();
+    var day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+    document.querySelectorAll('[data-lm-affirmation]').forEach(function (el) {
+      el.textContent = affirmations[day % affirmations.length];
+    });
+
+    // A sigil is built from its words: vowels and repeated letters drop out,
+    // and what's left is traced on a three-ring letter wheel.
+    function sigil(text, ring) {
+      var R = ring || 40;
+      var letters = (text || '').toUpperCase().replace(/[^A-Z]/g, '');
+      var unique = function (s) { return s.split('').filter(function (c, i, a) { return a.indexOf(c) === i; }); };
+      var kept = unique(letters.replace(/[AEIOU]/g, ''));
+      if (kept.length < 2) kept = unique(letters);
+      if (kept.length < 2) kept = ['L', 'M'];
+      var pts = kept.map(function (ch) {
+        var i = ch.charCodeAt(0) - 65, a = (i / 26) * Math.PI * 2 - Math.PI / 2, r = R * [1, 0.7, 0.4][i % 3];
+        return [50 + r * Math.cos(a), 50 + r * Math.sin(a)];
+      });
+      var last = pts[pts.length - 1], prev = pts[pts.length - 2];
+      var dx = last[0] - prev[0], dy = last[1] - prev[1], d = Math.hypot(dx, dy) || 1;
+      dx /= d; dy /= d;
+      var f = function (n) { return +n.toFixed(2); };
+      return '<svg viewBox="0 0 100 100"><polyline points="' + pts.map(function (p) { return f(p[0]) + ',' + f(p[1]); }).join(' ') + '"/>' +
+        '<circle cx="' + f(pts[0][0]) + '" cy="' + f(pts[0][1]) + '" r="6"/>' +
+        '<line x1="' + f(last[0] - dy * 6) + '" y1="' + f(last[1] + dx * 6) + '" x2="' + f(last[0] + dy * 6) + '" y2="' + f(last[1] - dx * 6) + '"/></svg>';
+    }
+    document.querySelectorAll('[data-lm-sigil]').forEach(function (el) {
+      el.innerHTML = sigil(el.getAttribute('data-lm-sigil'), +el.getAttribute('data-lm-sigil-ring') || 40);
+    });
+  })();
+</script>

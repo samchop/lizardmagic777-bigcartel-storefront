@@ -3554,3 +3554,438 @@ textarea {
  */
 
 
+
+/* ==========================================================================
+   LIZARD MAGIC · HOME
+   Matches the "Home · desktop" and "Home · mobile" mockups.
+   Fonts are loaded in layout.html. NCL Enigmatic falls back to Grenze Gotisch
+   until its @font-face is added (see the note at the end of this block).
+   ========================================================================== */
+
+:root {
+  --lm-ink: #3a1f1c;
+  --lm-bg: #4a2b28;
+  --lm-oxblood: #8b3a2f;
+  --lm-copper: #b5652f;
+  --lm-gold: #f0a548;
+  --lm-cream: #f3ecd0;
+  --lm-sand: #e2d6b4;
+  --lm-dust: #b89a86;
+  --lm-font-display: 'NCL Enigmatic', 'Grenze Gotisch', serif;
+  --lm-font-gothic: 'Grenze Gotisch', serif;
+  --lm-font-caps: 'Syncopate', sans-serif;
+  --lm-font-mono: 'Space Mono', monospace;
+  --lm-gutter: 44px;
+  --lm-rule: 1.5px solid var(--lm-oxblood);
+}
+
+/* Paper grain over the whole store, as in the mockups */
+body {
+  background-color: var(--background-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .9 0 0 0 0 .8 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#main .content-wrapper--home { padding: 0; }
+body[data-bc-page-type="home"] #main { padding-bottom: 0; }
+
+.lm-home {
+  color: var(--lm-cream);
+  font-family: var(--lm-font-mono);
+  overflow-x: clip;
+}
+.lm-home *, .lm-home *::before, .lm-home *::after { box-sizing: border-box; }
+.lm-home h1, .lm-home h2, .lm-home h3, .lm-home p { margin: 0; font-weight: 400; }
+.lm-home a { color: inherit; }
+.lm-home a:hover { text-decoration: none; }
+
+.lm-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: var(--lm-gutter);
+  padding-right: var(--lm-gutter);
+}
+.lm-band { background: var(--lm-ink); }
+.lm-home .lm-mobile-only { display: none !important; }
+
+.lm-visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Type ---------- */
+.lm-eyebrow {
+  font: 700 11px var(--lm-font-caps);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--lm-gold);
+}
+.lm-eyebrow--sm { font-size: 10px; letter-spacing: 4px; }
+.lm-display { font-family: var(--lm-font-display); font-weight: 400; line-height: 1; text-wrap: balance; }
+.lm-display--xl { font-size: 60px; }
+.lm-display--lg { font-size: 52px; }
+.lm-display--md { font-size: 36px; }
+.lm-muted { font: 400 13px/1.7 var(--lm-font-mono); color: var(--lm-sand); }
+.lm-gold { color: var(--lm-gold); }
+.lm-link-arrow {
+  font: 700 11px var(--lm-font-caps);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1.5px solid var(--lm-gold);
+  padding-bottom: 4px;
+  transition: color .2s ease;
+}
+.lm-link-arrow:hover { color: var(--lm-gold); }
+.lm-placeholder { font: 400 10px var(--lm-font-mono); color: var(--lm-dust); }
+
+/* ---------- Buttons ---------- */
+.lm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 12px var(--lm-font-caps);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 20px 30px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.lm-btn--solid { background: var(--lm-gold); color: var(--lm-ink) !important; }
+.lm-btn--solid:hover { background: var(--lm-cream); }
+.lm-btn--outline { border-color: var(--lm-cream); color: var(--lm-cream); background: transparent; }
+.lm-btn--outline:hover { border-color: var(--lm-gold); color: var(--lm-gold) !important; }
+.lm-btn--ghost {
+  width: 100%;
+  border-color: var(--lm-gold);
+  color: var(--lm-gold) !important;
+  background: transparent;
+  font-size: 10px;
+  padding: 14px;
+}
+.lm-btn--ghost:hover { background: var(--lm-gold); color: var(--lm-ink) !important; }
+.lm-btn:focus-visible { outline: 2px solid var(--lm-cream); outline-offset: 3px; }
+
+/* ---------- Glyphs + sigils ---------- */
+.lm-glyph { width: 36px; height: 36px; flex: none; fill: none; stroke: var(--lm-gold); stroke-width: 2; }
+.lm-glyph .lm-glyph-dot { fill: var(--lm-gold); stroke: none; }
+[data-lm-sigil] svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--lm-cream);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* ---------- Hero ---------- */
+.lm-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px);
+  align-items: center;
+  gap: 20px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+.lm-hero__copy { display: flex; flex-direction: column; gap: 24px; }
+#main .lm-hero__title { font: 400 74px/1 var(--lm-font-display); text-wrap: balance; }
+.lm-hero__text { max-width: 440px; font: 400 14px/1.75 var(--lm-font-mono); color: var(--lm-sand); text-wrap: pretty; }
+.lm-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.lm-hero__stats { display: flex; gap: 28px; padding-top: 6px; font: 400 12px var(--lm-font-mono); color: var(--lm-sand); }
+.lm-hero__stats b { color: var(--lm-cream); font: 400 22px var(--lm-font-caps); margin-right: 4px; }
+
+.lm-hero__circle { position: relative; width: 100%; aspect-ratio: 1 / 1; }
+.lm-circle { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lm-circle circle, .lm-circle polygon { fill: none; stroke: var(--lm-copper); stroke-width: 1.5; }
+.lm-circle .lm-circle__outer { stroke: var(--lm-oxblood); stroke-width: 2; }
+.lm-circle .lm-circle__thin { stroke-width: 1; }
+.lm-circle .lm-circle__dash { stroke-width: 1; stroke-dasharray: 3 6; }
+.lm-circle text { font: 700 22px var(--lm-font-caps); letter-spacing: 8px; fill: var(--lm-gold); }
+.lm-circle__ring { transform-origin: 350px 350px; animation: lm-spin 120s linear infinite; }
+.lm-circle__glyph polygon, .lm-circle__glyph line { fill: var(--lm-bg); stroke: var(--lm-cream); stroke-width: 2; }
+@keyframes lm-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lm-circle__ring { animation: none; } }
+
+.lm-hero__seal {
+  position: absolute;
+  width: 59.4%;
+  left: 20.3%;
+  top: 20.3%;
+  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .45));
+}
+.lm-hero__seal--sigil { aspect-ratio: 1 / 1; padding: 12%; filter: none; }
+.lm-hero__seal--sigil svg { stroke: var(--lm-gold); stroke-width: 2.5; }
+
+/* ---------- Promises ---------- */
+.lm-promises {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: var(--lm-rule);
+  border-bottom: var(--lm-rule);
+}
+.lm-promise {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
+  border-right: var(--lm-rule);
+}
+.lm-promise:last-child { border-right: 0; }
+.lm-promise > div { display: flex; flex-direction: column; gap: 4px; }
+.lm-promise__title { font: 700 10px/1.5 var(--lm-font-caps) !important; letter-spacing: 2px; text-transform: uppercase; }
+.lm-promise__body { font: 400 12px/1.5 var(--lm-font-mono); color: var(--lm-sand); }
+
+/* ---------- Section heads ---------- */
+.lm-section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+.lm-section-head__titles { display: flex; flex-direction: column; gap: 8px; }
+
+/* ---------- Chosen this cycle ---------- */
+.lm-featured { padding: 60px 0; }
+.lm-featured .lm-wrap { display: flex; flex-direction: column; gap: 30px; }
+.lm-gecko-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.lm-gecko-grid:empty { display: none; }
+.lm-gecko { display: flex; flex-direction: column; gap: 14px; }
+.lm-gecko__frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  border-radius: 50% 50% 0 0;
+  background: var(--lm-oxblood);
+}
+.lm-gecko__arch {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50% 50% 0 0;
+  border: 2px solid var(--lm-gold);
+  background: repeating-linear-gradient(135deg, var(--lm-bg) 0 8px, #52302c 8px 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lm-gecko__arch img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.lm-gecko__frame:hover .lm-gecko__arch img { transform: scale(1.04); }
+.lm-gecko__sigil {
+  display: none;
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--lm-ink);
+  border: 1.5px solid var(--lm-gold);
+}
+.lm-gecko__sigil svg { stroke-width: 5; }
+.lm-gecko__row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.lm-gecko__name { font: 800 32px/1 var(--lm-font-gothic) !important; }
+.lm-gecko__price { font: 700 14px var(--lm-font-caps); color: var(--lm-gold); white-space: nowrap; }
+.lm-gecko__price .price-suffix { font-size: 10px; }
+.lm-gecko__morph { font: 700 9.5px/1.7 var(--lm-font-caps); letter-spacing: 2px; text-transform: uppercase; color: var(--lm-sand); }
+.lm-gecko__add { margin: auto 0 0; }
+.lm-empty { font: 400 13px/1.7 var(--lm-font-mono); color: var(--lm-sand); }
+
+/* ---------- Merch ---------- */
+.lm-merch {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+.lm-merch__intro { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.lm-merch__intro .lm-link-arrow { margin-top: 6px; border-bottom: 0; padding-bottom: 0; }
+.lm-merch__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.lm-merch__item { display: flex; flex-direction: column; gap: 10px; }
+.lm-merch__image {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: var(--lm-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.lm-merch__image img { width: 78%; height: 78%; object-fit: contain; transition: transform .4s ease; }
+.lm-merch__item:hover .lm-merch__image img { transform: rotate(-3deg) scale(1.03); }
+.lm-merch__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font: 700 10px/1.5 var(--lm-font-caps);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.lm-merch { border-bottom: var(--lm-rule); }
+
+/* ---------- Care rites + mudra ---------- */
+.lm-rites-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.lm-rites {
+  padding: 56px var(--lm-gutter);
+  border-right: var(--lm-rule);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.lm-rites__grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.lm-rite {
+  border: var(--lm-rule);
+  border-radius: 999px 999px 14px 14px;
+  padding: 22px 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5); }
+.lm-rite .lm-glyph { width: 40px; height: 40px; }
+.lm-rite__element { font: 700 9px var(--lm-font-caps); letter-spacing: 2px; text-transform: uppercase; color: var(--lm-gold); }
+.lm-rite__name { font: 800 22px/1 var(--lm-font-gothic); }
+
+.lm-mudra {
+  padding: 56px var(--lm-gutter);
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+}
+.lm-mudra__frame {
+  aspect-ratio: 3 / 4;
+  border: 1.5px solid var(--lm-gold);
+  border-radius: 999px 999px 10px 10px;
+  background: repeating-linear-gradient(135deg, var(--lm-bg) 0 7px, #52302c 7px 14px);
+  padding: 30% 14% 22%;
+}
+.lm-mudra__frame svg { stroke: var(--lm-gold); stroke-width: 3; }
+.lm-mudra__copy { display: flex; flex-direction: column; gap: 10px; }
+.lm-mudra__copy .lm-muted { font-size: 12px; }
+
+/* ---------- Affirmation + signup ---------- */
+.lm-coven { border-top: var(--lm-rule); }
+.lm-coven__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+.lm-coven__aff { font-size: 44px; line-height: 1.05; }
+.lm-coven__signup { display: flex; flex-direction: column; gap: 12px; }
+.lm-coven__label { font: 700 11px/1.6 var(--lm-font-caps); letter-spacing: 4px; text-transform: uppercase; }
+.lm-coven__form { display: flex; gap: 10px; }
+.lm-coven__form input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: var(--lm-rule);
+  border-radius: 999px;
+  padding: 16px 22px;
+  font: 400 13px var(--lm-font-mono);
+  color: var(--lm-cream);
+}
+.lm-coven__form input::placeholder { color: var(--lm-dust); }
+.lm-coven__form input:focus { outline: none; border-color: var(--lm-gold); }
+.lm-coven__form .lm-btn { font-size: 11px; padding: 16px 24px; }
+
+/* ---------- Tablet ---------- */
+@media screen and (max-width: 1100px) {
+  :root { --lm-gutter: 32px; }
+  #main .lm-hero__title { font-size: 60px; }
+  .lm-promise { padding: 20px; }
+  .lm-gecko__name { font-size: 26px !important; }
+  .lm-rites-row { grid-template-columns: minmax(0, 1fr); }
+  .lm-rites { border-right: 0; border-bottom: var(--lm-rule); }
+}
+
+/* ---------- Mobile (matches "Home · mobile") ---------- */
+@media screen and (max-width: 900px) {
+  :root { --lm-gutter: 20px; }
+  .lm-desktop-only { display: none !important; }
+  .lm-home .lm-mobile-only { display: block !important; }
+  .lm-home .lm-btn.lm-mobile-only { display: flex !important; }
+
+  .lm-hero { grid-template-columns: 1fr; gap: 0; padding-top: 0; padding-bottom: 28px; text-align: center; }
+  .lm-hero__circle { order: -1; width: min(340px, 100%); margin: 0 auto 8px; }
+  .lm-circle text { font-size: 30px; letter-spacing: 9px; }
+  .lm-circle circle, .lm-circle polygon { stroke-width: 3; }
+  .lm-circle .lm-circle__outer, .lm-circle .lm-circle__thin, .lm-circle .lm-circle__dash, .lm-circle__glyph { display: none; }
+  .lm-hero__seal { width: 61.8%; left: 19.1%; top: 19.1%; }
+  .lm-hero__copy { gap: 16px; align-items: stretch; }
+  #main .lm-hero__title { font-size: 40px; line-height: 1.05; }
+  .lm-hero__text { font-size: 12px; line-height: 1.6; max-width: none; }
+  .lm-hero__actions .lm-btn { width: 100%; font-size: 11px; padding: 18px; }
+
+  .lm-promises { grid-template-columns: 1fr 1fr; }
+  .lm-promise { padding: 16px; gap: 10px; border-right: 1px solid var(--lm-oxblood); border-bottom: 1px solid var(--lm-oxblood); }
+  .lm-promise:nth-child(2n) { border-right: 0; }
+  .lm-promise:nth-child(n+3) { border-bottom: 0; }
+  .lm-promise .lm-glyph { width: 24px; height: 24px; stroke-width: 2.5; }
+  .lm-promise__title { font-size: 8px !important; letter-spacing: 1.5px; }
+  .lm-promise__body { display: none; }
+
+  .lm-featured { padding: 28px 0; }
+  .lm-featured .lm-wrap { gap: 18px; }
+  .lm-display--xl { font-size: 34px; }
+  .lm-gecko-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .lm-gecko { gap: 6px; }
+  .lm-gecko__frame { padding: 0; background: none; }
+  .lm-gecko__sigil { display: block; }
+  .lm-gecko__row { display: contents; }
+  .lm-gecko__name { order: 1; font-size: 24px !important; }
+  .lm-gecko__morph { order: 2; font-size: 8px; letter-spacing: 1.5px; line-height: 1.5; }
+  .lm-gecko__price { order: 3; font-size: 11px; }
+  .lm-gecko__add { display: none; }
+  .lm-featured__all { width: 100%; font-size: 10px; padding: 16px; }
+
+  .lm-merch { grid-template-columns: 1fr; gap: 20px; padding-top: 32px; padding-bottom: 32px; }
+  .lm-display--lg { font-size: 34px; }
+  .lm-merch__grid { gap: 12px; }
+  .lm-merch__meta { flex-direction: column; font-size: 8px; letter-spacing: 1.5px; gap: 2px; }
+
+  .lm-rites { padding: 32px var(--lm-gutter); }
+  .lm-rites__grid {
+    grid-template-columns: repeat(5, 116px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 calc(var(--lm-gutter) * -1);
+    padding: 0 var(--lm-gutter) 4px;
+    scrollbar-width: none;
+  }
+  .lm-rites__grid::-webkit-scrollbar { display: none; }
+  .lm-rite { scroll-snap-align: start; }
+
+  .lm-mudra { padding: 24px var(--lm-gutter) 30px; grid-template-columns: 80px minmax(0, 1fr); gap: 14px; }
+  .lm-eyebrow--sm { font-size: 8px; letter-spacing: 3px; }
+  .lm-display--md { font-size: 24px; }
+  .lm-mudra__copy { gap: 6px; }
+  .lm-mudra__copy .lm-muted { font-size: 11px; line-height: 1.5; }
+
+  .lm-coven__inner { grid-template-columns: 1fr; gap: 20px; padding-top: 32px; padding-bottom: 32px; }
+  .lm-coven__aff { font-size: 30px; }
+  .lm-coven__label { font-size: 9px; letter-spacing: 2.5px; }
+}
+
+@media screen and (max-width: 420px) {
+  .lm-coven__form { flex-direction: column; }
+}
+
+/* NCL Enigmatic: paste its @font-face rule here (see README). Until then the
+   display type falls back to Grenze Gotisch. */
