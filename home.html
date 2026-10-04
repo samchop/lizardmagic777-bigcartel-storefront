@@ -153,7 +153,7 @@
                       <span class="lm-placeholder">[ gecko photo ]</span>
                     {% endif %}
                   </div>
-    
+                  <span class="lm-gecko__badge" aria-hidden="true">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
                 </a>
                 <div class="lm-gecko__row">
                   <h3 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h3>
