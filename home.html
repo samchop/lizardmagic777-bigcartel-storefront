@@ -160,14 +160,7 @@
                   <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
                 </div>
                 {% if lm_morph != blank %}<span class="lm-gecko__morph">{{ lm_morph }}</span>{% endif %}
-                {% if product.options.size == 1 %}
-                  <form class="lm-gecko__add" method="post" action="/cart">
-                    <input type="hidden" name="cart[add][id]" value="{{ product.options.first.id }}">
-                    <button type="submit" class="lm-btn lm-btn--ghost">SELECT</button>
-                  </form>
-                {% else %}
-                  <a class="lm-btn lm-btn--ghost lm-gecko__add" href="{{ product.url }}">Choose options</a>
-                {% endif %}
+                <a class="lm-btn lm-btn--ghost lm-gecko__add" href="{{ product.url }}">Select</a>
               </article>
             {% endif %}
           {% endfor %}
