@@ -4011,6 +4011,179 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
 }
 
 /* ==========================================================================
+   LIZARD MAGIC · LIVE GECKOS LISTING (products.html, live-geckos category)
+   Cards reuse the home page's .lm-gecko styles.
+   ========================================================================== */
+
+#main .content-wrapper:has(> .lm-listing) { max-width: none; padding: 0; }
+body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
+
+.lm-listing__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 30px;
+  align-items: end;
+  padding-top: 44px;
+  padding-bottom: 30px;
+  border-bottom: var(--lm-rule);
+}
+.lm-listing__intro { display: flex; flex-direction: column; gap: 10px; }
+#main .lm-listing__title { font-size: 76px; margin-top: 10px; }
+.lm-listing__lede { max-width: 560px; font: 400 14px/1.6 var(--lm-font-mono); color: var(--lm-sand); }
+.lm-listing__quote {
+  max-width: 340px;
+  padding: 16px 26px;
+  border: 1.5px solid var(--lm-gold);
+  border-radius: 999px;
+  font: 400 22px/1.2 var(--lm-font-display);
+  text-align: center;
+}
+
+.lm-listing__body {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.lm-listing__side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 32px 28px 32px var(--lm-gutter);
+  border-right: var(--lm-rule);
+}
+.lm-filter { display: flex; flex-direction: column; gap: 12px; }
+.lm-filter[hidden] { display: none; }
+.lm-chips { display: flex; flex-direction: column; gap: 8px; }
+.lm-chip {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--lm-oxblood);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lm-cream);
+  font: 400 13px var(--lm-font-mono);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.lm-chip:hover { border-color: var(--lm-gold); }
+.lm-chip[aria-pressed="true"] { background: var(--lm-gold); border-color: var(--lm-gold); color: var(--lm-ink); }
+.lm-chip:focus-visible { outline: 2px solid var(--lm-cream); outline-offset: 2px; }
+.lm-listing__note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1.5px dashed var(--lm-oxblood);
+  border-radius: 14px;
+}
+.lm-listing__note p { font: 400 12px/1.6 var(--lm-font-mono); color: var(--lm-sand); }
+
+.lm-listing__main { display: flex; flex-direction: column; gap: 24px; padding: 32px var(--lm-gutter) 56px; min-width: 0; }
+.lm-listing__toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.lm-listing__count { white-space: nowrap; font: 700 10px var(--lm-font-caps); letter-spacing: 3px; text-transform: uppercase; color: #c9a98a; }
+.lm-sort select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 10px 36px 10px 16px;
+  border: 1.5px solid var(--lm-oxblood);
+  border-radius: 999px;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23f0a548' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 14px center;
+  color: var(--lm-cream);
+  font: 700 10px var(--lm-font-caps);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.lm-sort select:focus-visible { outline: 2px solid var(--lm-cream); outline-offset: 2px; }
+.lm-sort option { background: var(--lm-ink); color: var(--lm-cream); }
+
+.lm-listing__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.lm-card {
+  padding: 14px 14px 20px;
+  border: 1.5px solid var(--lm-oxblood);
+  border-radius: 200px 200px 16px 16px;
+  background: var(--lm-ink);
+  transition: border-color .2s ease;
+}
+.lm-card:hover { border-color: var(--lm-gold); }
+.lm-card[hidden] { display: none; }
+.lm-card .lm-gecko__row, .lm-card .lm-gecko__morph { padding: 0 4px; }
+.lm-card--unavailable .lm-gecko__arch img { filter: grayscale(.6) brightness(.75); }
+.lm-card__status {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--lm-ink);
+  border: 1px solid var(--lm-gold);
+  color: var(--lm-gold);
+  font: 700 9px var(--lm-font-caps);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lm-listing__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 40px;
+  border: 1.5px dashed var(--lm-oxblood);
+  border-radius: 16px;
+  text-align: center;
+}
+.lm-listing__empty[hidden] { display: none; }
+.lm-listing__reset {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--lm-gold);
+  background: none;
+  color: var(--lm-gold);
+  font: inherit;
+  cursor: pointer;
+}
+.lm-listing__pages { display: flex; justify-content: center; gap: 12px; font: 700 11px var(--lm-font-caps); letter-spacing: 2px; }
+
+@media screen and (max-width: 1100px) {
+  .lm-listing__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #main .lm-listing__title { font-size: 60px; }
+}
+
+@media screen and (max-width: 900px) {
+  .lm-listing__head { grid-template-columns: 1fr; gap: 18px; padding-top: 28px; padding-bottom: 24px; }
+  #main .lm-listing__title { font-size: 44px; margin-top: 4px; }
+  .lm-listing__lede { font-size: 12px; }
+  .lm-listing__quote { max-width: none; font-size: 18px; padding: 12px 20px; }
+
+  .lm-listing__body { grid-template-columns: minmax(0, 1fr); }
+  .lm-listing__side { gap: 14px; padding: 20px 0 0; border-right: 0; }
+  .lm-filter { gap: 8px; }
+  .lm-filter > .lm-eyebrow { padding: 0 var(--lm-gutter); }
+  /* Filter chips become swipeable rows */
+  .lm-chips {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0 var(--lm-gutter) 2px;
+    scrollbar-width: none;
+  }
+  .lm-chips::-webkit-scrollbar { display: none; }
+  .lm-chips::after { content: ""; flex: 0 0 1px; }
+  .lm-chip { flex: none; padding: 8px 14px; font-size: 12px; }
+  .lm-listing__note { display: none; }
+
+  .lm-listing__main { padding: 20px var(--lm-gutter) 40px; gap: 18px; }
+  .lm-listing__grid { gap: 18px; }
+  .lm-card { padding: 8px 8px 14px; border-radius: 200px 200px 12px 12px; }
+  .lm-card__status { bottom: 8px; font-size: 8px; padding: 3px 9px; }
+}
+
+/* ==========================================================================
    LIZARD MAGIC · HEADER + FOOTER (every page)
    ========================================================================== */
 

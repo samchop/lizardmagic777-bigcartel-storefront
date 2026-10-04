@@ -137,7 +137,7 @@
           {% for product in lm_geckos.products %}
             {% if product.status == 'active' and lm_shown < lm_featured_limit %}
               {% assign lm_shown = lm_shown | plus: 1 %}
-              {% assign lm_morph = product.description | strip_html | strip | newline_to_br | split: '<br />' | first | strip | truncate: 48 %}
+              {% assign lm_morph = product.description | split: '</p>' | first | split: '<br' | first | strip_html | strip | newline_to_br | split: '<br />' | first | strip | truncate: 48 %}
               <article class="lm-gecko">
                 <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
                   <div class="lm-gecko__arch">

@@ -1,4 +1,204 @@
 {% comment %}
+  Lizard Magic: the Live Geckos category gets its own listing (filters, sort, arched cards).
+  Every other product page (all products, merch, search) keeps the theme layout below.
+  Morph and sex come from the first line of each description, e.g. "Lily White ✦ Male".
+{% endcomment %}
+{% assign lm_is_geckos = false %}
+{% if page.full_url contains '/category/live-geckos' %}{% assign lm_is_geckos = true %}{% endif %}
+
+{% if lm_is_geckos %}
+<div class="lm-home lm-listing">
+  <div class="lm-listing__head lm-wrap">
+    <div class="lm-listing__intro">
+      <span class="lm-eyebrow">Available entities</span>
+      <h1 class="lm-display lm-listing__title">{{ page.name }}</h1>
+      <p class="lm-listing__lede">Every gecko is hand-raised, eating well and shipped overnight with a live-arrival guarantee.</p>
+    </div>
+    <p class="lm-listing__quote">“The right gecko finds its keeper.”</p>
+  </div>
+
+  {% paginate products from products.current by 100 %}
+    <div class="lm-listing__body">
+      <aside class="lm-listing__side" aria-label="Filter geckos">
+        <div class="lm-filter" data-lm-filter="sex" hidden>
+          <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-sex">Sex</span>
+          <div class="lm-chips" role="group" aria-labelledby="lm-filter-sex"></div>
+        </div>
+        <div class="lm-filter" data-lm-filter="morph" hidden>
+          <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-morph">Morph</span>
+          <div class="lm-chips" role="group" aria-labelledby="lm-filter-morph"></div>
+        </div>
+        <div class="lm-listing__note">
+          <span class="lm-eyebrow lm-eyebrow--sm">Shipping rite</span>
+          <p>Ships overnight, weather permitting. Live arrival guaranteed, and lineage is available for every gecko produced here.</p>
+        </div>
+      </aside>
+
+      <div class="lm-listing__main">
+        <div class="lm-listing__toolbar">
+          <span class="lm-listing__count" data-lm-count aria-live="polite">{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %}</span>
+          <label class="lm-sort">
+            <span class="lm-visually-hidden">Sort geckos</span>
+            <select data-lm-sort>
+              <option value="featured">Sort: Featured</option>
+              <option value="price-asc">Sort: Price low → high</option>
+              <option value="price-desc">Sort: Price high → low</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="lm-listing__grid" data-lm-grid>
+          {% for product in products %}
+            {% assign lm_first = product.description | split: '</p>' | first | split: '<br' | first | strip_html | strip | newline_to_br | split: '<br />' | first | strip %}
+            {% assign lm_parts = lm_first | replace: '·', '✦' | replace: '|', '✦' | split: '✦' %}
+            {% assign lm_sex = '' %}
+            {% assign lm_morph = '' %}
+            {% for lm_part in lm_parts %}
+              {% assign lm_p = lm_part | strip %}
+              {% assign lm_pd = lm_p | downcase %}
+              {% if lm_pd == 'female' or lm_pd == 'male' or lm_pd == 'unsexed' %}
+                {% assign lm_sex = lm_p | capitalize %}
+              {% elsif lm_morph == blank and lm_p != blank %}
+                {% assign lm_morph = lm_p %}
+              {% endif %}
+            {% endfor %}
+            {% assign lm_status = '' %}
+            {% case product.status %}
+              {% when 'sold-out' %}{% assign lm_status = t['products.sold_out'] %}
+              {% when 'coming-soon' %}{% assign lm_status = t['products.coming_soon'] %}
+            {% endcase %}
+            <article class="lm-gecko lm-card{% if product.status != 'active' %} lm-card--unavailable{% endif %}" data-lm-index="{{ forloop.index0 }}" data-lm-price="{{ product.default_price }}" data-lm-sex="{{ lm_sex | escape }}" data-lm-morph="{{ lm_morph | escape }}">
+              <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
+                <div class="lm-gecko__arch">
+                  {% if product.image != blank %}
+                    <img
+                      alt=""
+                      {% if forloop.index > 6 %}loading="lazy"{% endif %}
+                      src="{{ product.image | product_image_url | constrain: 600 }}"
+                      srcset="{{ product.image | product_image_url | constrain: 320 }} 320w, {{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 900 }} 900w"
+                      sizes="(max-width: 900px) 45vw, 300px"
+                    >
+                  {% else %}
+                    <span class="lm-placeholder">[ gecko photo ]</span>
+                  {% endif %}
+                </div>
+                <span class="lm-gecko__badge">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
+                {% if lm_status != blank %}<span class="lm-card__status">{{ lm_status }}</span>{% endif %}
+              </a>
+              <div class="lm-gecko__row">
+                <h2 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h2>
+                <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
+              </div>
+              {% if lm_first != blank %}<span class="lm-gecko__morph">{{ lm_first | truncate: 48 }}</span>{% endif %}
+              <a class="lm-btn lm-btn--solid lm-gecko__add" href="{{ product.url }}">{% if product.status == 'active' %}Select{% else %}View{% endif %}</a>
+            </article>
+          {% endfor %}
+        </div>
+
+        <div class="lm-listing__empty" data-lm-empty {% if products.size > 0 %}hidden{% endif %}>
+          <p class="lm-display lm-display--md">This vessel hasn't arrived yet</p>
+          <p class="lm-muted">{% if products.size > 0 %}No geckos match those filters right now. <button type="button" class="lm-listing__reset" data-lm-reset>Show all geckos</button>{% else %}The next clutch is still in the egg. Check back soon for the next drop.{% endif %}</p>
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <nav class="lm-listing__pages" aria-label="Pagination">{{ paginate | default_pagination, 'page-numbers', 'page-numbers' }}</nav>
+        {% endif %}
+      </div>
+    </div>
+  {% endpaginate %}
+</div>
+
+<script>
+  /* Lizard Magic: gecko filters + sort (state lives in the URL, e.g. ?sex=female&morph=tricolor) */
+  (function () {
+    var grid = document.querySelector('[data-lm-grid]');
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.children);
+    var countEl = document.querySelector('[data-lm-count]');
+    var emptyEl = document.querySelector('[data-lm-empty]');
+    var sortEl = document.querySelector('[data-lm-sort]');
+    var params = new URLSearchParams(location.search);
+    var state = { sex: params.get('sex') || '', morph: params.get('morph') || '', sort: params.get('sort') || 'featured' };
+    var slug = function (s) { return (s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); };
+
+    function options(key, order) {
+      var seen = {};
+      cards.forEach(function (c) {
+        var label = c.getAttribute('data-lm-' + key);
+        if (!label) return;
+        var id = slug(label);
+        if (!seen[id]) seen[id] = { id: id, label: label, count: 0 };
+        seen[id].count++;
+      });
+      var list = Object.keys(seen).map(function (k) { return seen[k]; });
+      list.sort(function (a, b) {
+        if (order) return order.indexOf(a.id) - order.indexOf(b.id);
+        return a.label.localeCompare(b.label);
+      });
+      return list;
+    }
+
+    function buildChips(key, order) {
+      var box = document.querySelector('[data-lm-filter="' + key + '"]');
+      var list = options(key, order);
+      if (!box || list.length < 2) return;
+      var wrap = box.querySelector('.lm-chips');
+      [{ id: '', label: 'All', count: cards.length }].concat(list).forEach(function (o) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lm-chip';
+        b.setAttribute('data-value', o.id);
+        b.innerHTML = '<span></span><span class="lm-chip__count"></span>';
+        b.firstChild.textContent = o.label;
+        b.lastChild.textContent = o.count;
+        b.addEventListener('click', function () { state[key] = o.id; render(); });
+        wrap.appendChild(b);
+      });
+      box.hidden = false;
+    }
+
+    function render() {
+      var shown = 0;
+      cards.forEach(function (c) {
+        var ok = (!state.sex || slug(c.getAttribute('data-lm-sex')) === state.sex) &&
+                 (!state.morph || slug(c.getAttribute('data-lm-morph')) === state.morph);
+        c.hidden = !ok;
+        if (ok) shown++;
+      });
+      var sorted = cards.slice().sort(function (a, b) {
+        var pa = parseFloat(a.getAttribute('data-lm-price')) || 0, pb = parseFloat(b.getAttribute('data-lm-price')) || 0;
+        if (state.sort === 'price-asc') return pa - pb;
+        if (state.sort === 'price-desc') return pb - pa;
+        return a.getAttribute('data-lm-index') - b.getAttribute('data-lm-index');
+      });
+      sorted.forEach(function (c) { grid.appendChild(c); });
+      document.querySelectorAll('.lm-chip').forEach(function (b) {
+        var key = b.closest('[data-lm-filter]').getAttribute('data-lm-filter');
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === state[key]));
+      });
+      if (countEl) countEl.textContent = shown === cards.length
+        ? cards.length + (cards.length === 1 ? ' gecko' : ' geckos')
+        : shown + ' of ' + cards.length + ' geckos';
+      if (emptyEl && cards.length) emptyEl.hidden = shown > 0;
+      sortEl.value = state.sort;
+      var q = new URLSearchParams(location.search);
+      ['sex', 'morph'].forEach(function (k) { state[k] ? q.set(k, state[k]) : q.delete(k); });
+      state.sort !== 'featured' ? q.set('sort', state.sort) : q.delete('sort');
+      var qs = q.toString();
+      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+    }
+
+    buildChips('sex', ['female', 'male', 'unsexed']);
+    buildChips('morph');
+    sortEl.addEventListener('change', function () { state.sort = sortEl.value; render(); });
+    var reset = document.querySelector('[data-lm-reset]');
+    if (reset) reset.addEventListener('click', function () { state.sex = ''; state.morph = ''; render(); });
+    render();
+  })();
+</script>
+
+{% else %}
+{% comment %}
   Use page name from Custo if it's been customized, otherwise use the localized default.
 {% endcomment %}
 {% assign page_title = t['navigation.products'] %}
@@ -146,3 +346,5 @@
     <div class="message-banner message-banner--centered message-banner--no-bg">{{ t['products.no_products'] }}</div>
   {% endif %}
 {% endpaginate %}
+
+{% endif %}
