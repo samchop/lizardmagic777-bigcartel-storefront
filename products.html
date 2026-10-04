@@ -8,17 +8,17 @@
 
 {% if lm_is_geckos %}
 <div class="lm-home lm-listing">
-  <div class="lm-listing__head lm-wrap">
+  <div class="lm-listing__head lm-wrap lm-band">
     <div class="lm-listing__intro">
       <span class="lm-eyebrow">Available entities</span>
-      <h1 class="lm-display lm-listing__title">{{ page.name }}</h1>
-      <p class="lm-listing__lede">Every gecko is hand-raised, eating well and shipped overnight with a live-arrival guarantee.</p>
+      <h1 class="lm-display lm-listing__title">For Your Exquisite Selection</h1>
+      <p class="lm-listing__lede">Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.</p>
     </div>
     <p class="lm-listing__quote">“The right gecko finds its keeper.”</p>
   </div>
 
   {% paginate products from products.current by 100 %}
-    <div class="lm-listing__body">
+    <div class="lm-listing__body ">
       <aside class="lm-listing__side" aria-label="Filter geckos">
         <div class="lm-filter" data-lm-filter="sex" hidden>
           <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-sex">Sex</span>
@@ -29,8 +29,9 @@
           <div class="lm-chips" role="group" aria-labelledby="lm-filter-morph"></div>
         </div>
         <div class="lm-listing__note">
-          <span class="lm-eyebrow lm-eyebrow--sm">Shipping rite</span>
-          <p>Ships overnight, weather permitting. Live arrival guaranteed, and lineage is available for every gecko produced here.</p>
+          <span class="lm-listing-ship-price">$55</span>
+          <span class="lm-eyebrow lm-eyebrow--sm">Overnight Summoning</span>
+          <p>Ships overnight, weather permitting. 45-90&deg; Live arrival guaranteed.</p>
         </div>
       </aside>
 

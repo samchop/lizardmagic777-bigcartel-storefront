@@ -843,7 +843,7 @@ header a:hover {
   gap: 32px;
   font-size: calc(1.25em * var(--header-text-scale, 1));
   font-weight: 500;
-  line-height: 1em;
+  line-height: 1.25;
   font-family: var(--secondary-font);
 }
 .top-nav * {
@@ -1023,7 +1023,6 @@ h1, h2, h3, h4, h5, h6 {
 
 #main {
   flex: 1;
-  padding-bottom: var(--margin-size);
 }
 #main .content-wrapper {
   margin: 0 auto;
@@ -3622,6 +3621,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   text-transform: uppercase;
   color: var(--lm-gold);
   padding-bottom: 1em;
+  line-height: 1.5;
 }
 .lm-eyebrow--sm { font-size: 10px; letter-spacing: 4px; }
 .lm-display { font-family: var(--lm-font-display); font-weight: 400; line-height: 1; text-wrap: balance; letter-spacing: 0.03em; word-spacing: -0.12em; }
@@ -3796,7 +3796,9 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   font: 400 18px var(--lm-font-mono);
   color: var(--lm-cream);
   white-space: nowrap;
-  border-bottom: 1px solid var(--lm-copper); }
+  border-bottom: 1px solid var(--lm-copper);
+  margin-top: -4px; 
+}
 .lm-gecko__price .price-suffix { font-size: 10px; }
 .lm-gecko__morph { font: 700 9.5px/1.7 var(--lm-font-caps); text-align: center; letter-spacing: 2px; text-transform: uppercase; color: var(--lm-sand); }
 .lm-gecko__add { margin: auto 0 0; background-color: var(--lm-copper); }
@@ -4059,29 +4061,37 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 4px 14px;
   border: 1.5px solid var(--lm-oxblood);
   border-radius: 999px;
   background: transparent;
   color: var(--lm-cream);
   font: 400 13px var(--lm-font-mono);
+  text-transform: uppercase;
+  letter-spacing:1px;
   text-align: left;
   cursor: pointer;
   transition: background-color .2s ease, color .2s ease, border-color .2s ease;
 }
 .lm-chip:hover { border-color: var(--lm-gold); }
-.lm-chip[aria-pressed="true"] { background: var(--lm-gold); border-color: var(--lm-gold); color: var(--lm-ink); }
+.lm-chip[aria-pressed="true"] { background: var(--lm-oxblood); border-color: var(--lm-oxblood); }
 .lm-chip:focus-visible { outline: 2px solid var(--lm-cream); outline-offset: 2px; }
 .lm-listing__note {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
-  border: 1.5px dashed var(--lm-oxblood);
+  gap: 0;
+  padding: 20px 8px;
   border-radius: 14px;
+  background-color: var(--lm-oxblood);
+  text-align: center;
 }
 .lm-listing__note p { font: 400 12px/1.6 var(--lm-font-mono); color: var(--lm-sand); }
-
+.lm-listing-ship-price {
+  font-family: var(--lm-font-display);
+  font-size: 36px;
+  line-height: 40px;
+  margin-bottom:4px;
+}
 .lm-listing__main { display: flex; flex-direction: column; gap: 24px; padding: 32px var(--lm-gutter) 56px; min-width: 0; }
 .lm-listing__toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .lm-listing__count { white-space: nowrap; font: 700 10px var(--lm-font-caps); letter-spacing: 3px; text-transform: uppercase; color: #c9a98a; }
@@ -4101,17 +4111,12 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 .lm-sort select:focus-visible { outline: 2px solid var(--lm-cream); outline-offset: 2px; }
 .lm-sort option { background: var(--lm-ink); color: var(--lm-cream); }
 
-.lm-listing__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.lm-listing__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
 .lm-card {
-  padding: 14px 14px 20px;
-  border: 1.5px solid var(--lm-oxblood);
-  border-radius: 200px 200px 16px 16px;
-  background: var(--lm-ink);
-  transition: border-color .2s ease;
+  padding: 14px 14px;
 }
 .lm-card:hover { border-color: var(--lm-gold); }
 .lm-card[hidden] { display: none; }
-.lm-card .lm-gecko__row, .lm-card .lm-gecko__morph { padding: 0 4px; }
 .lm-card--unavailable .lm-gecko__arch img { filter: grayscale(.6) brightness(.75); }
 .lm-card__status {
   position: absolute;
@@ -4128,7 +4133,9 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   text-transform: uppercase;
   white-space: nowrap;
 }
-
+#products .lm-gecko__add {
+  display: none;
+}
 .lm-listing__empty {
   display: flex;
   flex-direction: column;
