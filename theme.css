@@ -3955,7 +3955,7 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
   .lm-gecko { gap: 6px; }
   .lm-gecko__frame { padding: 0; background: none; }
   .lm-gecko__sigil { display: block; }
-  .lm-gecko__row { display: contents; }
+  .lm-gecko__row {  }
   .lm-gecko__name { order: 1; font-size: 24px !important; }
   .lm-gecko__morph { order: 2; font-size: 8px; letter-spacing: 1.5px; line-height: 1.5; text-align: left; }
   .lm-gecko__price { order: 3;
