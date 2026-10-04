@@ -3778,9 +3778,9 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 .lm-gecko__badge {
   display: none;
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  padding: 2px 9px;
+  right: 0;
+  top: 16%;
+  padding: 2px 10px;
   border-radius: 2em;
   background: var(--lm-gold);
   color: var(--lm-oxblood);
