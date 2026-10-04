@@ -3707,7 +3707,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 .lm-circle .lm-circle__outer { stroke: var(--lm-oxblood); stroke-width: 2; }
 .lm-circle .lm-circle__thin { stroke-width: 1; }
 .lm-circle .lm-circle__dash { stroke-width: 1; stroke-dasharray: 3 6; }
-.lm-circle text { font: 700 22px var(--lm-font-caps); letter-spacing: 8px; fill: var(--lm-gold); }
+.lm-circle text { font: 400 18px var(--lm-font-caps); letter-spacing: 8.45px; fill: var(--lm-gold); }
 .lm-circle__ring { transform-origin: 350px 350px; animation: lm-spin 120s linear infinite; }
 .lm-circle__glyph polygon, .lm-circle__glyph line { fill: var(--lm-bg); stroke: var(--lm-cream); stroke-width: 2; }
 @keyframes lm-spin { to { transform: rotate(360deg); } }
