@@ -26,6 +26,26 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
   mailing-list form URL to show the email field. Otherwise the button links
   to Instagram (if set) or the contact page.
 
+## Type scale
+
+All Lizard Magic text sizes live as variables at the top of the Lizard Magic
+section in `theme.css`. Tablet (≤1100px) and mobile (≤900px) only change
+those variables, so a new page just uses the same names:
+
+| Variable | Desktop | Tablet | Mobile | Used for |
+| --- | --- | --- | --- | --- |
+| `--lm-text` | 16px | 16px | 15px | paragraphs |
+| `--lm-text-sm` | 14px | 14px | 13px | paragraphs in tight spots |
+| `--lm-leading` | 1.6 | | | paragraph line height |
+| `--lm-heading-lg` (`.lm-display--lg`) | 72px | 60px | 44px | page titles |
+| `--lm-heading-md` (`.lm-display--md`) | 52px | 44px | 34px | section titles |
+| `--lm-heading-sm` (`.lm-display--sm`) | 32px | 32px | 24px | small headings |
+| `--lm-card-title` | 28px | 26px | 24px | gecko names |
+| `--lm-heading-leading` | 1.05 | | | heading line height |
+
+Paragraphs inside `.lm-home` inherit `--lm-text` / `--lm-leading`
+automatically; only small text needs `font-size: var(--lm-text-sm)`.
+
 ## Header + footer (layout.html)
 
 - **Announcement bar:** today's affirmation, followed by the Announcement
