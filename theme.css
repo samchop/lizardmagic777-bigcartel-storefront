@@ -3799,27 +3799,32 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 .lm-gecko__badge {
   display: none;
   position: absolute;
-  right: 0;
-  top: 16%;
-  padding: 2px 10px;
-  border-radius: 2em;
-  background: var(--lm-gold);
-  color: var(--lm-ink);
-  font: 400 18px/1.4 var(--lm-font-body);
+  right: 16px;
+  bottom: 16px;
+  padding: 4px 4px;
+  border-radius: 4px;
+  background: var(--lm-bg);
+  color: var(--lm-cream);
+  box-shadow: 1.5px 1.5px var(--lm-copper);
+  font: 400 16px var(--lm-font-caps);
+  letter-spacing: 1px;
   white-space: nowrap;
 }
 .lm-gecko__badge .price-suffix { font-size: 10px; }
 .lm-gecko__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .lm-gecko__name { font: 700 var(--lm-card-title)/var(--lm-heading-leading) var(--lm-font-accent) !important; }
 .lm-gecko__price { 
-  font: 400 18px var(--lm-font-body);
+  font-family: var(--lm-font-caps);
   color: var(--lm-cream);
   white-space: nowrap;
-  border-bottom: 1px solid var(--lm-copper);
-  margin-top: -4px; 
+  border-radius: 20px;
+  border: 1px solid var(--lm-copper);
+  margin-top: -4px;
+  padding: 2px 8px;
+  letter-spacing: 1px;
 }
 .lm-gecko__price .price-suffix { font-size: 10px; }
-.lm-gecko__morph { font: 700 9.5px/1.7 var(--lm-font-caps); text-align: center; letter-spacing: 2px; text-transform: uppercase; color: var(--lm-sand); }
+.lm-gecko__morph { font: 400 12px/1.7 var(--lm-font-caps); text-align: center; letter-spacing: 2px; text-transform: uppercase; color: var(--lm-sand); }
 .lm-gecko__add { margin: auto 0 0; background-color: var(--lm-copper); }
 .lm-empty { color: var(--lm-sand); }
 
