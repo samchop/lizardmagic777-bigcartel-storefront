@@ -4013,7 +4013,7 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
   text-align: center;
   color: var(--lm-sand);
 }
-.lm-announce__today { color: var(--lm-gold); }
+.lm-announce__today, .lm-announce__sep { color: var(--lm-copper); }
 
 .lm-header {
   display: block;
