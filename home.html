@@ -125,7 +125,7 @@
     <div class="lm-wrap">
       <div class="lm-section-head">
         <div class="lm-section-head__titles">
-          <span class="lm-eyebrow lm-desktop-only">Available Entities</span>
+          <span class="lm-eyebrow">Available Entities</span>
           <h2 class="lm-display lm-display--xl">For Your Exquisite Selection</h2>
         </div>
         <a class="lm-link-arrow lm-desktop-only" href="{{ lm_geckos_url }}">View all {% if lm_available > 0 %}{{ lm_available }} {% endif %}geckos →</a>
@@ -179,11 +179,11 @@
   {% if lm_merch and lm_merch.products.size > 0 %}
     <section class="lm-merch lm-wrap">
       <div class="lm-merch__intro">
-        <span class="lm-eyebrow">Merch</span>
+        <span class="lm-eyebrow">Arcane Artifacts</span>
         <h2 class="lm-display lm-display--lg">Wear the Magic</h2>
         <p class="lm-muted">Tees & talismans to carry the good vibes with you.</p>
         <p class="lm-muted">This aint your average brand tee!!</p>
-        <a class="lm-link-arrow" href="{{ lm_merch_url }}">Shop all artifacts →</a>
+        <a class="lm-link-arrow" href="{{ lm_merch_url }}">Shop all merch →</a>
       </div>
       <div class="lm-merch__grid">
         {% for product in lm_merch.products limit: lm_merch_limit %}

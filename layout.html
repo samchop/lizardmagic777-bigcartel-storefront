@@ -235,11 +235,6 @@
         <div class="footer-custom-content">{{ theme.footer_text }}</div>
       {% endif %}
       <div class="lm-footer__inner">
-        {% if theme.instagram_url != blank %}
-          <a class="lm-footer__handle" href="{{ theme.instagram_url }}">@lizardmagic777</a>
-        {% else %}
-          <span class="lm-footer__handle">@lizardmagic777</span>
-        {% endif %}
         <nav class="lm-footer__links" aria-label="Secondary">
           <ul>
             {% for custom_page in pages.custom_pages %}

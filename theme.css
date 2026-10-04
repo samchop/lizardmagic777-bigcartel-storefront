@@ -3649,7 +3649,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   font: 700 12px var(--lm-font-caps);
   letter-spacing: 3px;
   text-transform: uppercase;
-  padding: 20px 30px;
+  padding: 12px 36px;
   border-radius: 999px;
   border: 1.5px solid transparent;
   cursor: pointer;
@@ -3782,10 +3782,11 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   top: 16%;
   padding: 2px 10px;
   border-radius: 2em;
-  background: var(--lm-gold);
-  color: var(--lm-oxblood);
+  background: var(--lm-bg);
+  color: var(--lm-gold);
   font: 600 18px/1.4 var(--lm-font-mono);
   white-space: nowrap;
+  border:1px solid;
 }
 .lm-gecko__badge .price-suffix { font-size: 10px; }
 .lm-gecko__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
@@ -3933,10 +3934,10 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
 
   .lm-hero { grid-template-columns: 1fr; gap: 0; padding-top: 0; padding-bottom: 28px; text-align: center; }
   .lm-hero__circle { order: -1; width: min(340px, 100%); margin: 0 auto 8px; }
-  .lm-circle text { font-size: 30px; letter-spacing: 9px; }
+  .lm-circle text {}
   .lm-circle circle, .lm-circle polygon { stroke-width: 3; }
   .lm-circle .lm-circle__outer, .lm-circle .lm-circle__thin, .lm-circle .lm-circle__dash, .lm-circle__glyph { display: none; }
-  .lm-hero__seal { width: 61.8%; left: 19.1%; top: 19.1%; }
+  .lm-hero__seal { }
   .lm-hero__copy { gap: 16px; align-items: stretch; }
   #main .lm-hero__title { font-size: 40px; line-height: 1.05; }
   .lm-hero__text { font-size: 12px; line-height: 1.6; max-width: none; }
@@ -3955,7 +3956,7 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
   .lm-display--xl { font-size: 34px; }
   .lm-gecko-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
   .lm-gecko { gap: 6px; }
-  .lm-gecko__frame { padding: 0; background: none; }
+  .lm-gecko__frame { padding: 1px; }
   .lm-gecko__badge { display: block; }
   .lm-gecko__price { display: none; }
   .lm-gecko__name { font-size: 24px !important; overflow-wrap: anywhere; text-align: center; width: 100%;}
