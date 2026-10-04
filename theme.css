@@ -3801,11 +3801,12 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   position: absolute;
   right: 16px;
   bottom: 16px;
-  padding: 4px 4px;
-  border-radius: 4px;
+  padding: 8px 20px;
+  border-radius: 20px;
   background: var(--lm-bg);
   color: var(--lm-cream);
-  box-shadow: 1.5px 1.5px var(--lm-copper);
+  border: 1px solid var(--lm-copper);
+  box-shadow: 0 0 0 4px var(--lm-bg);
   font: 400 16px var(--lm-font-caps);
   letter-spacing: 1px;
   white-space: nowrap;
