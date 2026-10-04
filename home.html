@@ -160,7 +160,7 @@
                   <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
                 </div>
                 {% if lm_morph != blank %}<span class="lm-gecko__morph">{{ lm_morph }}</span>{% endif %}
-                <a class="lm-btn lm-btn--ghost lm-gecko__add" href="{{ product.url }}">Select</a>
+                <a class="lm-btn lm-btn--solid lm-gecko__add" href="{{ product.url }}">Select</a>
               </article>
             {% endif %}
           {% endfor %}
