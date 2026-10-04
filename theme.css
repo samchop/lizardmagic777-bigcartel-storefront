@@ -3558,7 +3558,7 @@ textarea {
 /* ==========================================================================
    LIZARD MAGIC · HOME
    Matches the "Home · desktop" and "Home · mobile" mockups.
-   Fonts are loaded in layout.html. NCL Enigmatic falls back to Grenze Gotisch
+   Fonts are loaded in layout.html. NCL Enigmatic falls back to Almendra
    until its @font-face is added (see the note at the end of this block).
    ========================================================================== */
 
@@ -3571,8 +3571,8 @@ textarea {
   --lm-cream: #f3ecd0;
   --lm-sand: #e2d6b4;
   --lm-dust: #b89a86;
-  --lm-font-display: 'NCL Enigmatic', 'Grenze Gotisch', serif;
-  --lm-font-gothic: 'Grenze Gotisch', serif;
+  --lm-font-display: 'NCL Enigmatic', 'Almendra', serif;
+  --lm-font-accent: 'Almendra', serif;
   --lm-font-caps: 'Syncopate', sans-serif;
   --lm-font-mono: 'Space Mono', monospace;
   --lm-gutter: 44px;
@@ -3792,7 +3792,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 }
 .lm-gecko__badge .price-suffix { font-size: 10px; }
 .lm-gecko__row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.lm-gecko__name { font: 800 32px/1 var(--lm-font-gothic) !important; }
+.lm-gecko__name { font: 700 32px/1 var(--lm-font-accent) !important; }
 .lm-gecko__price { 
   font: 400 18px var(--lm-font-mono);
   color: var(--lm-cream);
@@ -3858,7 +3858,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 .lm-rite {
   border: var(--lm-rule);
   border-radius: 999px 999px 14px 14px;
-  padding: 22px 10px 16px;
+  padding: 22px 6px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3869,7 +3869,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5); }
 .lm-rite .lm-glyph { width: 40px; height: 40px; }
 .lm-rite__element { font: 700 9px var(--lm-font-caps); letter-spacing: 2px; text-transform: uppercase; color: var(--lm-gold); }
-.lm-rite__name { font: 800 22px/1 var(--lm-font-gothic); }
+.lm-rite__name { font: 700 clamp(15px, 1.42vw, 18px)/1.1 var(--lm-font-accent); }
 
 .lm-mudra {
   padding: 56px var(--lm-gutter);
@@ -4120,11 +4120,11 @@ body:not([data-bc-page-type="home"]) #main { padding-top: 48px; }
   .lm-header .lm-header__inner { padding: 16px 20px; font-size: 10px; letter-spacing: 2px; }
   .lm-header .lm-header__inner .lm-header__menu { display: inline-flex; }
   .lm-header .lm-header__inner .lm-header__search { display: none; }
-  .lm-header .lm-header__inner .lm-header__brand { font: 900 28px/1 var(--lm-font-gothic); }
+  .lm-header .lm-header__inner .lm-header__brand { font: 700 28px/1 var(--lm-font-accent); }
 
   .lm-footer { padding: 24px 20px 28px; }
   .lm-footer__inner { flex-direction: column; text-align: center; gap: 14px; }
 }
 
 /* NCL Enigmatic: paste its @font-face rule here (see README). Until then the
-   display type falls back to Grenze Gotisch. */
+   display type falls back to Almendra. */

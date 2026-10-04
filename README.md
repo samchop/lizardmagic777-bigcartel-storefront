@@ -14,7 +14,7 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
 
 - `home.html` holds the markup; the styles are at the end of `theme.css`
   under `LIZARD MAGIC · HOME`.
-- `layout.html` loads Grenze Gotisch, Space Mono and Syncopate from Google Fonts.
+- `layout.html` loads Almendra, Space Mono and Syncopate from Google Fonts.
 - **Hero seal:** upload `assets/lizard-magic-seal.png` as the Welcome image
   (Customize Design > Home). It sits inside the magic circle.
 - **Categories:** "Chosen this cycle" pulls the first 4 available products
@@ -42,6 +42,6 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
 ## NCL Enigmatic
 
 The headline font is a commercial font, so it is not committed to this public
-repo. Until it's added, headings fall back to Grenze Gotisch. If your license
+repo. Until it's added, headings fall back to Almendra. If your license
 covers web embedding, paste its `@font-face` rule at the very end of
 `theme.css` in Big Cartel.
