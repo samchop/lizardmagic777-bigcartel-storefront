@@ -3694,11 +3694,11 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   padding-top: 40px;
   padding-bottom: 30px;
 }
-.lm-hero__copy { display: flex; flex-direction: column; gap: 24px; }
+.lm-hero__copy { display: flex; flex-direction: column; gap: 20px; }
 #main .lm-hero__title { font: 400 74px/1 var(--lm-font-display); text-wrap: balance; letter-spacing: 0.03em; word-spacing: -0.1em;}
 .lm-hero__text { max-width: 440px; font: 400 14px/1.75 var(--lm-font-mono); color: var(--lm-sand); text-wrap: pretty; }
 .lm-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; }
-.lm-hero__stats { display: flex; gap: 28px; padding-top: 6px; font: 400 12px var(--lm-font-mono); color: var(--lm-sand); text-transform: uppercase; letter-spacing: 2px;}
+.lm-hero__stats { display: flex; gap: 28px; padding-top: 20px; font: 400 12px var(--lm-font-mono); color: var(--lm-sand); text-transform: uppercase; letter-spacing: 2px;}
 .lm-hero__stats b { color: white; font: 700 12px var(--lm-font-caps); margin-right: 8px; }
 
 .lm-hero__circle { position: relative; width: 100%; aspect-ratio: 1 / 1; }
