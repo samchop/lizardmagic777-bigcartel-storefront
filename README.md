@@ -14,7 +14,7 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
 
 - `home.html` holds the markup; the styles are at the end of `theme.css`
   under `LIZARD MAGIC · HOME`.
-- `layout.html` loads Almendra, Space Mono and Syncopate from Google Fonts.
+- `layout.html` loads Almendra, Recursive and Unbounded from Google Fonts. Recursive's Casual and Mono settings are `--lm-body-casual` / `--lm-body-mono` at the top of the Lizard Magic styles in `theme.css`.
 - **Hero seal:** upload `assets/lizard-magic-seal.png` as the Welcome image
   (Customize Design > Home). It sits inside the magic circle.
 - **Categories:** "Chosen this cycle" pulls the first 4 available products
@@ -45,3 +45,11 @@ The headline font is a commercial font, so it is not committed to this public
 repo. Until it's added, headings fall back to Almendra. If your license
 covers web embedding, paste its `@font-face` rule at the very end of
 `theme.css` in Big Cartel.
+
+## Up next
+
+- **Trait filters from categories:** a gecko can have several traits (e.g. Tricolor + Lily White + Red Base).
+  Plan: create a Big Cartel category per trait, tick every one that applies on each gecko (alongside
+  Live Geckos), and build the listing's filter chips from `product.categories`. Picking several chips
+  shows geckos that have all of them. Sex stays in the description's first line. Still to decide: one
+  "Traits" group or separate groups (Morph, Base color…). Waiting on the categories being set up.
