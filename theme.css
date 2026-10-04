@@ -4016,6 +4016,7 @@ a.lm-rite:hover { border-color: var(--lm-gold); background: rgba(58, 31, 28, .5)
   color: var(--lm-sand);
 }
 .lm-announce__today, .lm-announce__sep { color: var(--lm-copper); }
+.lm-announce__mobile { display: none; color: var(--lm-copper); }
 
 .lm-header {
   display: block;
@@ -4113,7 +4114,8 @@ body:not([data-bc-page-type="home"]) #main { padding-top: 48px; }
 /* Matches "Home · mobile": MENU · wordmark · CART */
 @media screen and (max-width: 768px) {
   .lm-announce { padding: 10px 16px; font-size: 8px; letter-spacing: 2px; }
-  .lm-announce__label, .lm-announce__sep, .lm-announce__extra { display: none; }
+  .lm-announce > * { display: none; }
+  .lm-announce > .lm-announce__mobile { display: inline; }
 
   .lm-header .lm-header__inner { padding: 16px 20px; font-size: 10px; letter-spacing: 2px; }
   .lm-header .lm-header__inner .lm-header__menu { display: inline-flex; }
