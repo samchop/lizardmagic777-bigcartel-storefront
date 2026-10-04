@@ -3621,6 +3621,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   letter-spacing: 5px;
   text-transform: uppercase;
   color: var(--lm-gold);
+  padding-bottom: 1em;
 }
 .lm-eyebrow--sm { font-size: 10px; letter-spacing: 4px; }
 .lm-display { font-family: var(--lm-font-display); font-weight: 400; line-height: 1; text-wrap: balance; letter-spacing: 0.03em; word-spacing: -0.12em; }
@@ -3636,6 +3637,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   white-space: nowrap;
   border-bottom: 1.5px solid var(--lm-gold);
   padding-bottom: 4px;
+  margin-bottom: 1em;
   transition: color .2s ease;
 }
 .lm-link-arrow:hover { color: var(--lm-gold); }
@@ -3694,7 +3696,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   padding-top: 40px;
   padding-bottom: 30px;
 }
-.lm-hero__copy { display: flex; flex-direction: column; gap: 20px; }
+.lm-hero__copy { display: flex; flex-direction: column; gap: 1em; }
 #main .lm-hero__title { font: 400 74px/1 var(--lm-font-display); text-wrap: balance; letter-spacing: 0.03em; word-spacing: -0.1em;}
 .lm-hero__text { max-width: 440px; font: 400 14px/1.75 var(--lm-font-mono); color: var(--lm-sand); text-wrap: pretty; }
 .lm-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; }
@@ -3813,7 +3815,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   padding-bottom: 56px;
 }
 .lm-merch__intro { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-.lm-merch__intro .lm-link-arrow { margin-top: 6px; border-bottom: 0; padding-bottom: 0; }
+.lm-merch__intro .lm-link-arrow { margin-top: 6px; }
 .lm-merch__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .lm-merch__item { display: flex; flex-direction: column; gap: 10px; }
 .lm-merch__image {
