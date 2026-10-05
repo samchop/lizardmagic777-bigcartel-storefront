@@ -3061,6 +3061,7 @@ textarea {
   --lm-oxblood: #8b3a2f;
   --lm-copper: #b5652f;
   --lm-gold: #f0a548;
+  --lm-gold-light: #f7d293;
   --lm-cream: #f3ecd0;
   --lm-sand: #e2d6b4;
   --lm-dust: #b89a86;
@@ -3748,11 +3749,11 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--lm-ink);
+  --lm-drop-burst: 56%;          /* starburst width, as a share of the badge */
 }
 .lm-drop__burst {
   position: absolute;
-  inset: -6%;
+  inset: calc((100% - var(--lm-drop-burst)) / 2);
   background: var(--lm-gold);
   clip-path: polygon(100% 50%, 95.71% 55.15%, 98.75% 61.13%, 93.42% 65.19%, 95.05% 71.69%, 88.95% 74.47%, 89.09% 81.17%, 82.53% 82.53%, 81.17% 89.09%, 74.47% 88.95%, 71.69% 95.05%, 65.19% 93.42%, 61.13% 98.75%, 55.15% 95.71%, 50% 100%, 44.85% 95.71%, 38.87% 98.75%, 34.81% 93.42%, 28.31% 95.05%, 25.53% 88.95%, 18.83% 89.09%, 17.47% 82.53%, 10.91% 81.17%, 11.05% 74.47%, 4.95% 71.69%, 6.58% 65.19%, 1.25% 61.13%, 4.29% 55.15%, 0% 50%, 4.29% 44.85%, 1.25% 38.87%, 6.58% 34.81%, 4.95% 28.31%, 11.05% 25.53%, 10.91% 18.83%, 17.47% 17.47%, 18.83% 10.91%, 25.53% 11.05%, 28.31% 4.95%, 34.81% 6.58%, 38.87% 1.25%, 44.85% 4.29%, 50% 0%, 55.15% 4.29%, 61.13% 1.25%, 65.19% 6.58%, 71.69% 4.95%, 74.47% 11.05%, 81.17% 10.91%, 82.53% 17.47%, 89.09% 18.83%, 88.95% 25.53%, 95.05% 28.31%, 93.42% 34.81%, 98.75% 38.87%, 95.71% 44.85%);
   animation: lm-spin 30s linear infinite;
@@ -3765,15 +3766,17 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   overflow: visible;
   fill: none;
   stroke: currentColor;
+  color: var(--lm-gold-light);
   animation: lm-spin 30s linear infinite;
 }
 .lm-drop__ring--text { animation-duration: 60s; animation-direction: reverse; }
 .lm-drop__ring text { fill: currentColor; stroke: none; font: 600 8.6px var(--lm-font-caps); letter-spacing: 1.2px; }
 .lm-drop__ring .lm-drop__dot { fill: currentColor; stroke: none; }
-.lm-drop__copy { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 118px; text-align: center; }
-.lm-drop__label { font: 700 8.5px var(--lm-font-caps); letter-spacing: 2px; text-transform: uppercase; }
-.lm-drop__date { font: 700 24px/1 var(--lm-font-caps); text-transform: uppercase; }
-.lm-drop__note { --lm-body-mono: 1; --lm-body-casual: 1; font: 600 11.5px/1.3 var(--lm-font-body); }
+.lm-drop__copy { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; color: var(--lm-ink); }
+.lm-drop__label { font: 700 7px var(--lm-font-caps); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+.lm-drop__month { font: 700 21px/1 var(--lm-font-caps); text-transform: uppercase; }
+.lm-drop__day { font: 700 34px/.95 var(--lm-font-caps); } /* the script fits this to the month's width */
+.lm-drop__note { --lm-body-mono: 1; --lm-body-casual: 1; max-width: 100px; font: 600 9px/1.3 var(--lm-font-body); }
 @media (prefers-reduced-motion: reduce) { .lm-drop__burst, .lm-drop__ring { animation: none; } }
 .lm-listing--merch .lm-gecko__frame, .lm-listing--merch .lm-gecko__arch { border-radius: 8px;}
 
@@ -3803,8 +3806,8 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 }
 
 @media screen and (max-width: 900px) {
-  .lm-listing--merch .lm-card { flex-basis: calc((100% - 18px) / 2); }
-  .lm-drop { width: 220px; justify-self: center; margin: 8px 0 4px; } /* 18px = the mobile grid gap */
+  .lm-listing--merch .lm-card { flex-basis: calc((100% - 18px) / 2); } /* 18px = the mobile grid gap */
+  .lm-drop { width: 220px; justify-self: center; margin: 8px 0 4px; }
   /* Merch keeps its price under the name on phones too */
   .lm-card--merch .lm-gecko__badge { display: none; }
   .lm-card--merch .lm-gecko__price { display: inline-block; }

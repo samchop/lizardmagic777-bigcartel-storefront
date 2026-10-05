@@ -46,8 +46,10 @@ Geckos, without the sidebar, with the spinning drop badge in the header and
 the "Two vessels" tee panel below the products. The tee names, prices, descriptions and sizes are `lm_tee1_*` /
 `lm_tee2_*` at the top of `products.html` (typed in, so update them if the
 product prices change). The spinning drop badge's text is `lm_drop_label` /
-`lm_drop_date` / `lm_drop_note` in the same spot; set `lm_drop_date` to `''`
-to hide the badge between drops.
+`lm_drop_month` / `lm_drop_day` (plus an optional `lm_drop_note`) in the same
+spot; set `lm_drop_month` to `''` to hide the badge between drops. The day is
+sized automatically to match the month's width. Starburst size is
+`--lm-drop-burst` in `theme.css`.
 
 ## Type scale
 

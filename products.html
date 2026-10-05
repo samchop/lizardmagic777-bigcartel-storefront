@@ -18,10 +18,12 @@
 {% assign lm_tee2_price = '$30' %}
 {% assign lm_tee2_text = 'Bella+Canvas heather polyblend. Super soft & comfy, light and true to size, with the brightest print of the two.' %}
 {% assign lm_tee2_sizes = 'Adult XS–4XL · Hatchling S–XL' %}
-{% comment %} Spinning drop badge in the Merch header. Leave lm_drop_date blank to hide the badge. {% endcomment %}
-{% assign lm_drop_label = 'Drop closes' %}
-{% assign lm_drop_date = 'Nov 21' %}
-{% assign lm_drop_note = 'or when the run sells out' %}
+{% comment %} Spinning drop badge in the Merch header. Leave lm_drop_month blank to hide the badge.
+  The day is automatically sized to match the month's width. lm_drop_note is an optional small line. {% endcomment %}
+{% assign lm_drop_label = 'Drop ends' %}
+{% assign lm_drop_month = 'Nov' %}
+{% assign lm_drop_day = '30' %}
+{% assign lm_drop_note = '' %}
 
 {% if lm_layout != '' %}
 <div class="lm-home lm-listing lm-listing--{{ lm_layout }}">
@@ -38,7 +40,7 @@
       {% endif %}
     </div>
     {% if lm_layout == 'geckos' %}<p class="lm-listing__quote">“The right gecko finds its keeper.”</p>{% endif %}
-    {% if lm_layout == 'merch' and lm_drop_date != blank %}
+    {% if lm_layout == 'merch' and lm_drop_month != blank %}
       <div class="lm-drop">
         <div class="lm-drop__burst" aria-hidden="true"></div>
         <svg class="lm-drop__ring" viewBox="0 0 200 200" aria-hidden="true">
@@ -59,7 +61,8 @@
         </svg>
         <p class="lm-drop__copy">
           <span class="lm-drop__label">{{ lm_drop_label }}</span>
-          <span class="lm-drop__date">{{ lm_drop_date }}</span>
+          <span class="lm-drop__month">{{ lm_drop_month }}</span>
+          {% if lm_drop_day != blank %}<span class="lm-drop__day">{{ lm_drop_day }}</span>{% endif %}
           {% if lm_drop_note != blank %}<span class="lm-drop__note">{{ lm_drop_note }}</span>{% endif %}
         </p>
       </div>
@@ -183,6 +186,24 @@
 
   {% endif %}
 </div>
+
+{% if lm_layout == 'merch' %}
+<script>
+  /* Lizard Magic: size the drop badge's day to match the month's width (capped) */
+  (function () {
+    var month = document.querySelector('.lm-drop__month'), day = document.querySelector('.lm-drop__day');
+    if (!month || !day) return;
+    function fit() {
+      day.style.fontSize = '';
+      var base = parseFloat(getComputedStyle(month).fontSize);
+      var ratio = month.getBoundingClientRect().width / day.getBoundingClientRect().width;
+      var size = parseFloat(getComputedStyle(day).fontSize) * ratio;
+      if (isFinite(size) && size > 0) day.style.fontSize = Math.min(size, base * 2.2) + 'px';
+    }
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
+  })();
+</script>
+{% endif %}
 
 {% if lm_layout == 'geckos' %}
 <script>
