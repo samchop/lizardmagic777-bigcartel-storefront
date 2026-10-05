@@ -51,6 +51,23 @@ spot; set `lm_drop_month` to `''` to hide the badge between drops. The day is
 sized automatically to match the month's width. Starburst size is
 `--lm-drop-burst` in `theme.css`.
 
+## Merch product page
+
+`product.html` gives products in the Merch category their own layout: photo
+gallery, an Age toggle, vessel (Style) cards, size pills, an add-to-cart that
+stays on the page, the size chart, and related products. Everything else
+(geckos) still uses the theme's product layout.
+
+- Ages, styles, sizes, prices and sold-out sizes come straight from the
+  product's Big Cartel variants (option groups named **Age**, **Style**,
+  **Sizes**).
+- What Big Cartel can't store lives in the `lm-tee-config` JSON block in
+  `product.html`: each style's subtitle, spec rows, fit notes, and size-chart
+  measurements in inches `[chest, length]`, keyed by the exact option names.
+  The size chart only shows when there's chart data for the chosen style + age.
+- `lm_eyebrow` and `lm_note` at the top set the small line above the title and
+  the note under the button.
+
 ## Type scale
 
 All Lizard Magic text sizes live as variables at the top of the Lizard Magic

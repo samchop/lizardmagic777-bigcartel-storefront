@@ -343,10 +343,13 @@
       <script>
         // Initialize product data: fetch fresh on back/forward navigation (cache timing fix),
         // use window.bigcartel.product on normal loads, or fetch as fallback
+        // Lizard Magic: skip on pages that use our own product layout (no theme form)
         var navEntry = performance.getEntriesByType('navigation')[0];
         var isBackForward = navEntry && navEntry.type === 'back_forward';
 
-        if (isBackForward) {
+        if (!document.getElementById('add-to-cart-form')) {
+          // nothing to set up
+        } else if (isBackForward) {
           Product.find('{{ product.permalink }}', processProduct);
         } else if (window.bigcartel?.product) {
           processProduct(window.bigcartel.product);

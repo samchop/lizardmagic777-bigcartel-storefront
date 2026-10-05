@@ -1,4 +1,412 @@
 {% comment %}
+  Lizard Magic: products in the Merch category get the tee layout (vessel picker, size
+  chart, related products). Everything else keeps the theme layout further down.
+  Vessel descriptions, specs, fit notes and size-chart measurements live in the
+  "lm-tee-config" JSON block below, keyed by the exact option names used in Big Cartel.
+{% endcomment %}
+{% assign lm_is_merch = false %}
+{% for category in product.categories %}
+  {% if category.permalink == 'merch' %}{% assign lm_is_merch = true %}{% endif %}
+{% endfor %}
+
+{% if lm_is_merch %}
+{% assign lm_eyebrow = 'Available for a limited time only' %}
+{% assign lm_note = 'Printed in a small run. When the drop closes, this design is retired and never reprinted.' %}
+
+<div class="lm-home lm-product" data-lm-product>
+  <div class="lm-product__main lm-wrap">
+    <div class="lm-gallery">
+      <div class="lm-gallery__stage">
+        {% if product.image != blank %}
+          <img
+            class="lm-gallery__img"
+            data-lm-stage
+            alt="{{ product.name | escape }}"
+            fetchpriority="high"
+            src="{{ product.image | product_image_url | constrain: 1000 }}"
+            srcset="{{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 1000 }} 1000w, {{ product.image | product_image_url | constrain: 1400 }} 1400w"
+            sizes="(max-width: 900px) 100vw, 640px"
+          >
+        {% else %}
+          <span class="lm-placeholder">[ photo ]</span>
+        {% endif %}
+      </div>
+      {% if product.images.size > 1 %}
+        <div class="lm-gallery__thumbs">
+          {% for image in product.images %}
+            <button type="button" class="lm-gallery__thumb" aria-label="Show image {{ forloop.index }} of {{ product.images.size }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+              data-src="{{ image | product_image_url | constrain: 1000 }}"
+              data-srcset="{{ image | product_image_url | constrain: 600 }} 600w, {{ image | product_image_url | constrain: 1000 }} 1000w, {{ image | product_image_url | constrain: 1400 }} 1400w">
+              <img alt="" loading="lazy" src="{{ image | product_image_url | constrain: 300 }}">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="lm-buy">
+      <div class="lm-buy__head">
+        {% if product.status == 'sold-out' %}
+          <span class="lm-eyebrow">{{ t['products.sold_out'] }}</span>
+        {% elsif product.status == 'coming-soon' %}
+          <span class="lm-eyebrow">{{ t['products.coming_soon'] }}</span>
+        {% elsif lm_eyebrow != blank %}
+          <span class="lm-eyebrow">{{ lm_eyebrow }}</span>
+        {% endif %}
+        <h1 class="lm-display lm-display--md lm-buy__title">{{ product.name }}</h1>
+        {% if product.description != blank %}<div class="lm-buy__desc">{{ product.description | paragraphs }}</div>{% endif %}
+      </div>
+
+      <form class="lm-buy__form" method="post" action="/cart" accept-charset="utf8" data-lm-form>
+        <input type="hidden" name="utf8" value="✓">
+        {% if product.has_default_option %}
+          <input type="hidden" name="cart[add][id]" value="{{ product.option.id }}" data-lm-variant>
+        {% else %}
+          <input type="hidden" name="cart[add][id]" value="" data-lm-variant>
+          {% comment %} Without scripts, a plain variant menu {% endcomment %}
+          <noscript>
+            <select name="cart[add][id]" class="lm-buy__fallback">
+              {% for option in product.options %}<option value="{{ option.id }}"{% if option.sold_out %} disabled{% endif %}>{{ option.name }}</option>{% endfor %}
+            </select>
+          </noscript>
+          <div data-lm-age></div>
+          <div class="lm-buy__step" data-lm-style-step hidden>
+            <span class="lm-eyebrow lm-eyebrow--sm">I · Choose your vessel</span>
+            <div class="lm-vessels" data-lm-styles></div>
+          </div>
+          <div class="lm-buy__step" data-lm-size-step hidden>
+            <div class="lm-buy__step-head">
+              <span class="lm-eyebrow lm-eyebrow--sm" data-lm-size-title>II · Size</span>
+              <span class="lm-fit-note" data-lm-fit></span>
+            </div>
+            <div class="lm-sizes" data-lm-sizes></div>
+          </div>
+        {% endif %}
+
+        {% if product.status == 'active' %}
+          <button type="submit" class="lm-cta" data-lm-cta>
+            <span data-lm-cta-label>{{ t['products.add_to_cart'] }}</span>
+            <span data-lm-cta-price>{{ product | product_price: theme.money_format }}</span>
+          </button>
+          <a class="lm-link-arrow lm-buy__cart-link" href="/cart" data-lm-cart-link hidden>{{ t['cart.view_cart'] }} →</a>
+        {% else %}
+          <span class="lm-cta lm-cta--off">{% if product.status == 'sold-out' %}{{ t['products.sold_out'] }}{% else %}{{ t['products.coming_soon'] }}{% endif %}</span>
+        {% endif %}
+      </form>
+      {% if lm_note != blank %}<p class="lm-buy__note">{{ lm_note }}</p>{% endif %}
+    </div>
+  </div>
+
+  <section class="lm-chart" data-lm-chart hidden aria-labelledby="lm-chart-title">
+    <div class="lm-wrap">
+      <div class="lm-chart__head">
+        <div class="lm-section-head__titles">
+          <span class="lm-eyebrow lm-eyebrow--sm">III · The measure</span>
+          <h2 class="lm-display lm-display--sm" id="lm-chart-title">Size Chart</h2>
+          <p class="lm-muted"><span data-lm-chart-title></span> · measured flat, garment laid out</p>
+        </div>
+        <div class="lm-toggle" role="group" aria-label="Units" data-lm-units>
+          <button type="button" data-unit="in" aria-pressed="true">Inches</button>
+          <button type="button" data-unit="cm" aria-pressed="false">CM</button>
+        </div>
+      </div>
+      <div class="lm-chart__body">
+        <figure class="lm-chart__diagram">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <path class="lm-chart__tee" d="M76,22 Q100,38 124,22 L170,40 L192,86 L160,98 L150,78 L150,186 L50,186 L50,78 L40,98 L8,86 L30,40 Z"/>
+            <g class="lm-chart__measure">
+              <line x1="54" y1="104" x2="146" y2="104"/><line x1="54" y1="98" x2="54" y2="110"/><line x1="146" y1="98" x2="146" y2="110"/>
+              <line x1="132" y1="30" x2="132" y2="186" stroke-dasharray="4 3"/><line x1="126" y1="30" x2="138" y2="30"/><line x1="126" y1="186" x2="138" y2="186"/>
+            </g>
+            <circle class="lm-chart__pin" cx="100" cy="104" r="9"/><text x="100" y="108">A</text>
+            <circle class="lm-chart__pin" cx="132" cy="150" r="9"/><text x="132" y="154">B</text>
+          </svg>
+          <figcaption><span><b>A</b> Chest: armpit to armpit</span><span><b>B</b> Length: collar to hem</span></figcaption>
+        </figure>
+        <div class="lm-chart__data">
+          <div class="lm-chart__table-wrap"><table class="lm-chart__table" data-lm-table></table></div>
+          <div class="lm-compare">
+            <span class="lm-eyebrow lm-eyebrow--sm" data-lm-compare-title></span>
+            <div data-lm-compare></div>
+            <span class="lm-fit-note" data-lm-fit-2></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if theme.show_related_products and product.related_products.size > 0 %}
+    <section class="lm-related lm-wrap" aria-labelledby="lm-related-title">
+      <div class="lm-section-head__titles">
+        <span class="lm-eyebrow">More artifacts</span>
+        <h2 class="lm-display lm-display--sm" id="lm-related-title">{{ t['products.related_products'] }}</h2>
+      </div>
+      <div class="lm-listing__grid lm-related__grid">
+        {% for related_product in product.related_products %}
+          <article class="lm-gecko lm-card lm-card--merch{% if related_product.status != 'active' %} lm-card--unavailable{% endif %}">
+            <a class="lm-gecko__frame" href="{{ related_product.url }}" aria-label="{{ related_product.name | escape }}">
+              <div class="lm-gecko__arch">
+                {% if related_product.image != blank %}
+                  <img alt="" loading="lazy"
+                    src="{{ related_product.image | product_image_url | constrain: 600 }}"
+                    srcset="{{ related_product.image | product_image_url | constrain: 320 }} 320w, {{ related_product.image | product_image_url | constrain: 600 }} 600w"
+                    sizes="(max-width: 900px) 45vw, 300px">
+                {% else %}
+                  <span class="lm-placeholder">[ photo ]</span>
+                {% endif %}
+              </div>
+              {% if related_product.status == 'sold-out' %}<span class="lm-card__status">{{ t['products.sold_out'] }}</span>{% elsif related_product.status == 'coming-soon' %}<span class="lm-card__status">{{ t['products.coming_soon'] }}</span>{% endif %}
+            </a>
+            <div class="lm-gecko__row">
+              <h3 class="lm-gecko__name"><a href="{{ related_product.url }}">{{ related_product.name }}</a></h3>
+              <span class="lm-gecko__price">{{ related_product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</div>
+
+{% comment %} Variant data straight from Big Cartel {% endcomment %}
+<script type="application/json" id="lm-variants">
+{"groups":[{% for g in product.option_groups %}{"name":"{{ g.name | replace: '"', '\"' }}","values":[{% for v in g.values %}"{{ v.name | replace: '"', '\"' }}"{% unless forloop.last %},{% endunless %}{% endfor %}]}{% unless forloop.last %},{% endunless %}{% endfor %}],
+ "options":[{% for option in product.options %}{"id":{{ option.id }},"name":"{{ option.name | replace: '"', '\"' }}","price":{{ option.price }},"soldOut":{% if option.sold_out %}true{% else %}false{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]}
+</script>
+
+{% comment %}
+  Tee details Big Cartel can't store. Keys must match your option names exactly:
+  "groups" maps each role to the option-group name; "styles" is keyed by style value,
+  and fit notes + chart measurements by age value. Chart numbers are inches: [chest, length].
+{% endcomment %}
+<script type="application/json" id="lm-tee-config">
+{
+  "groups": { "age": "Age", "style": "Style", "size": "Sizes" },
+  "ageLabels": { "Hatchling": "Hatchling (kids)" },
+  "styles": {
+    "The Relic": {
+      "sub": "Heavyweight · vintage wash",
+      "specs": [["Weight", "Heavyweight cotton"], ["Fit", "Oversized, dropped shoulder"], ["Feel", "Dense, broken-in"], ["Print", "Muted, vintage"]],
+      "fit": { "Adult": "Oversized. Size down for a classic fit", "Hatchling": "Roomy youth fit" },
+      "chart": {
+        "Adult": { "S": [22.05, 27.56], "M": [22.83, 28.35], "L": [23.62, 29.13], "XL": [24.41, 29.92], "2XL": [25.2, 30.71], "3XL": [26.38, 31.1] },
+        "Hatchling": { "S": [14.17, 18.11], "M": [15.55, 20.08], "L": [16.93, 22.05], "XL": [18.31, 24.02], "2XL": [19.68, 25.2] }
+      }
+    },
+    "The Familiar": {
+      "sub": "Bella+Canvas · heather blend",
+      "specs": [["Weight", "Lightweight blend"], ["Fit", "Classic unisex"], ["Feel", "Soft, drapey heather"], ["Print", "Bright, saturated"]],
+      "fit": { "Adult": "Classic unisex fit. True to size", "Hatchling": "Classic youth fit" },
+      "chart": {
+        "Adult": { "XS": [16.5, 27], "S": [18, 28], "M": [20, 29], "L": [22, 30], "XL": [24, 31], "2XL": [26, 32], "3XL": [28, 33], "4XL": [30, 34] },
+        "Hatchling": { "S": [15.25, 20.875], "M": [16.25, 22.125], "L": [17.25, 23.375], "XL": [18.25, 24.375] }
+      }
+    }
+  }
+}
+</script>
+
+<script>
+  /* Lizard Magic: tee picker (age → vessel → size), size chart, gallery, add to cart */
+  (function () {
+    var root = document.querySelector('[data-lm-product]');
+    if (!root) return;
+    var $ = function (sel) { return root.querySelector(sel); };
+
+    /* Gallery: thumbnails swap the main image */
+    var stage = $('[data-lm-stage]');
+    root.querySelectorAll('.lm-gallery__thumb').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!stage) return;
+        stage.src = btn.getAttribute('data-src');
+        stage.srcset = btn.getAttribute('data-srcset');
+        root.querySelectorAll('.lm-gallery__thumb').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      });
+    });
+
+    var data, cfg;
+    try { data = JSON.parse(document.getElementById('lm-variants').textContent); } catch (e) { return; }
+    try { cfg = JSON.parse(document.getElementById('lm-tee-config').textContent); } catch (e) { cfg = { groups: {}, styles: {} }; }
+    var variantInput = $('[data-lm-variant]');
+    var cta = $('[data-lm-cta]'), ctaLabel = $('[data-lm-cta-label]'), ctaPrice = $('[data-lm-cta-price]');
+    var form = $('[data-lm-form]'), cartLink = $('[data-lm-cart-link]');
+    if (!data.options.length || data.options.length === 1 || !data.groups.length) return;
+
+    var currency = (window.bigcartel && window.bigcartel.account && window.bigcartel.account.currency) || 'USD';
+    var money = function (n) {
+      try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: currency, minimumFractionDigits: n % 1 ? 2 : 0 }).format(n); }
+      catch (e) { return '$' + n; }
+    };
+    var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+    /* Work out which group plays which role, then read each variant's values from its name */
+    var groups = data.groups.map(function (g) { return { name: g.name, values: g.values }; });
+    var byName = function (n) { return groups.filter(function (g) { return g.name === n; })[0]; };
+    var roles = cfg.groups || {};
+    var ageG = byName(roles.age), styleG = byName(roles.style), sizeG = byName(roles.size) || groups[groups.length - 1];
+    var variants = data.options.map(function (o) {
+      var v = { id: o.id, price: o.price, soldOut: o.soldOut, vals: {} };
+      o.name.split(' / ').forEach(function (part) {
+        part = part.trim();
+        groups.forEach(function (g) { if (g.values.indexOf(part) > -1) v.vals[g.name] = part; });
+      });
+      return v;
+    });
+
+    var state = { age: ageG ? ageG.values[0] : null, style: styleG ? styleG.values[0] : null, size: null, unit: 'in', added: false };
+    var matches = function (v, a, s) { return (!ageG || v.vals[ageG.name] === a) && (!styleG || v.vals[styleG.name] === s); };
+    var inCombo = function (a, s) { return variants.filter(function (v) { return matches(v, a, s); }); };
+    var sizeOf = function (v) { return v.vals[sizeG.name]; };
+    var current = function () {
+      var list = inCombo(state.age, state.style);
+      return list.filter(function (v) { return sizeOf(v) === state.size; })[0] || null;
+    };
+    var styleCfg = function (s) { return (cfg.styles || {})[s] || {}; };
+
+    /* Age: segmented toggle */
+    var ageBox = $('[data-lm-age]');
+    if (ageG && ageG.values.length > 1) {
+      var tog = el('div', 'lm-toggle'); tog.setAttribute('role', 'group'); tog.setAttribute('aria-label', ageG.name);
+      ageG.values.forEach(function (a) {
+        var b = el('button', null, (cfg.ageLabels || {})[a] || a); b.type = 'button'; b.setAttribute('data-value', a);
+        b.addEventListener('click', function () { state.age = a; state.added = false; render(); });
+        tog.appendChild(b);
+      });
+      ageBox.appendChild(tog);
+    }
+
+    /* Vessel (style) cards */
+    var styleBox = $('[data-lm-styles]');
+    if (styleG) {
+      $('[data-lm-style-step]').hidden = false;
+      styleG.values.forEach(function (s) {
+        var c = styleCfg(s);
+        var b = el('button', 'lm-vessel'); b.type = 'button'; b.setAttribute('data-value', s);
+        var head = el('span', 'lm-vessel__head');
+        head.appendChild(el('span', 'lm-vessel__name', s));
+        if (c.sub) head.appendChild(el('span', 'lm-vessel__sub', c.sub));
+        head.appendChild(el('span', 'lm-vessel__price'));
+        b.appendChild(head);
+        if (c.specs && c.specs.length) {
+          var dl = el('span', 'lm-vessel__specs');
+          c.specs.forEach(function (row) {
+            var r = el('span', 'lm-vessel__spec'); r.appendChild(el('span', null, row[0])); r.appendChild(el('span', null, row[1])); dl.appendChild(r);
+          });
+          b.appendChild(dl);
+        }
+        b.addEventListener('click', function () { state.style = s; state.added = false; render(); });
+        styleBox.appendChild(b);
+      });
+    }
+
+    $('[data-lm-size-step]').hidden = false;
+    var sizeBox = $('[data-lm-sizes]');
+    $('[data-lm-size-title]').textContent = (styleG ? 'II · ' : 'I · ') + 'Size';
+
+    /* Size chart */
+    var chart = root.querySelector('[data-lm-chart]');
+    var table = root.querySelector('[data-lm-table]');
+    root.querySelectorAll('[data-lm-units] button').forEach(function (b) {
+      b.addEventListener('click', function () { state.unit = b.getAttribute('data-unit'); render(); });
+    });
+    var fmt = function (v) { return state.unit === 'cm' ? String(Math.round(v * 2.54 * 2) / 2) : (+v.toFixed(3)) + '"'; };
+
+    function renderChart() {
+      var set = (styleCfg(state.style).chart || {})[state.age];
+      if (!set) { chart.hidden = true; return; }
+      chart.hidden = false;
+      root.querySelector('[data-lm-chart-title]').textContent = state.style + (state.age ? ' · ' + ((cfg.ageLabels || {})[state.age] || state.age) : '');
+      root.querySelectorAll('[data-lm-units] button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-unit') === state.unit)); });
+      var sizes = Object.keys(set);
+      var rows = [['Size', null], ['<b>A</b> Chest', 0], ['<b>B</b> Length', 1]];
+      table.innerHTML = '';
+      rows.forEach(function (r, ri) {
+        var tr = el('tr'); var th = el('th'); th.innerHTML = r[0]; th.scope = 'row'; tr.appendChild(th);
+        sizes.forEach(function (z) {
+          var td = el(ri ? 'td' : 'th', z === state.size ? 'is-on' : null, ri ? fmt(set[z][r[1]]) : z);
+          if (!ri) td.scope = 'col';
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+      /* Same size, both vessels */
+      var cmp = state.size && set[state.size] ? state.size : sizes[Math.floor(sizes.length / 2)];
+      root.querySelector('[data-lm-compare-title]').textContent = 'Same size, two vessels · ' + cmp + ' chest width';
+      var box = root.querySelector('[data-lm-compare]'); box.innerHTML = '';
+      var all = (styleG ? styleG.values : [state.style]).map(function (s) { var c = (styleCfg(s).chart || {})[state.age]; return { s: s, v: c && c[cmp] ? c[cmp][0] : null, max: c ? Math.max.apply(null, Object.keys(c).map(function (k) { return c[k][0]; })) : 0 }; });
+      var max = Math.max.apply(null, all.map(function (a) { return a.max; }));
+      all.forEach(function (a) {
+        var row = el('div', 'lm-compare__row' + (a.s === state.style ? ' is-on' : ''));
+        row.appendChild(el('span', 'lm-compare__name', a.s));
+        var bar = el('span', 'lm-compare__bar'); var fill = el('span'); fill.style.width = a.v ? (a.v / max * 100) + '%' : '0'; bar.appendChild(fill); row.appendChild(bar);
+        row.appendChild(el('span', 'lm-compare__val', a.v ? fmt(a.v) : 'n/a'));
+        box.appendChild(row);
+      });
+    }
+
+    function render() {
+      if (ageG) root.querySelectorAll('[data-lm-age] button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === state.age)); });
+      if (styleG) root.querySelectorAll('.lm-vessel').forEach(function (b) {
+        var s = b.getAttribute('data-value'), list = inCombo(state.age, s), prices = list.map(function (v) { return v.price; });
+        b.setAttribute('aria-pressed', String(s === state.style));
+        b.hidden = !list.length;
+        var lo = Math.min.apply(null, prices), hi = Math.max.apply(null, prices);
+        b.querySelector('.lm-vessel__price').textContent = list.length ? (lo === hi ? money(lo) : 'From ' + money(lo)) : '';
+      });
+      /* If the chosen vessel doesn't come in this age, fall back to one that does */
+      if (styleG && !inCombo(state.age, state.style).length) {
+        var ok = styleG.values.filter(function (s) { return inCombo(state.age, s).length; })[0];
+        if (ok) state.style = ok;
+      }
+      var list = inCombo(state.age, state.style);
+      var order = sizeG.values;
+      list.sort(function (a, b) { return order.indexOf(sizeOf(a)) - order.indexOf(sizeOf(b)); });
+      if (!list.some(function (v) { return sizeOf(v) === state.size && !v.soldOut; })) state.size = null;
+      sizeBox.innerHTML = '';
+      list.forEach(function (v) {
+        var z = sizeOf(v), b = el('button', 'lm-size', z); b.type = 'button';
+        b.setAttribute('aria-pressed', String(z === state.size));
+        if (v.soldOut) { b.disabled = true; b.setAttribute('aria-label', z + ', sold out'); }
+        b.addEventListener('click', function () { state.size = z; state.added = false; render(); });
+        sizeBox.appendChild(b);
+      });
+      var fit = ((styleCfg(state.style).fit || {})[state.age]) || '';
+      root.querySelector('[data-lm-fit]').textContent = fit;
+      root.querySelector('[data-lm-fit-2]').textContent = fit;
+
+      var v = current();
+      variantInput.value = v ? v.id : '';
+      if (cta) {
+        var prices = list.map(function (x) { return x.price; });
+        ctaPrice.textContent = v ? money(v.price) : (prices.length ? money(Math.min.apply(null, prices)) : '');
+        ctaLabel.textContent = state.added ? 'Added ✦ add another' : v ? 'Add ' + [state.style, state.size].filter(Boolean).join(' · ') : 'Choose a size';
+        cta.classList.toggle('is-waiting', !v);
+        cta.setAttribute('aria-disabled', String(!v));
+      }
+      renderChart();
+    }
+
+    /* Add to cart without leaving the page (falls back to a normal form post) */
+    if (form) form.addEventListener('submit', function (e) {
+      var v = current();
+      if (!v) { e.preventDefault(); sizeBox.querySelector('.lm-size:not([disabled])') && sizeBox.querySelector('.lm-size:not([disabled])').focus(); return; }
+      if (!(window.Cart && typeof Cart.addItem === 'function')) return;
+      e.preventDefault();
+      cta.classList.add('is-busy');
+      Cart.addItem(v.id, 1, function (cart) {
+        state.added = true; render();
+        if (cartLink) cartLink.hidden = false;
+        var count = document.querySelector('.lm-header__count span');
+        if (count && cart && cart.item_count != null) count.textContent = cart.item_count;
+      }, { onComplete: function () { cta.classList.remove('is-busy'); } });
+    });
+
+    render();
+  })();
+</script>
+
+{% else %}
+{% comment %}
   Use page name from Custo if it's been customized, otherwise use the localized default.
 {% endcomment %}
 {% assign page_title = t['navigation.products'] %}
@@ -331,4 +739,5 @@
       </div>
     </aside>
   {% endif %}
+{% endif %}
 {% endif %}
