@@ -8,7 +8,7 @@
 
 {% if lm_is_geckos %}
 <div class="lm-home lm-listing">
-  <div class="lm-listing__head lm-wrap lm-band">
+  <div class="lm-listing__head lm-wrap">
     <div class="lm-listing__intro">
       <span class="lm-eyebrow">Available entities</span>
       <h1 class="lm-display lm-display--lg lm-listing__title">For Your Exquisite Selection</h1>
@@ -35,7 +35,7 @@
         </div>
       </aside>
 
-      <div class="lm-listing__main">
+      <div class="lm-listing__main lm-band">
         <div class="lm-listing__toolbar">
           <span class="lm-listing__count" data-lm-count aria-live="polite">{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %}</span>
           <label class="lm-sort">
