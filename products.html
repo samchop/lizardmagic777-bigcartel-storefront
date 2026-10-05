@@ -2,7 +2,7 @@
   Lizard Magic listings. Two categories get their own layout, sharing the same cards:
   - Live Geckos: filters + sort sidebar. Morph and sex come from the first line of each
     description, e.g. "Lily White ✦ Male".
-  - Merch: no sidebar, price under the name, then the two-tees panel and the Vault row.
+  - Merch: no sidebar, price under the name, a spinning drop badge, then the two-tees panel.
   Every other product page (all products, search) keeps the theme layout below.
 {% endcomment %}
 {% assign lm_layout = '' %}
@@ -18,8 +18,10 @@
 {% assign lm_tee2_price = '$30' %}
 {% assign lm_tee2_text = 'Bella+Canvas heather polyblend. Super soft & comfy, light and true to size, with the brightest print of the two.' %}
 {% assign lm_tee2_sizes = 'Adult XS–4XL · Hatchling S–XL' %}
-{% comment %} The Vault row links to the category with this permalink once it exists {% endcomment %}
-{% assign lm_vault_permalink = 'vault' %}
+{% comment %} Spinning drop badge in the Merch header. Leave lm_drop_date blank to hide the badge. {% endcomment %}
+{% assign lm_drop_label = 'Drop closes' %}
+{% assign lm_drop_date = 'Nov 21' %}
+{% assign lm_drop_note = 'or when the run sells out' %}
 
 {% if lm_layout != '' %}
 <div class="lm-home lm-listing lm-listing--{{ lm_layout }}">
@@ -36,6 +38,32 @@
       {% endif %}
     </div>
     {% if lm_layout == 'geckos' %}<p class="lm-listing__quote">“The right gecko finds its keeper.”</p>{% endif %}
+    {% if lm_layout == 'merch' and lm_drop_date != blank %}
+      <div class="lm-drop">
+        <div class="lm-drop__burst" aria-hidden="true"></div>
+        <svg class="lm-drop__ring" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="80" stroke-width="1"/>
+          <circle cx="100" cy="100" r="88.5" stroke-width=".6"/>
+          <circle cx="100" cy="100" r="83.25" stroke-width="2.5" pathLength="72" stroke-dasharray=".08 .92"/>
+          <circle cx="100" cy="100" r="84.5" stroke-width="5" pathLength="12" stroke-dasharray=".025 .975"/>
+        </svg>
+        <svg class="lm-drop__ring lm-drop__ring--text" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><path id="lm-drop-ring" d="M100,100 m-71,0 a71,71 0 1,1 142,0 a71,71 0 1,1 -142,0"/></defs>
+          <text><textPath href="#lm-drop-ring" textLength="440" lengthAdjust="spacing">LIZARD MAGIC ☉︎ ☽︎ ☿︎ ♀︎ LIMITED EDITION ♂︎ ♃︎ ♄︎ ✦︎ </textPath></text>
+          <circle cx="100" cy="100" r="62" stroke-width=".8"/>
+          <circle cx="100" cy="100" r="60" stroke-width=".4" stroke-dasharray="1.5 2.5"/>
+          <circle class="lm-drop__dot" cx="142.43" cy="142.43" r="2.2"/>
+          <circle class="lm-drop__dot" cx="57.57" cy="142.43" r="2.2"/>
+          <circle class="lm-drop__dot" cx="57.57" cy="57.57" r="2.2"/>
+          <circle class="lm-drop__dot" cx="142.43" cy="57.57" r="2.2"/>
+        </svg>
+        <p class="lm-drop__copy">
+          <span class="lm-drop__label">{{ lm_drop_label }}</span>
+          <span class="lm-drop__date">{{ lm_drop_date }}</span>
+          {% if lm_drop_note != blank %}<span class="lm-drop__note">{{ lm_drop_note }}</span>{% endif %}
+        </p>
+      </div>
+    {% endif %}
   </div>
 
   {% paginate products from products.current by 100 %}
@@ -153,23 +181,6 @@
       </div>
     </section>
 
-    {% assign lm_vault = nil %}
-    {% for category in categories.all %}
-      {% if category.permalink == lm_vault_permalink %}{% assign lm_vault = category %}{% endif %}
-    {% endfor %}
-    <section class="lm-vault">
-      <div class="lm-vault__inner lm-wrap">
-        <div class="lm-vault__copy">
-          <div class="lm-vault__title">The Vault</div>
-          <p>Retired relics no longer in print...</p>
-        </div>
-        {% if lm_vault %}
-          <a class="lm-btn lm-btn--outline lm-vault__btn" href="{{ lm_vault.url }}">Enter the vault →</a>
-        {% else %}
-          <span class="lm-btn lm-btn--outline lm-vault__btn lm-vault__btn--soon">Opening soon</span>
-        {% endif %}
-      </div>
-    </section>
   {% endif %}
 </div>
 

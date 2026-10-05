@@ -3720,7 +3720,7 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 /* ==========================================================================
    LIZARD MAGIC · MERCH LISTING (products.html, merch category)
    Same head and cards as Live Geckos, minus the sidebar; price sits under
-   the name. Then the two-tees panel and the Vault row.
+   the name, plus the spinning drop badge. Then the two-tees panel.
    ========================================================================== */
 
 .lm-listing--merch .lm-listing__body { grid-template-columns: minmax(0, 1fr); }
@@ -3737,6 +3737,44 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   font-weight: 500;
 }
 #main:has(.lm-listing--merch) { padding-bottom: 0; }
+
+/* Spinning drop badge (merch header): gold starburst, tick rings and orbiting
+   ring text. Copy is set at the top of products.html. */
+.lm-drop {
+  position: relative;
+  flex: none;
+  width: 250px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lm-ink);
+}
+.lm-drop__burst {
+  position: absolute;
+  inset: -6%;
+  background: var(--lm-gold);
+  clip-path: polygon(100% 50%, 95.71% 55.15%, 98.75% 61.13%, 93.42% 65.19%, 95.05% 71.69%, 88.95% 74.47%, 89.09% 81.17%, 82.53% 82.53%, 81.17% 89.09%, 74.47% 88.95%, 71.69% 95.05%, 65.19% 93.42%, 61.13% 98.75%, 55.15% 95.71%, 50% 100%, 44.85% 95.71%, 38.87% 98.75%, 34.81% 93.42%, 28.31% 95.05%, 25.53% 88.95%, 18.83% 89.09%, 17.47% 82.53%, 10.91% 81.17%, 11.05% 74.47%, 4.95% 71.69%, 6.58% 65.19%, 1.25% 61.13%, 4.29% 55.15%, 0% 50%, 4.29% 44.85%, 1.25% 38.87%, 6.58% 34.81%, 4.95% 28.31%, 11.05% 25.53%, 10.91% 18.83%, 17.47% 17.47%, 18.83% 10.91%, 25.53% 11.05%, 28.31% 4.95%, 34.81% 6.58%, 38.87% 1.25%, 44.85% 4.29%, 50% 0%, 55.15% 4.29%, 61.13% 1.25%, 65.19% 6.58%, 71.69% 4.95%, 74.47% 11.05%, 81.17% 10.91%, 82.53% 17.47%, 89.09% 18.83%, 88.95% 25.53%, 95.05% 28.31%, 93.42% 34.81%, 98.75% 38.87%, 95.71% 44.85%);
+  animation: lm-spin 30s linear infinite;
+}
+.lm-drop__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  animation: lm-spin 30s linear infinite;
+}
+.lm-drop__ring--text { animation-duration: 60s; animation-direction: reverse; }
+.lm-drop__ring text { fill: currentColor; stroke: none; font: 600 8.6px var(--lm-font-caps); letter-spacing: 1.2px; }
+.lm-drop__ring .lm-drop__dot { fill: currentColor; stroke: none; }
+.lm-drop__copy { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 118px; text-align: center; }
+.lm-drop__label { font: 700 8.5px var(--lm-font-caps); letter-spacing: 2px; text-transform: uppercase; }
+.lm-drop__date { font: 700 24px/1 var(--lm-font-caps); text-transform: uppercase; }
+.lm-drop__note { --lm-body-mono: 1; --lm-body-casual: 1; font: 600 11.5px/1.3 var(--lm-font-body); }
+@media (prefers-reduced-motion: reduce) { .lm-drop__burst, .lm-drop__ring { animation: none; } }
 .lm-listing--merch .lm-gecko__frame, .lm-listing--merch .lm-gecko__arch { border-radius: 8px;}
 
 .lm-tees { padding-bottom: 56px; }
@@ -3749,16 +3787,9 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 .lm-tees__intro { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 20px 40px; }
 .lm-tee { display: flex; flex-direction: column; gap: 12px; padding: 20px; border-left: var(--lm-rule); }
 .lm-tee__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.lm-tee__price, h3.lm-tee__name, .lm-vault__title { font: 700 20px var(--lm-font-caps); color: var(--lm-gold); text-transform: uppercase; letter-spacing: 2px; }
+.lm-tee__price, h3.lm-tee__name { font: 700 20px var(--lm-font-caps); color: var(--lm-gold); text-transform: uppercase; letter-spacing: 2px; }
 .lm-tee__sizes { --lm-body-mono: 1; font-size: var(--lm-text-sm); color: var(--lm-dust); }
 .lm-tee__desc {font-size: 14px;}
-.lm-vault { background: var(--lm-ink); border-top: var(--lm-rule); }
-.lm-vault__inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 40px; padding-bottom: 40px; }
-.lm-vault__copy { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; }
-.lm-vault__copy p { color: var(--lm-sand); }
-.lm-home .lm-vault__btn { flex: none; padding: 16px 30px; border-color: var(--lm-gold); color: var(--lm-gold); }
-.lm-home .lm-vault__btn:hover { background: var(--lm-gold); color: var(--lm-ink) !important; }
-.lm-home .lm-vault__btn--soon, .lm-home .lm-vault__btn--soon:hover { background: transparent; color: var(--lm-gold) !important; opacity: .6; cursor: default; }
 
 @media screen and (max-width: 1100px) {
   .lm-tees__panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -3772,7 +3803,8 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 }
 
 @media screen and (max-width: 900px) {
-  .lm-listing--merch .lm-card { flex-basis: calc((100% - 18px) / 2); } /* 18px = the mobile grid gap */
+  .lm-listing--merch .lm-card { flex-basis: calc((100% - 18px) / 2); }
+  .lm-drop { width: 220px; justify-self: center; margin: 8px 0 4px; } /* 18px = the mobile grid gap */
   /* Merch keeps its price under the name on phones too */
   .lm-card--merch .lm-gecko__badge { display: none; }
   .lm-card--merch .lm-gecko__price { display: inline-block; }
@@ -3786,8 +3818,6 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   .lm-tee__name { font-size: 16px; }
   .lm-tee__price { font-size: 16px; }
 
-  .lm-vault__inner { flex-direction: column; align-items: flex-start; padding-top: 32px; padding-bottom: 32px; }
-  .lm-home .lm-vault__btn { width: 100%; }
 }
 
 /* ==========================================================================

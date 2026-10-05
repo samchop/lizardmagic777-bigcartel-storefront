@@ -42,11 +42,12 @@ Custom CSS box instead.
 ## Merch page
 
 `products.html` gives the Merch category the same head and cards as Live
-Geckos, without the sidebar, then the "Two vessels" tee panel and the Vault
-row. The tee names, prices, descriptions and sizes are `lm_tee1_*` /
+Geckos, without the sidebar, with the spinning drop badge in the header and
+the "Two vessels" tee panel below the products. The tee names, prices, descriptions and sizes are `lm_tee1_*` /
 `lm_tee2_*` at the top of `products.html` (typed in, so update them if the
-product prices change). The Vault button links to the category with the
-permalink `vault`; until that category exists it reads "Opening soon".
+product prices change). The spinning drop badge's text is `lm_drop_label` /
+`lm_drop_date` / `lm_drop_note` in the same spot; set `lm_drop_date` to `''`
+to hide the badge between drops.
 
 ## Type scale
 
