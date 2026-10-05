@@ -4224,6 +4224,67 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 }
 
 /* ==========================================================================
+   LIZARD MAGIC · MERCH LISTING (products.html, merch category)
+   Same head and cards as Live Geckos, minus the sidebar; price sits under
+   the name. Then the two-tees panel and the Vault row.
+   ========================================================================== */
+
+.lm-listing--merch .lm-listing__body { grid-template-columns: minmax(0, 1fr); }
+/* Few designs at a time, so cards stay a third wide and center as a group */
+.lm-listing--merch .lm-listing__grid { display: flex; flex-wrap: wrap; justify-content: center; }
+.lm-listing--merch .lm-card { flex: 0 1 calc(100% / 3); }
+.lm-card--merch .lm-gecko__row { flex-direction: column; align-items: flex-start; gap: 8px; }
+.lm-card--merch .lm-gecko__price { margin-top: 0; }
+#main:has(.lm-listing--merch) { padding-bottom: 0; }
+
+.lm-tees { padding-top: 48px; padding-bottom: 56px; }
+.lm-tees__panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr) minmax(0, 1.6fr);
+  border: var(--lm-rule);
+  border-radius: 24px;
+}
+.lm-tees__intro { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 40px; }
+.lm-tee { display: flex; flex-direction: column; gap: 12px; padding: 40px; border-left: var(--lm-rule); }
+.lm-tee__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.lm-tee__name { font: 700 20px/1.2 var(--lm-font-caps); letter-spacing: 1px; text-transform: uppercase; }
+.lm-tee__price { font: 700 18px var(--lm-font-caps); color: var(--lm-gold); }
+.lm-tee__sizes { --lm-body-mono: 1; font-size: var(--lm-text-sm); color: var(--lm-dust); }
+
+.lm-vault { background: var(--lm-ink); border-top: var(--lm-rule); }
+.lm-vault__inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 40px; padding-bottom: 40px; }
+.lm-vault__copy { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; }
+.lm-vault__copy p { color: var(--lm-sand); }
+.lm-home .lm-vault__btn { flex: none; padding: 16px 30px; border-color: var(--lm-gold); color: var(--lm-gold); }
+.lm-home .lm-vault__btn:hover { background: var(--lm-gold); color: var(--lm-ink) !important; }
+.lm-home .lm-vault__btn--soon, .lm-home .lm-vault__btn--soon:hover { background: transparent; color: var(--lm-gold) !important; opacity: .6; cursor: default; }
+
+@media screen and (max-width: 1100px) {
+  .lm-tees__panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lm-tees__intro { grid-column: 1 / -1; padding-bottom: 0; }
+  .lm-tee:first-of-type { border-left: 0; }
+}
+
+@media screen and (max-width: 900px) {
+  .lm-listing--merch .lm-card { flex-basis: calc((100% - 18px) / 2); } /* 18px = the mobile grid gap */
+  /* Merch keeps its price under the name on phones too */
+  .lm-card--merch .lm-gecko__badge { display: none; }
+  .lm-card--merch .lm-gecko__price { display: inline-block; }
+  .lm-card--merch .lm-gecko__row { align-items: center; }
+
+  .lm-tees { padding-top: 32px; padding-bottom: 40px; }
+  .lm-tees__panel { grid-template-columns: minmax(0, 1fr); border-radius: 18px; }
+  .lm-tees__intro, .lm-tee { padding: 24px; }
+  .lm-tee { border-left: 0; border-top: var(--lm-rule); }
+  .lm-tees__intro { padding-bottom: 24px; }
+  .lm-tee__name { font-size: 16px; }
+  .lm-tee__price { font-size: 16px; }
+
+  .lm-vault__inner { flex-direction: column; align-items: flex-start; padding-top: 32px; padding-bottom: 32px; }
+  .lm-home .lm-vault__btn { width: 100%; }
+}
+
+/* ==========================================================================
    LIZARD MAGIC · HEADER + FOOTER (every page)
    ========================================================================== */
 

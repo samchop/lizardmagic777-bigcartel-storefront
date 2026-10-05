@@ -26,6 +26,15 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
   mailing-list form URL to show the email field. Otherwise the button links
   to Instagram (if set) or the contact page.
 
+## Merch page
+
+`products.html` gives the Merch category the same head and cards as Live
+Geckos, without the sidebar, then the "Two vessels" tee panel and the Vault
+row. The tee names, prices, descriptions and sizes are `lm_tee1_*` /
+`lm_tee2_*` at the top of `products.html` (typed in, so update them if the
+product prices change). The Vault button links to the category with the
+permalink `vault`; until that category exists it reads "Opening soon".
+
 ## Type scale
 
 All Lizard Magic text sizes live as variables at the top of the Lizard Magic

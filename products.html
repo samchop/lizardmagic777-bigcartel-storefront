@@ -1,24 +1,46 @@
 {% comment %}
-  Lizard Magic: the Live Geckos category gets its own listing (filters, sort, arched cards).
-  Every other product page (all products, merch, search) keeps the theme layout below.
-  Morph and sex come from the first line of each description, e.g. "Lily White ✦ Male".
+  Lizard Magic listings. Two categories get their own layout, sharing the same cards:
+  - Live Geckos: filters + sort sidebar. Morph and sex come from the first line of each
+    description, e.g. "Lily White ✦ Male".
+  - Merch: no sidebar, price under the name, then the two-tees panel and the Vault row.
+  Every other product page (all products, search) keeps the theme layout below.
 {% endcomment %}
-{% assign lm_is_geckos = false %}
-{% if page.full_url contains '/category/live-geckos' %}{% assign lm_is_geckos = true %}{% endif %}
+{% assign lm_layout = '' %}
+{% if page.full_url contains '/category/live-geckos' %}{% assign lm_layout = 'geckos' %}{% endif %}
+{% if page.full_url contains '/category/merch' %}{% assign lm_layout = 'merch' %}{% endif %}
 
-{% if lm_is_geckos %}
-<div class="lm-home lm-listing">
+{% comment %} Merch page copy: edit the two tee types and their prices here {% endcomment %}
+{% assign lm_tee1_name = 'The Relic' %}
+{% assign lm_tee1_price = '$48' %}
+{% assign lm_tee1_text = 'Heavyweight cotton, vintage wash, oversized streetwear cut. High quality material and printing.' %}
+{% assign lm_tee1_sizes = 'Adult S–2XL · Hatchling S–XL' %}
+{% assign lm_tee2_name = 'The Familiar' %}
+{% assign lm_tee2_price = '$30' %}
+{% assign lm_tee2_text = 'Bella+Canvas heather polyblend. Super soft & comfy, light and true to size, with the brightest print of the two.' %}
+{% assign lm_tee2_sizes = 'Adult XS–4XL · Hatchling S–XL' %}
+{% comment %} The Vault row links to the category with this permalink once it exists {% endcomment %}
+{% assign lm_vault_permalink = 'vault' %}
+
+{% if lm_layout != '' %}
+<div class="lm-home lm-listing lm-listing--{{ lm_layout }}">
   <div class="lm-listing__head lm-wrap">
     <div class="lm-listing__intro">
-      <span class="lm-eyebrow">Available entities</span>
-      <h1 class="lm-display lm-display--lg lm-listing__title">For Your Exquisite Selection</h1>
-      <p class="lm-listing__lede">Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.</p>
+      {% if lm_layout == 'merch' %}
+        <span class="lm-eyebrow">Arcane artifacts</span>
+        <h1 class="lm-display lm-display--lg lm-listing__title">Wear the Magic</h1>
+        <p class="lm-listing__lede">Tees &amp; talismans to carry the good vibes with you. This ain't your average brand tee!!</p>
+      {% else %}
+        <span class="lm-eyebrow">Available entities</span>
+        <h1 class="lm-display lm-display--lg lm-listing__title">For Your Exquisite Selection</h1>
+        <p class="lm-listing__lede">Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.</p>
+      {% endif %}
     </div>
-    <p class="lm-listing__quote">“The right gecko finds its keeper.”</p>
+    {% if lm_layout == 'geckos' %}<p class="lm-listing__quote">“The right gecko finds its keeper.”</p>{% endif %}
   </div>
 
   {% paginate products from products.current by 100 %}
-    <div class="lm-listing__body ">
+    <div class="lm-listing__body">
+      {% if lm_layout == 'geckos' %}
       <aside class="lm-listing__side" aria-label="Filter geckos">
         <div class="lm-filter" data-lm-filter="sex" hidden>
           <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-sex">Sex</span>
@@ -34,8 +56,10 @@
           <p>Ships overnight, weather permitting. 45-90&deg; Live arrival guaranteed.</p>
         </div>
       </aside>
+      {% endif %}
 
       <div class="lm-listing__main lm-band">
+        {% if lm_layout == 'geckos' %}
         <div class="lm-listing__toolbar">
           <span class="lm-listing__count" data-lm-count aria-live="polite">{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %}</span>
           <label class="lm-sort">
@@ -47,6 +71,7 @@
             </select>
           </label>
         </div>
+        {% endif %}
 
         <div class="lm-listing__grid" data-lm-grid>
           {% for product in products %}
@@ -68,7 +93,7 @@
               {% when 'sold-out' %}{% assign lm_status = t['products.sold_out'] %}
               {% when 'coming-soon' %}{% assign lm_status = t['products.coming_soon'] %}
             {% endcase %}
-            <article class="lm-gecko lm-card{% if product.status != 'active' %} lm-card--unavailable{% endif %}" data-lm-index="{{ forloop.index0 }}" data-lm-price="{{ product.default_price }}" data-lm-sex="{{ lm_sex | escape }}" data-lm-morph="{{ lm_morph | escape }}">
+            <article class="lm-gecko lm-card{% if lm_layout == 'merch' %} lm-card--merch{% endif %}{% if product.status != 'active' %} lm-card--unavailable{% endif %}" data-lm-index="{{ forloop.index0 }}" data-lm-price="{{ product.default_price }}" data-lm-sex="{{ lm_sex | escape }}" data-lm-morph="{{ lm_morph | escape }}">
               <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
                 <div class="lm-gecko__arch">
                   {% if product.image != blank %}
@@ -80,7 +105,7 @@
                       sizes="(max-width: 900px) 45vw, 300px"
                     >
                   {% else %}
-                    <span class="lm-placeholder">[ gecko photo ]</span>
+                    <span class="lm-placeholder">[ photo ]</span>
                   {% endif %}
                 </div>
                 <span class="lm-gecko__badge">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
@@ -90,7 +115,7 @@
                 <h2 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h2>
                 <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
               </div>
-              {% if lm_first != blank %}<span class="lm-gecko__morph">{{ lm_first | truncate: 48 }}</span>{% endif %}
+              {% if lm_layout == 'geckos' and lm_first != blank %}<span class="lm-gecko__morph">{{ lm_first | truncate: 48 }}</span>{% endif %}
               <a class="lm-btn lm-btn--solid lm-gecko__add" href="{{ product.url }}">{% if product.status == 'active' %}Select{% else %}View{% endif %}</a>
             </article>
           {% endfor %}
@@ -98,7 +123,7 @@
 
         <div class="lm-listing__empty" data-lm-empty {% if products.size > 0 %}hidden{% endif %}>
           <p class="lm-display lm-display--sm">This vessel hasn't arrived yet</p>
-          <p class="lm-muted">{% if products.size > 0 %}No geckos match those filters right now. <button type="button" class="lm-listing__reset" data-lm-reset>Show all geckos</button>{% else %}The next clutch is still in the egg. Check back soon for the next drop.{% endif %}</p>
+          <p class="lm-muted">{% if lm_layout == 'merch' %}New relics are being conjured. Check back soon for the next drop.{% elsif products.size > 0 %}No geckos match those filters right now. <button type="button" class="lm-listing__reset" data-lm-reset>Show all geckos</button>{% else %}The next clutch is still in the egg. Check back soon for the next drop.{% endif %}</p>
         </div>
 
         {% if paginate.pages > 1 %}
@@ -107,8 +132,48 @@
       </div>
     </div>
   {% endpaginate %}
+
+  {% if lm_layout == 'merch' %}
+    <section class="lm-tees lm-wrap" aria-label="Tee styles">
+      <div class="lm-tees__panel">
+        <div class="lm-tees__intro">
+          <span class="lm-eyebrow">Two vessels</span>
+          <h2 class="lm-display lm-display--sm">One design, two ways to wear it</h2>
+        </div>
+        <div class="lm-tee">
+          <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee1_name }}</h3><span class="lm-tee__price">{{ lm_tee1_price }}</span></div>
+          <p>{{ lm_tee1_text }}</p>
+          <p class="lm-tee__sizes">{{ lm_tee1_sizes }}</p>
+        </div>
+        <div class="lm-tee">
+          <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee2_name }}</h3><span class="lm-tee__price">{{ lm_tee2_price }}</span></div>
+          <p>{{ lm_tee2_text }}</p>
+          <p class="lm-tee__sizes">{{ lm_tee2_sizes }}</p>
+        </div>
+      </div>
+    </section>
+
+    {% assign lm_vault = nil %}
+    {% for category in categories.all %}
+      {% if category.permalink == lm_vault_permalink %}{% assign lm_vault = category %}{% endif %}
+    {% endfor %}
+    <section class="lm-vault">
+      <div class="lm-vault__inner lm-wrap">
+        <div class="lm-vault__copy">
+          <h2 class="lm-display lm-display--sm">The Vault</h2>
+          <p>Retired relics no longer in print...</p>
+        </div>
+        {% if lm_vault %}
+          <a class="lm-btn lm-btn--outline lm-vault__btn" href="{{ lm_vault.url }}">Enter the vault →</a>
+        {% else %}
+          <span class="lm-btn lm-btn--outline lm-vault__btn lm-vault__btn--soon">Opening soon</span>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
 </div>
 
+{% if lm_layout == 'geckos' %}
 <script>
   /* Lizard Magic: gecko filters + sort (state lives in the URL, e.g. ?sex=female&morph=tricolor) */
   (function () {
@@ -197,6 +262,7 @@
     render();
   })();
 </script>
+{% endif %}
 
 {% else %}
 {% comment %}
