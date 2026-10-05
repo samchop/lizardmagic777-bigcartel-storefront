@@ -10,6 +10,19 @@ These map one-to-one to Big Cartel's **Customize Design > Code** editor:
 `contact.html`, `maintenance.html`, `care-guide.html` and `theme.css`.
 `settings.json` is a snapshot of the current Customize settings.
 
+## Big Cartel's size limit
+
+Big Cartel silently refuses to save `theme.css` above roughly **150,000
+characters** (no error, the save just doesn't happen). It's ~125,000 now.
+Check before pasting:
+
+```
+python3 -c "print(len(open('theme.css', encoding='utf-8').read()))"
+```
+
+Big inline data (the NCL Enigmatic `@font-face`) lives in Customize Design's
+Custom CSS box instead.
+
 ## Home page
 
 - `home.html` holds the markup; the styles are at the end of `theme.css`
