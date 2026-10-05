@@ -3575,14 +3575,14 @@ textarea {
   --lm-font-caps: 'Unbounded', sans-serif;
   --lm-font-body: 'Recursive', sans-serif;
   /* Recursive's style dials: Casual 0 = crisp, 1 = brushy; Mono 0 = proportional, 1 = monospace */
-  --lm-body-casual: 0.5;
+  --lm-body-casual: 0.75;
   --lm-body-mono: 0;
   --lm-gutter: 44px;
   --lm-rule: 1.5px solid var(--lm-oxblood);
 
   /* Type scale. These are the desktop values; tablet and mobile change them
      in the :root blocks of the media queries further down. */
-  --lm-text: 16px;            /* paragraphs */
+  --lm-text: 18px;            /* paragraphs */
   --lm-text-sm: 14px;         /* paragraphs in tight spots (promise bar, sidebar, mudra) */
   --lm-leading: 1.6;          /* line height for all paragraph text */
   --lm-heading-lg: 72px;      /* page titles: home hero, listing */
@@ -3805,13 +3805,13 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   position: absolute;
   right: 16px;
   bottom: 16px;
-  padding: 8px 20px;
+  padding: 4px 16px;
   border-radius: 20px;
   background: var(--lm-bg);
   color: var(--lm-cream);
   border: 1px solid var(--lm-copper);
   box-shadow: 0 0 0 4px var(--lm-bg);
-  font: 400 16px var(--lm-font-caps);
+  font: 400 12px var(--lm-font-caps);
   letter-spacing: 1px;
   white-space: nowrap;
 }
@@ -3820,6 +3820,7 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
 .lm-gecko__name { font: 700 var(--lm-card-title)/var(--lm-heading-leading) var(--lm-font-accent) !important; }
 .lm-gecko__price { 
   font-family: var(--lm-font-caps);
+  font-size: 14px;
   color: var(--lm-cream);
   white-space: nowrap;
   border-radius: 20px;
@@ -3850,12 +3851,13 @@ body[data-bc-page-type="home"] #main { padding-bottom: 0; }
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   background: var(--lm-ink);
+  border: 6px solid var(--lm-ink);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-.lm-merch__image img { width: 96%; height: 96%; object-fit: contain; transition: transform .4s ease; }
+.lm-merch__image img { object-fit: cover; transition: transform .4s ease; }
 .lm-merch__item:hover .lm-merch__image img { transform: rotate(-3deg) scale(1.1); }
 .lm-merch__meta {
   display: flex;
