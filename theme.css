@@ -3588,7 +3588,7 @@ textarea {
   --lm-heading-lg: 72px;      /* page titles: home hero, listing */
   --lm-heading-md: 52px;      /* section titles */
   --lm-heading-sm: 32px;      /* small headings: mudra, empty states */
-  --lm-card-title: 28px;      /* gecko names */
+  --lm-card-title: 24px;      /* gecko names */
   --lm-heading-leading: 1.05; /* line height for all headings */
 
   --lm-photo-ratio: 1 / 1;    /* gecko photo frames (e.g. 4 / 5 for taller) */
