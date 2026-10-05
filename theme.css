@@ -3766,7 +3766,7 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
   overflow: visible;
   fill: none;
   stroke: currentColor;
-  color: var(--lm-gold-light);
+  color: var(--lm-copper);
   animation: lm-spin 30s linear infinite;
 }
 .lm-drop__ring--text { animation-duration: 60s; animation-direction: reverse; }
