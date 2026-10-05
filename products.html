@@ -58,7 +58,7 @@
       </aside>
       {% endif %}
 
-      <div class="lm-listing__main lm-band">
+      <div class="lm-listing__main">
         {% if lm_layout == 'geckos' %}
         <div class="lm-listing__toolbar">
           <span class="lm-listing__count" data-lm-count aria-live="polite">{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %}</span>
@@ -112,7 +112,7 @@
                 {% if lm_status != blank %}<span class="lm-card__status">{{ lm_status }}</span>{% endif %}
               </a>
               <div class="lm-gecko__row">
-                <h2 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h2>
+                <div class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></div>
                 <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
               </div>
               {% if lm_layout == 'geckos' and lm_first != blank %}<span class="lm-gecko__morph">{{ lm_first | truncate: 48 }}</span>{% endif %}
@@ -142,12 +142,12 @@
         </div>
         <div class="lm-tee">
           <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee1_name }}</h3><span class="lm-tee__price">{{ lm_tee1_price }}</span></div>
-          <p>{{ lm_tee1_text }}</p>
+          <p class="lm-tee__desc">{{ lm_tee1_text }}</p>
           <p class="lm-tee__sizes">{{ lm_tee1_sizes }}</p>
         </div>
         <div class="lm-tee">
           <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee2_name }}</h3><span class="lm-tee__price">{{ lm_tee2_price }}</span></div>
-          <p>{{ lm_tee2_text }}</p>
+          <p class="lm-tee__desc">{{ lm_tee2_text }}</p>
           <p class="lm-tee__sizes">{{ lm_tee2_sizes }}</p>
         </div>
       </div>
@@ -160,7 +160,7 @@
     <section class="lm-vault">
       <div class="lm-vault__inner lm-wrap">
         <div class="lm-vault__copy">
-          <h2 class="lm-display lm-display--sm">The Vault</h2>
+          <div class="lm-vault__title">The Vault</div>
           <p>Retired relics no longer in print...</p>
         </div>
         {% if lm_vault %}
