@@ -319,12 +319,28 @@
       var sizes = Object.keys(set);
       var rows = [['Size', null], ['<b>A</b> Chest', 0], ['<b>B</b> Length', 1]];
       table.innerHTML = '';
+      /* Which chart sizes can be bought right now (exist for this age + vessel and aren't sold out) */
+      var buyable = {};
+      inCombo(state.age, state.style).forEach(function (v) { if (!v.soldOut) buyable[sizeOf(v)] = true; });
+      var pick = function (z) { if (buyable[z]) { state.size = z; state.added = false; render(); } };
       rows.forEach(function (r, ri) {
         var tr = el('tr'); var th = el('th'); th.innerHTML = r[0]; th.scope = 'row'; tr.appendChild(th);
         sizes.forEach(function (z) {
-          var td = el(ri ? 'td' : 'th', z === state.size ? 'is-on' : null, ri ? fmt(set[z][r[1]]) : z);
-          if (!ri) td.scope = 'col';
-          tr.appendChild(td);
+          var cls = [z === state.size ? 'is-on' : '', buyable[z] ? 'is-pickable' : 'is-unavailable'].join(' ').trim();
+          var cell;
+          if (!ri) {
+            /* Header cells hold a real button so the chart works with a keyboard too */
+            cell = el('th', cls); cell.scope = 'col';
+            var b = el('button', 'lm-chart__pick', z); b.type = 'button';
+            b.setAttribute('aria-pressed', String(z === state.size));
+            if (!buyable[z]) { b.disabled = true; b.setAttribute('aria-label', z + ', unavailable'); }
+            b.addEventListener('click', function () { pick(z); });
+            cell.appendChild(b);
+          } else {
+            cell = el('td', cls, fmt(set[z][r[1]]));
+            cell.addEventListener('click', function () { pick(z); });
+          }
+          tr.appendChild(cell);
         });
         table.appendChild(tr);
       });
