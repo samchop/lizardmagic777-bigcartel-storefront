@@ -56,7 +56,7 @@ sized automatically to match the month's width. Starburst size is
 `product.html` gives products in the Merch category their own layout: photo
 gallery, an Age toggle, vessel (Style) cards, size pills, an add-to-cart that
 stays on the page, the size chart, and related products. Everything else
-(geckos) still uses the theme's product layout.
+in Live Geckos uses the gecko layout below.
 
 - Ages, styles, sizes, prices and sold-out sizes come straight from the
   product's Big Cartel variants (option groups named **Age**, **Style**,
@@ -100,6 +100,23 @@ automatically; only small text needs `font-size: var(--lm-text-sm)`.
   Customize), your custom pages except the Care Guide, Big Cartel's required
   pages and Contact, then "Made & raised with love in Texas".
 - The affirmation list lives in the script near the end of `layout.html`.
+
+## Gecko product page
+
+Products in the Live Geckos category get the gecko layout: breadcrumb, arched
+photo, name, trait chips, the description, "Claim your gecko" options, local
+pickup, and "From my hands to yours".
+
+- The description's first line (`Morph ✦ Sex`) becomes the trait chips; the
+  rest of the description shows under them.
+- **Pay in full** adds the gecko to the cart. **Hold with deposit** opens a
+  popup explaining the deposit (Cash App, Zelle or Venmo) with links to message
+  you; nothing goes in the cart, so the gecko stays listed until you mark it.
+- Settings at the top of the gecko section of `product.html`: `lm_deposit`,
+  `lm_deposit_note`, `lm_full_note`, `lm_cashapp` / `lm_zelle` / `lm_venmo`
+  (shown in the popup when filled in), and the pickup text.
+- The "Read the care guide" button appears once a custom page with the
+  permalink `care-guide` exists.
 
 ## NCL Enigmatic
 
