@@ -1,19 +1,46 @@
 {% comment %}
-  Lizard Magic: products in the Merch category get the tee layout (vessel picker, size
-  chart, related products). Everything else keeps the theme layout further down.
+  Lizard Magic product pages:
+  - Merch category: the tee layout (vessel picker, size chart, related products).
+  - Live Geckos category: the gecko layout (traits, claim / deposit, local pickup, journey).
+  Anything else keeps the theme layout at the bottom.
   Vessel descriptions, specs, fit notes and size-chart measurements live in the
   "lm-tee-config" JSON block below, keyed by the exact option names used in Big Cartel.
 {% endcomment %}
-{% assign lm_is_merch = false %}
+{% assign lm_kind = '' %}
 {% for category in product.categories %}
-  {% if category.permalink == 'merch' %}{% assign lm_is_merch = true %}{% endif %}
+  {% if category.permalink == 'merch' %}{% assign lm_kind = 'merch' %}{% assign lm_crumb = category %}{% endif %}
+  {% if category.permalink == 'live-geckos' %}{% assign lm_kind = 'gecko' %}{% assign lm_crumb = category %}{% endif %}
 {% endfor %}
+{% capture lm_breadcrumb %}
+  <nav class="lm-crumbs lm-wrap" aria-label="Breadcrumb">
+    <a href="{{ lm_crumb.url }}">{{ lm_crumb.name }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span>
+  </nav>
+{% endcapture %}
+{% capture lm_gallery_js %}
+<script>
+  /* Lizard Magic: product gallery, thumbnails swap the main image */
+  (function () {
+    var root = document.querySelector('[data-lm-product]');
+    if (!root) return;
+    var stage = root.querySelector('[data-lm-stage]');
+    root.querySelectorAll('.lm-gallery__thumb').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!stage) return;
+        stage.src = btn.getAttribute('data-src');
+        stage.srcset = btn.getAttribute('data-srcset');
+        root.querySelectorAll('.lm-gallery__thumb').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      });
+    });
+  })();
+</script>
+{% endcapture %}
 
-{% if lm_is_merch %}
+{% if lm_kind == 'merch' %}
 {% assign lm_eyebrow = 'Available for a limited time only' %}
 {% assign lm_note = 'Printed in a small run. When the drop closes, this design is retired and never reprinted.' %}
 
 <div class="lm-home lm-product" data-lm-product>
+  {{ lm_breadcrumb }}
   <div class="lm-product__main lm-wrap">
     <div class="lm-gallery">
       <div class="lm-gallery__stage">
@@ -212,17 +239,6 @@
     if (!root) return;
     var $ = function (sel) { return root.querySelector(sel); };
 
-    /* Gallery: thumbnails swap the main image */
-    var stage = $('[data-lm-stage]');
-    root.querySelectorAll('.lm-gallery__thumb').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        if (!stage) return;
-        stage.src = btn.getAttribute('data-src');
-        stage.srcset = btn.getAttribute('data-srcset');
-        root.querySelectorAll('.lm-gallery__thumb').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-      });
-    });
-
     var data, cfg;
     try { data = JSON.parse(document.getElementById('lm-variants').textContent); } catch (e) { return; }
     try { cfg = JSON.parse(document.getElementById('lm-tee-config').textContent); } catch (e) { cfg = { groups: {}, styles: {} }; }
@@ -419,6 +435,211 @@
     render();
   })();
 </script>
+
+{{ lm_gallery_js }}
+
+{% elsif lm_kind == 'gecko' %}
+{% comment %} Gecko page settings {% endcomment %}
+{% assign lm_g_eyebrow = 'The exquisite entity' %}
+{% assign lm_full_note = 'Ships overnight in the next 1–2 weeks, weather permitting.' %}
+{% comment %} Deposit: leave lm_deposit blank to hide the deposit option. Payment handles: leave blank to hide. {% endcomment %}
+{% assign lm_deposit = '$150' %}
+{% assign lm_deposit_note = 'Non-refundable. Remaining balance (plus shipping) due within 30 days.' %}
+{% assign lm_cashapp = '' %}
+{% assign lm_zelle = '' %}
+{% assign lm_venmo = '' %}
+{% assign lm_pickup_title = 'Local pickup · Houston & Beaumont' %}
+{% assign lm_pickup_text = "Skip the shipping fees and meet your new baby in person. Contact me if you prefer local pickup!" %}
+
+{% comment %} First description line ("Lily White ✦ Male") becomes trait chips; the rest is the description {% endcomment %}
+{% if product.description contains '</p>' %}
+  {% assign lm_first_raw = product.description | split: '</p>' | first %}
+  {% assign lm_rest = product.description | remove_first: lm_first_raw | remove_first: '</p>' | strip %}
+{% else %}
+  {% assign lm_first_raw = product.description | newline_to_br | split: '<br />' | first %}
+  {% assign lm_rest = product.description | remove_first: lm_first_raw | strip %}
+{% endif %}
+{% assign lm_first = lm_first_raw | strip_html | strip %}
+{% assign lm_traits = lm_first | replace: '·', '✦' | replace: '|', '✦' | split: '✦' %}
+{% assign lm_care_url = '' %}
+{% for custom_page in pages.custom_pages %}
+  {% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}
+{% endfor %}
+{% if product.has_default_option %}{% assign lm_option_id = product.option.id %}{% else %}{% assign lm_option_id = product.options.first.id %}{% endif %}
+
+<div class="lm-home lm-product lm-product--gecko" data-lm-product data-lm-gecko data-lm-name="{{ product.name | escape }}">
+  {{ lm_breadcrumb }}
+  <div class="lm-product__main lm-wrap">
+    <div class="lm-gallery">
+      <div class="lm-gallery__stage lm-gallery__stage--arch">
+        {% if product.image != blank %}
+          <img
+            class="lm-gallery__img"
+            data-lm-stage
+            alt="{{ product.name | escape }}"
+            fetchpriority="high"
+            src="{{ product.image | product_image_url | constrain: 1000 }}"
+            srcset="{{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 1000 }} 1000w, {{ product.image | product_image_url | constrain: 1400 }} 1400w"
+            sizes="(max-width: 900px) 100vw, 640px"
+          >
+        {% else %}
+          <span class="lm-placeholder">[ photo ]</span>
+        {% endif %}
+        {% if product.status == 'sold-out' %}<span class="lm-card__status">{{ t['products.sold_out'] }}</span>{% elsif product.status == 'coming-soon' %}<span class="lm-card__status">{{ t['products.coming_soon'] }}</span>{% endif %}
+      </div>
+      {% if product.images.size > 1 %}
+        <div class="lm-gallery__thumbs">
+          {% for image in product.images %}
+            <button type="button" class="lm-gallery__thumb" aria-label="Show image {{ forloop.index }} of {{ product.images.size }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+              data-src="{{ image | product_image_url | constrain: 1000 }}"
+              data-srcset="{{ image | product_image_url | constrain: 600 }} 600w, {{ image | product_image_url | constrain: 1000 }} 1000w, {{ image | product_image_url | constrain: 1400 }} 1400w">
+              <img alt="" loading="lazy" src="{{ image | product_image_url | constrain: 300 }}">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="lm-buy">
+      <div class="lm-buy__head">
+        {% if product.status == 'sold-out' %}
+          <span class="lm-eyebrow">{{ t['products.sold_out'] }}</span>
+        {% elsif product.status == 'coming-soon' %}
+          <span class="lm-eyebrow">{{ t['products.coming_soon'] }}</span>
+        {% elsif lm_g_eyebrow != blank %}
+          <span class="lm-eyebrow">{{ lm_g_eyebrow }}</span>
+        {% endif %}
+        <h1 class="lm-display lm-display--lg lm-buy__title">{{ product.name }}</h1>
+      </div>
+      {% if lm_first != blank %}
+        <ul class="lm-traits" aria-label="Traits">
+          {% for lm_t in lm_traits %}{% assign lm_tt = lm_t | strip %}{% if lm_tt != blank %}<li class="lm-trait">{{ lm_tt }}</li>{% endif %}{% endfor %}
+        </ul>
+      {% endif %}
+      {% if lm_rest != blank %}<div class="lm-buy__desc">{{ lm_rest | paragraphs }}</div>{% endif %}
+
+      {% if product.status == 'active' %}
+        <form class="lm-buy__form" method="post" action="/cart" accept-charset="utf8" data-lm-form>
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="cart[add][id]" value="{{ lm_option_id }}">
+          <div class="lm-buy__step">
+            <span class="lm-eyebrow lm-eyebrow--sm">I · Claim your gecko</span>
+            <div class="lm-claims">
+              <button type="button" class="lm-claim" aria-pressed="true" data-lm-claim="full" data-price="{{ product | product_price: theme.money_format | strip_html | strip }}">
+                <span class="lm-claim__head"><span class="lm-claim__name">Pay in full</span><span class="lm-claim__price">{{ product | product_price: theme.money_format }}</span></span>
+                {% if lm_full_note != blank %}<span class="lm-claim__note">{{ lm_full_note }}</span>{% endif %}
+              </button>
+              {% if lm_deposit != blank %}
+                <button type="button" class="lm-claim" aria-pressed="false" data-lm-claim="hold" data-price="{{ lm_deposit }}">
+                  <span class="lm-claim__head"><span class="lm-claim__name">Hold with deposit</span><span class="lm-claim__price">{{ lm_deposit }}</span></span>
+                  {% if lm_deposit_note != blank %}<span class="lm-claim__note">{{ lm_deposit_note }}</span>{% endif %}
+                </button>
+              {% endif %}
+            </div>
+          </div>
+          <button type="submit" class="lm-cta" data-lm-cta>
+            <span data-lm-cta-label>Claim {{ product.name }}</span>
+            <span data-lm-cta-price>{{ product | product_price: theme.money_format }}</span>
+          </button>
+          <a class="lm-link-arrow lm-buy__cart-link" href="/cart" data-lm-cart-link hidden>{{ t['cart.view_cart'] }} →</a>
+        </form>
+      {% else %}
+        <span class="lm-cta lm-cta--off">{% if product.status == 'sold-out' %}{{ t['products.sold_out'] }}{% else %}{{ t['products.coming_soon'] }}{% endif %}</span>
+      {% endif %}
+
+      {% if lm_pickup_title != blank %}
+        <div class="lm-pickup">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 1H10V6.4L13 6.9L16 7.4L19 7.2L21 7.9V15L20 17L17 19.5L15 21L14.6 23L12.5 22L11 19.5L9 16.5L7 15L5.5 15.8L3.5 13.5L1 10V9.2H6Z"/><circle cx="18.6" cy="15.6" r="1.3"/></svg>
+          <div><span class="lm-pickup__title">{{ lm_pickup_title }}</span><p class="lm-pickup__text">{{ lm_pickup_text }}</p></div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <section class="lm-journey lm-wrap" aria-labelledby="lm-journey-title">
+    <div class="lm-journey__head">
+      <div class="lm-section-head__titles">
+        <span class="lm-eyebrow lm-eyebrow--sm">II · The journey</span>
+        <h2 class="lm-display lm-display--sm" id="lm-journey-title">From my hands to yours</h2>
+      </div>
+      {% if lm_care_url != blank %}<a class="lm-btn lm-btn--outline lm-journey__link" href="{{ lm_care_url }}">Read the care guide →</a>{% endif %}
+    </div>
+    <ol class="lm-journey__steps">
+      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">I</span><h3 class="lm-step__title">Claim</h3><p>Pay in full or place a deposit to claim your gecko. I’ll email within 48 hrs to plan shipping.</p></li>
+      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">II</span><h3 class="lm-step__title">Prepare</h3><p>Set up the enclosure a week ahead and hold temps at 72–78°F.</p></li>
+      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">III</span><h3 class="lm-step__title">Arrival</h3><p>Arrives overnight at your local hub by 10:30am. Live arrival guaranteed.</p></li>
+      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">IV</span><h3 class="lm-step__title">Settle in</h3><p>At least two weeks of limited handling. Let them get settled and feel safe in their new home!</p></li>
+    </ol>
+  </section>
+
+  {% if lm_deposit != blank and product.status == 'active' %}
+    <dialog class="lm-dialog" data-lm-hold aria-labelledby="lm-hold-title">
+      <form method="dialog"><button class="lm-dialog__close" aria-label="Close">×</button></form>
+      <span class="lm-eyebrow lm-eyebrow--sm">Hold with deposit</span>
+      <h2 class="lm-display lm-display--sm" id="lm-hold-title">Hold {{ product.name }}</h2>
+      <p>To hold {{ product.name }}, send a <strong>{{ lm_deposit }}</strong> deposit by Cash App, Zelle or Venmo, then message me with their name so I can mark them as yours.</p>
+      {% if lm_cashapp != blank or lm_zelle != blank or lm_venmo != blank %}
+        <ul class="lm-dialog__pay">
+          {% if lm_cashapp != blank %}<li><span>Cash App</span><b>{{ lm_cashapp }}</b></li>{% endif %}
+          {% if lm_zelle != blank %}<li><span>Zelle</span><b>{{ lm_zelle }}</b></li>{% endif %}
+          {% if lm_venmo != blank %}<li><span>Venmo</span><b>{{ lm_venmo }}</b></li>{% endif %}
+        </ul>
+      {% else %}
+        <p>Message me and I’ll send my payment details.</p>
+      {% endif %}
+      {% if lm_deposit_note != blank %}<p class="lm-dialog__note">{{ lm_deposit_note }}</p>{% endif %}
+      <div class="lm-dialog__actions">
+        <a class="lm-btn lm-btn--solid" href="/contact">Message me</a>
+        {% if theme.instagram_url != blank %}<a class="lm-btn lm-btn--outline" href="{{ theme.instagram_url }}">DM on Instagram</a>{% endif %}
+      </div>
+    </dialog>
+  {% endif %}
+</div>
+
+<script>
+  /* Lizard Magic: claim (pay in full → cart) or hold (deposit popup) */
+  (function () {
+    var root = document.querySelector('[data-lm-gecko]');
+    if (!root) return;
+    var name = root.getAttribute('data-lm-name');
+    var form = root.querySelector('[data-lm-form]');
+    if (!form) return;
+    var cta = root.querySelector('[data-lm-cta]'), label = root.querySelector('[data-lm-cta-label]'), price = root.querySelector('[data-lm-cta-price]');
+    var cartLink = root.querySelector('[data-lm-cart-link]'), dialog = root.querySelector('[data-lm-hold]');
+    var claims = root.querySelectorAll('[data-lm-claim]');
+    var mode = 'full', added = false;
+    function render() {
+      claims.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lm-claim') === mode)); });
+      var picked = root.querySelector('[data-lm-claim="' + mode + '"]');
+      price.textContent = picked ? picked.getAttribute('data-price') : price.textContent;
+      label.textContent = mode === 'hold' ? 'Hold ' + name : added ? 'Claimed ✦ in your cart' : 'Claim ' + name;
+    }
+    claims.forEach(function (b) { b.addEventListener('click', function () { mode = b.getAttribute('data-lm-claim'); render(); }); });
+    form.addEventListener('submit', function (e) {
+      if (mode === 'hold') {
+        e.preventDefault();
+        if (dialog && dialog.showModal) dialog.showModal(); else location.href = '/contact';
+        return;
+      }
+      if (added) { e.preventDefault(); location.href = '/cart'; return; }
+      if (!(window.Cart && typeof Cart.addItem === 'function')) return;
+      e.preventDefault();
+      cta.classList.add('is-busy');
+      Cart.addItem(form.querySelector('[name="cart[add][id]"]').value, 1, function (cart) {
+        added = true; render();
+        if (cartLink) cartLink.hidden = false;
+        var count = document.querySelector('.lm-header__count span');
+        if (count && cart && cart.item_count != null) count.textContent = cart.item_count;
+      }, { onComplete: function () { cta.classList.remove('is-busy'); } });
+    });
+    /* Close the popup when tapping the dimmed backdrop */
+    if (dialog) dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+    render();
+  })();
+</script>
+
+
+{{ lm_gallery_js }}
 
 {% else %}
 {% comment %}
