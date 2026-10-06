@@ -3790,7 +3790,7 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-listing) { padding-top: 0; }
 .lm-tees__intro { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 20px 40px; }
 .lm-tee { display: flex; flex-direction: column; gap: 12px; padding: 20px; border-left: var(--lm-rule); }
 .lm-tee__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.lm-tee__price, h3.lm-tee__name { font: 700 20px var(--lm-font-caps); color: var(--lm-gold); text-transform: uppercase; letter-spacing: 2px; }
+.lm-tee__price, h3.lm-tee__name { font: 700 16px var(--lm-font-caps); color: var(--lm-gold); text-transform: uppercase; letter-spacing: 2px; }
 .lm-tee__sizes { --lm-body-mono: 1; font-size: var(--lm-text-sm); color: var(--lm-dust); }
 .lm-tee__desc {font-size: 14px;}
 
