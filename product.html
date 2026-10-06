@@ -54,7 +54,6 @@
           <span class="lm-eyebrow">{{ lm_eyebrow }}</span>
         {% endif %}
         <h1 class="lm-display lm-display--md lm-buy__title">{{ product.name }}</h1>
-        {% if product.description != blank %}<div class="lm-buy__desc">{{ product.description | paragraphs }}</div>{% endif %}
       </div>
 
       <form class="lm-buy__form" method="post" action="/cart" accept-charset="utf8" data-lm-form>
@@ -94,15 +93,16 @@
         {% endif %}
       </form>
       {% if lm_note != blank %}<p class="lm-buy__note">{{ lm_note }}</p>{% endif %}
+      {% if product.description != blank %}<div class="lm-buy__desc">{{ product.description | paragraphs }}</div>{% endif %}
     </div>
   </div>
 
-  <section class="lm-chart" data-lm-chart hidden aria-labelledby="lm-chart-title">
+  <section class="lm-chart lm-wrap" data-lm-chart hidden aria-labelledby="lm-chart-title">
     <div class="lm-wrap">
       <div class="lm-chart__head">
         <div class="lm-section-head__titles">
-          <span class="lm-eyebrow lm-eyebrow--sm">III · Doublecheck the digits</span>
-          <p class="lm-muted"><span data-lm-chart-title></span> · measured flat, garment laid out</p>
+          <span class="lm-eyebrow lm-eyebrow--sm">III · Doublecheck the digits &#10022; <span data-lm-chart-title></span> </span>
+          <p class="lm-muted">Measured flat, garment laid out</p>
         </div>
         <div class="lm-toggle" role="group" aria-label="Units" data-lm-units>
           <button type="button" data-unit="in" aria-pressed="true">Inches</button>
@@ -135,9 +135,9 @@
   </section>
 
   {% if theme.show_related_products and product.related_products.size > 0 %}
-    <section class="lm-related lm-wrap" aria-labelledby="lm-related-title">
+    <section class="lm-related lm-band lm-wrap" aria-labelledby="lm-related-title">
       <div class="lm-section-head__titles">
-        <span class="lm-eyebrow">More artifacts</span>
+        <span class="lm-eyebrow">More cool things</span>
         <h2 class="lm-display lm-display--sm" id="lm-related-title">{{ t['products.related_products'] }}</h2>
       </div>
       <div class="lm-listing__grid lm-related__grid">
@@ -186,7 +186,7 @@
     "The Relic": {
       "sub": "Heavyweight · vintage wash",
       "specs": [["Weight", "Heavyweight cotton"], ["Fit", "Oversized, dropped shoulder"], ["Feel", "Dense, broken-in"], ["Print", "Muted, vintage"]],
-      "fit": { "Adult": "Oversized. Size down for a classic fit", "Hatchling": "Roomy youth fit" },
+      "fit": { "Adult": "Oversized. Size down for a classic fit for sizes below XL", "Hatchling": "Non-stretch youth fit" },
       "chart": {
         "Adult": { "S": [22.05, 27.56], "M": [22.83, 28.35], "L": [23.62, 29.13], "XL": [24.41, 29.92], "2XL": [25.2, 30.71], "3XL": [26.38, 31.1] },
         "Hatchling": { "S": [14.17, 18.11], "M": [15.55, 20.08], "L": [16.93, 22.05], "XL": [18.31, 24.02], "2XL": [19.68, 25.2] }

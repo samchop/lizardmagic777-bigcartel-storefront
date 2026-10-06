@@ -3966,7 +3966,7 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-product) { padding-top: 0; pa
 }
 
 /* Size chart band */
-.lm-chart { padding: 44px 0 48px; border-top: var(--lm-rule); background: var(--lm-ink); }
+.lm-chart { padding: 44px 0 48px; background: var(--lm-ink); }
 .lm-chart[hidden] { display: none; }
 .lm-chart__head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 28px; }
 .lm-chart__head .lm-muted { font-size: var(--lm-text-sm); }
@@ -4015,7 +4015,7 @@ body:not([data-bc-page-type="home"]) #main:has(.lm-product) { padding-top: 0; pa
 .lm-compare__val { --lm-body-mono: 1; font-size: 13px; text-align: right; }
 
 /* Related products: merch cards, centered */
-.lm-related { display: flex; flex-direction: column; gap: 24px; padding-top: 48px; padding-bottom: 56px; border-top: var(--lm-rule); }
+.lm-related { display: flex; flex-direction: column; gap: 24px; padding-top: 48px; padding-bottom: 56px; }
 .lm-related .lm-related__grid { display: flex; flex-wrap: wrap; justify-content: center; }
 .lm-related .lm-card { flex: 0 1 25%; }
 .lm-related .lm-section-head__titles { text-align: center; align-items: center;}
