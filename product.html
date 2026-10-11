@@ -212,7 +212,7 @@
   "styles": {
     "The Relic": {
       "sub": "Heavyweight · vintage wash",
-      "specs": [["Weight", "Heavyweight cotton"], ["Fit", "Oversized, dropped shoulder"], ["Feel", "Dense, broken-in"], ["Print", "Muted, vintage"]],
+      "specs": [["Weight", "Heavyweight cotton"], ["Fit", "Oversized, dropped shoulder"], ["Feel", "Dense, high quality"], ["Print", "Muted, vintage"]],
       "fit": { "Adult": "Oversized. Size down for a classic fit for sizes below XL", "Hatchling": "Non-stretch youth fit" },
       "chart": {
         "Adult": { "S": [22.05, 27.56], "M": [22.83, 28.35], "L": [23.62, 29.13], "XL": [24.41, 29.92], "2XL": [25.2, 30.71], "3XL": [26.38, 31.1] },
@@ -220,8 +220,8 @@
       }
     },
     "The Familiar": {
-      "sub": "Bella+Canvas · heather blend",
-      "specs": [["Weight", "Lightweight blend"], ["Fit", "Classic unisex"], ["Feel", "Soft, drapey heather"], ["Print", "Bright, saturated"]],
+      "sub": "Bella+Canvas · polyblend",
+      "specs": [["Weight", "Lightweight"], ["Fit", "Classic unisex"], ["Feel", "Soft, stretchy"], ["Print", "Bright, saturated"]],
       "fit": { "Adult": "Classic unisex fit. True to size", "Hatchling": "Classic youth fit" },
       "chart": {
         "Adult": { "XS": [16.5, 27], "S": [18, 28], "M": [20, 29], "L": [22, 30], "XL": [24, 31], "2XL": [26, 32], "3XL": [28, 33], "4XL": [30, 34] },
@@ -576,8 +576,8 @@
     <dialog class="lm-dialog" data-lm-hold aria-labelledby="lm-hold-title">
       <form method="dialog"><button class="lm-dialog__close" aria-label="Close">×</button></form>
       <span class="lm-eyebrow lm-eyebrow--sm">Hold with deposit</span>
-      <h2 class="lm-display lm-display--sm" id="lm-hold-title">Hold {{ product.name }}</h2>
-      <p>To hold {{ product.name }}, send a <strong>{{ lm_deposit }}</strong> deposit by Cash App, Zelle or Venmo, then message me with their name so I can mark them as yours.</p>
+      <h2 class="lm-display lm-display--sm" id="lm-hold-title">Claim {{ product.name }}</h2>
+      <p>To purchase {{ product.name }} with a payment plan, a <strong>{{ lm_deposit }}</strong> nonrefundable cash deposit is required upfront to mark the gecko on hold. </p>
       {% if lm_cashapp != blank or lm_zelle != blank or lm_venmo != blank %}
         <ul class="lm-dialog__pay">
           {% if lm_cashapp != blank %}<li><span>Cash App</span><b>{{ lm_cashapp }}</b></li>{% endif %}
@@ -585,7 +585,7 @@
           {% if lm_venmo != blank %}<li><span>Venmo</span><b>{{ lm_venmo }}</b></li>{% endif %}
         </ul>
       {% else %}
-        <p>Message me and I’ll send my payment details.</p>
+        <p>Message me to confirm payment plan and make a deposit today.</p>
       {% endif %}
       {% if lm_deposit_note != blank %}<p class="lm-dialog__note">{{ lm_deposit_note }}</p>{% endif %}
       <div class="lm-dialog__actions">
