@@ -118,6 +118,14 @@ pickup, and "From my hands to yours".
 - The "Read the care guide" button appears once a custom page with the
   permalink `care-guide` exists.
 
+## Astro icons
+
+`assets/icons/astro/` holds the [Astroicons](https://github.com/marcmarine/astroicons) set (zodiac
+signs, planets, aspects, houses), copied from commit `75bdad0`. MIT licensed: keep
+`assets/icons/astro/LICENSE` with them. `assets/icons/moon/` has the 8 moon phases, drawn to match
+(24px grid, 1px line). All use `currentColor`, so CSS `color` sets the line color. They'll be pasted
+inline into the templates when the 1c rebrand is built, so they don't count toward the theme.css limit.
+
 ## NCL Enigmatic
 
 The headline font is a commercial font, so it is not committed to this public
