@@ -14,6 +14,27 @@
 {% assign lm_ship_title = 'Overnight Summoning' %}
 {% assign lm_ship_points = 'Live arrival guaranteed|Ships Mon–Wed, weather permitting|Local pickup in Houston & Beaumont' | split: '|' %}
 
+{% comment %} ---- Merch page settings ---- {% endcomment %}
+{% assign lm_m_eyebrow = 'Available artifacts' %}
+{% assign lm_m_title = 'Choose Your Talisman' %}
+{% assign lm_m_lede = 'Limited Edition designs on quality material.' %}
+{% assign lm_m_sizes = 'Adult & Hatchling sizes' %}
+{% comment %} Drop badge: leave lm_drop_day blank to hide it {% endcomment %}
+{% assign lm_drop_label = 'Drop ends' %}
+{% assign lm_drop_month = 'Nov' %}
+{% assign lm_drop_day = '30' %}
+{% comment %} The two vessels {% endcomment %}
+{% assign lm_tee1_name = 'The Relic' %}
+{% assign lm_tee1_price = '$44' %}
+{% assign lm_tee1_text = 'Heavyweight cotton, vintage wash, oversized streetwear cut. High quality material and printing.' %}
+{% assign lm_tee1_spec = 'Heavyweight · Oversized · Muted print' %}
+{% assign lm_tee1_sizes = 'Adult S–3XL · Hatchling S–2XL ($40)' %}
+{% assign lm_tee2_name = 'The Familiar' %}
+{% assign lm_tee2_price = '$36' %}
+{% assign lm_tee2_text = 'Bella+Canvas heather polyblend. Super soft and comfy, light and true to size, with the brightest print of the two.' %}
+{% assign lm_tee2_spec = 'Lightweight · Classic fit · Bright print' %}
+{% assign lm_tee2_sizes = 'Adult XS–4XL · Hatchling S–XL ($33)' %}
+
 {% assign lm_layout = 'all' %}
 {% if page.full_url contains '/category/live-geckos' %}{% assign lm_layout = 'geckos' %}{% endif %}
 {% if page.full_url contains '/category/merch' %}{% assign lm_layout = 'merch' %}{% endif %}
@@ -199,8 +220,56 @@
   })();
 </script>
 
+{% elsif lm_layout == 'merch' %}
+<div class="lm-list lm-list--merch">
+  <section class="lm-hero lm-hero--center lm-hero--drop">
+    <div class="lm-sigil" aria-hidden="true"></div>
+    <p class="lm-eyebrow">{{ lm_m_eyebrow }}</p>
+    <h1 class="lm-display">{{ lm_m_title }}</h1>
+    <p class="lm-lede">{{ lm_m_lede }}</p>
+    {% if lm_drop_day != blank %}
+    <div class="lm-drop" role="img" aria-label="{{ lm_drop_label }} {{ lm_drop_month }} {{ lm_drop_day }}">
+      <svg class="lm-drop__burst" viewBox="-125 -125 250 250" aria-hidden="true"><path transform="scale(.93)" d="M0-112 11.53-102.35 24.92-109.19 34.02-97.22 48.59-100.91 54.8-87.21 69.83-87.57 72.83-72.83 87.57-69.83 87.21-54.8 100.91-48.59 97.22-34.02 109.19-24.92 102.35-11.53 112 0 102.35 11.53 109.19 24.92 97.22 34.02 100.91 48.59 87.21 54.8 87.57 69.83 72.83 72.83 69.83 87.57 54.8 87.21 48.59 100.91 34.02 97.22 24.92 109.19 11.53 102.35 0 112-11.53 102.35-24.92 109.19-34.02 97.22-48.59 100.91-54.8 87.21-69.83 87.57-72.83 72.83-87.57 69.83-87.21 54.8-100.91 48.59-97.22 34.02-109.19 24.92-102.35 11.53-112 0-102.35-11.53-109.19-24.92-97.22-34.02-100.91-48.59-87.21-54.8-87.57-69.83-72.83-72.83-69.83-87.57-54.8-87.21-48.59-100.91-34.02-97.22-24.92-109.19-11.53-102.35Z"/></svg>
+      <svg class="lm-drop__ring" viewBox="-125 -125 250 250" aria-hidden="true"><defs><path id="lm-drop-ring" d="M0,-78a78,78 0 1,1 0,156a78,78 0 1,1 0,-156"/></defs><circle class="lm-drop__disc" r="96"/><circle class="lm-drop__line" r="91"/><g class="lm-drop__spin"><text><textPath href="#lm-drop-ring" textLength="486" lengthAdjust="spacing">{{ lm_drop_label | upcase }} ✦ {{ lm_drop_label | upcase }} ✦ {{ lm_drop_label | upcase }} ✦ </textPath></text></g></svg>
+      <p class="lm-drop__date"><span>{{ lm_drop_month | upcase }}</span><b>{{ lm_drop_day }}</b></p>
+    </div>
+    {% endif %}
+  </section>
+  {% paginate products from products.current by 100 %}
+  <section class="lm-merch">
+    <div class="lm-list__bar"><p class="lm-label lm-muted">{{ products.size }} {% if products.size == 1 %}artifact{% else %}artifacts{% endif %}</p><p class="lm-label lm-muted">{{ lm_m_sizes }}</p></div>
+    {% if products.size > 0 %}
+    <div class="lm-grid">
+      {% for product in products %}
+        <a class="lm-tile{% if product.status != 'active' %} lm-tile--{{ product.status }}{% endif %}" href="{{ product.url }}">
+          <div class="lm-tile__card">
+            <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
+            <div class="lm-tile__img">
+              {% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" srcset="{{ product.image | product_image_url | constrain: 400 }} 400w, {{ product.image | product_image_url | constrain: 700 }} 700w, {{ product.image | product_image_url | constrain: 1000 }} 1000w" sizes="(max-width: 600px) 92vw, (max-width: 1100px) 45vw, 380px" alt="{{ product.name | escape }}" loading="{% if forloop.index > 3 %}lazy{% else %}eager{% endif %}">{% endif %}
+              {% if product.status == 'sold-out' %}<span class="lm-tile__flag">Sold out</span>{% elsif product.status == 'coming-soon' %}<span class="lm-tile__flag">Coming soon</span>{% endif %}
+            </div>
+          </div>
+          <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product | product_price }}{% endif %}</span></p></div>
+        </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="lm-list__empty">New relics are being conjured. Check back soon for the next drop.</p>
+    {% endif %}
+  </section>
+  {% endpaginate %}
+  <section class="lm-vessels">
+    <div class="lm-vessels__head"><p class="lm-eyebrow">Two vessels</p><h2 class="lm-display lm-display--md">One design, two ways to wear it</h2></div>
+    <div class="lm-vessels__pair">
+      <div class="lm-vessel"><span class="lm-vessel__n">I</span><h3>{{ lm_tee1_name }}</h3><p class="lm-vessel__price">{{ lm_tee1_price }}</p><p class="lm-vessel__text">{{ lm_tee1_text }}</p><p class="lm-vessel__spec">{{ lm_tee1_spec }}</p><p class="lm-vessel__sizes">{{ lm_tee1_sizes }}</p></div>
+      <div class="lm-vessels__rule" aria-hidden="true"></div>
+      <div class="lm-vessel"><span class="lm-vessel__n">II</span><h3>{{ lm_tee2_name }}</h3><p class="lm-vessel__price">{{ lm_tee2_price }}</p><p class="lm-vessel__text">{{ lm_tee2_text }}</p><p class="lm-vessel__spec">{{ lm_tee2_spec }}</p><p class="lm-vessel__sizes">{{ lm_tee2_sizes }}</p></div>
+    </div>
+  </section>
+</div>
+
 {% else %}
-{% comment %} Placeholder listing for merch / all wares / search until their phases are built {% endcomment %}
+{% comment %} Placeholder listing for all wares / search until their phases are built {% endcomment %}
 <div class="lm-list">
   <section class="lm-hero lm-hero--center">
     <div class="lm-sigil" aria-hidden="true"></div>
