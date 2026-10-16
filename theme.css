@@ -816,6 +816,11 @@ ul, ol { padding: 0; list-style: none; }
   .lm-home__hero { display: flex; flex-direction: column-reverse; gap: 28px; padding: 36px var(--pad) 40px; }
   .lm-home__orb { width: 100%; max-width: 330px; margin: 40px auto 30px; }
   .lm-home__title { font-size: 48px; line-height: 1; }
+  /* stacked hero: centre the text, white eyebrow */
+  .lm-home__heroText { align-items: center; text-align: center; }
+  .lm-home__heroText .lm-eyebrow { color: var(--ink); }
+  .lm-home__title { text-wrap: balance; }
+  .lm-home__heroText .lm-lede { text-wrap: balance; }
   .lm-home__ctas, .lm-home__ctas .lm-btn { width: 100%; }
   .lm-home__vows { flex-direction: column; gap: 12px; padding: 20px 0; font-size: 8.5px; letter-spacing: 2.2px; }
   .lm-home__vows .lm-star { width: 8px; height: 8px; }
