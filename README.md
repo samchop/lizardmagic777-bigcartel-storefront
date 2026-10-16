@@ -129,7 +129,7 @@ inline into the templates when the 1c rebrand is built, so they don't count towa
 ## Hosted assets (Cloudflare Pages)
 
 The `assets/` folder is published to Cloudflare Pages, so the store can load files from it, e.g.
-`https://<project>.pages.dev/icons/moon/full-moon.svg` (no `assets/` in the URL). Pages settings:
+`https://lizardmagic-assets.pages.dev/icons/moon/full-moon.svg` (no `assets/` in the URL). Pages settings:
 production branch `claude/big-cartel-home-page-7vwp4t`, framework preset None, no build command,
 build output directory `assets`. `assets/_headers` allows cross-origin loading. Every push redeploys.
 
