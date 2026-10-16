@@ -732,39 +732,3 @@
 </script>
 {{ lm_gallery_js }}
 {% endif %}
-
-{% comment %}
-  Product data for Google (price, availability, photos), so listings can show price and stock in search.
-  Quotes, backslashes and line breaks are stripped/escaped so the JSON stays valid whatever the description says.
-{% endcomment %}
-{% assign lm_ld_gecko = false %}
-{% for c in product.categories %}{% if c.permalink == 'live-geckos' %}{% assign lm_ld_gecko = true %}{% endif %}{% endfor %}
-{% assign lm_ld_url = page.full_url | split: '?' | first %}
-{% assign lm_ld_desc = product.description | replace: '<br', ' <br' | replace: '</p>', ' </p>' | strip_html | strip_newlines | replace: '\', '' | replace: '"', '\"' | truncate: 600 %}
-{% assign lm_ld_name = product.name | replace: '\', '' | replace: '"', '\"' %}
-{% if product.status == 'active' %}{% assign lm_ld_avail = 'InStock' %}{% elsif product.status == 'coming-soon' %}{% assign lm_ld_avail = 'PreOrder' %}{% else %}{% assign lm_ld_avail = 'SoldOut' %}{% endif %}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "{{ lm_ld_name }}{% if lm_ld_gecko %} (Crested Gecko){% endif %}",
-  "description": "{{ lm_ld_desc }}",
-  "url": "{{ lm_ld_url }}",
-  "image": [{% for image in product.images %}"{{ image | product_image_url | constrain: 1200 }}"{% unless forloop.last %}, {% endunless %}{% endfor %}],
-  "brand": { "@type": "Brand", "name": "{{ store.name | replace: '"', '' }}" },
-  {% if lm_ld_gecko %}"category": "Live Animals > Reptiles > Crested Geckos",{% endif %}
-  "offers": {% if product.variable_pricing %}{
-    "@type": "AggregateOffer",
-    "lowPrice": "{{ product.min_price }}",
-    "highPrice": "{{ product.max_price }}",
-    "offerCount": "{{ product.options.size }}",
-    {% else %}{
-    "@type": "Offer",
-    "price": "{{ product.default_price }}",
-    {% endif %}"priceCurrency": "{{ store.currency.code | default: 'USD' }}",
-    "availability": "https://schema.org/{{ lm_ld_avail }}",
-    "url": "{{ lm_ld_url }}",
-    "seller": { "@type": "Organization", "name": "{{ store.name | replace: '"', '' }}" }
-  }
-}
-</script>
