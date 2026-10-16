@@ -439,8 +439,8 @@
 {{ lm_gallery_js }}
 
 {% elsif lm_kind == 'gecko' %}
-{% comment %} Gecko page settings {% endcomment %}
-{% assign lm_g_eyebrow = 'The exquisite entity' %}
+{% comment %} ---- Gecko page settings ---- {% endcomment %}
+{% assign lm_g_eyebrow = 'The Exquisite Entity' %}
 {% assign lm_full_note = 'Ships overnight in the next 1–2 weeks, weather permitting.' %}
 {% comment %} Deposit: leave lm_deposit blank to hide the deposit option. Payment handles: leave blank to hide. {% endcomment %}
 {% assign lm_deposit = '$100' %}
@@ -448,136 +448,259 @@
 {% assign lm_cashapp = '' %}
 {% assign lm_zelle = '' %}
 {% assign lm_venmo = '' %}
-{% assign lm_pickup_title = 'Local pickup · Houston & Beaumont' %}
-{% assign lm_pickup_text = "Skip the shipping fees and meet your new baby in person. Contact me if you prefer local pickup!" %}
+{% assign lm_instagram_dm = 'https://ig.me/m/lizardmagic777' %}
+{% assign lm_ship_title = 'FedEx Overnight' %}
+{% assign lm_ship_text = '$55 · Priority shipping' %}
+{% assign lm_pickup_title = 'Local Pickup' %}
+{% assign lm_pickup_text = 'Houston & Beaumont, TX' %}
 
-{% comment %} First description line ("Lily White ✦ Male") becomes trait chips; the rest is the description {% endcomment %}
-{% if product.description contains '</p>' %}
-  {% assign lm_first_raw = product.description | split: '</p>' | first %}
-  {% assign lm_rest = product.description | remove_first: lm_first_raw | remove_first: '</p>' | strip %}
-{% else %}
-  {% assign lm_first_raw = product.description | newline_to_br | split: '<br />' | first %}
-  {% assign lm_rest = product.description | remove_first: lm_first_raw | strip %}
-{% endif %}
-{% assign lm_first = lm_first_raw | strip_html | strip %}
-{% assign lm_traits = lm_first | replace: '·', '✦' | replace: '|', '✦' | split: '✦' %}
-{% assign lm_care_url = '' %}
-{% for custom_page in pages.custom_pages %}
-  {% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}
+{% comment %}
+  Description format (each on its own line; any can be left out):
+    Tricolor · Male · RTB        <- first line: trait tags
+    Hatched: 05/05/2024          <- MM/DD/YYYY, MM/YYYY or YYYY
+    Weight: 42g
+    Age: Adult                   <- estimated from weight when missing
+    Breeder: Hidden Valley Geckos
+    Sire: Tinsel · Tricolor Extreme Harlequin
+    Dam: Gemini · Tricolor Extreme Harlequin
+    Everything else -> the catalogue note.
+  With Sire or Dam listed, the LAST photo is the parents' photo (shown under Lineage, not in the gallery).
+{% endcomment %}
+{% assign lm_desc = product.description | replace: '<br />', '<br>' | replace: '<br/>', '<br>' | replace: '</p>', '<br>' | replace: '<p>', '' | replace: '&nbsp;', ' ' %}
+{% assign lm_lines = lm_desc | split: '<br>' %}
+{% assign lm_first = '' %}{% assign lm_hatched = '' %}{% assign lm_weight = '' %}{% assign lm_age = '' %}
+{% assign lm_breeder = '' %}{% assign lm_sire = '' %}{% assign lm_dam = '' %}
+{% assign lm_paras = '' %}{% assign lm_seen = false %}
+{% for raw in lm_lines %}
+  {% assign line = raw | strip %}
+  {% assign plain = line | strip_html | strip %}
+  {% if plain == blank %}{% continue %}{% endif %}
+  {% unless lm_seen %}{% assign lm_first = plain %}{% assign lm_seen = true %}{% continue %}{% endunless %}
+  {% assign lm_key = '' %}
+  {% if plain contains ':' %}
+    {% assign k = plain | split: ':' | first %}
+    {% if k.size < 16 %}{% assign lm_key = k | strip | downcase %}{% endif %}
+    {% assign v = plain | remove_first: k | remove_first: ':' | strip %}
+  {% endif %}
+  {% case lm_key %}
+    {% when 'hatched', 'hatch date', 'hatchdate', 'born' %}{% assign lm_hatched = v %}
+    {% when 'weight', 'mass' %}{% assign lm_weight = v %}
+    {% when 'age' %}{% assign lm_age = v %}
+    {% when 'breeder', 'producer', 'bred by' %}{% assign lm_breeder = v %}
+    {% when 'sire', 'dad', 'father' %}{% assign lm_sire = v %}
+    {% when 'dam', 'mom', 'mother' %}{% assign lm_dam = v %}
+    {% else %}{% assign lm_paras = lm_paras | append: line | append: '%%LM%%' %}
+  {% endcase %}
 {% endfor %}
-{% if product.has_default_option %}{% assign lm_option_id = product.option.id %}{% else %}{% assign lm_option_id = product.options.first.id %}{% endif %}
+{% assign lm_paras = lm_paras | split: '%%LM%%' %}
+{% assign lm_tags = lm_first | replace: '✦', '·' | replace: '|', '·' | split: '·' %}
+{% assign lm_pron = 'Their' %}{% assign lm_firstd = lm_first | downcase %}
+{% if lm_firstd contains 'female' %}{% assign lm_pron = 'Her' %}{% elsif lm_firstd contains 'male' %}{% assign lm_pron = 'His' %}{% endif %}
+{% if lm_age == blank and lm_weight != blank %}
+  {% assign lm_grams = lm_weight | downcase | remove: 'grams' | remove: 'g' | strip | plus: 0 %}
+  {% if lm_grams > 0 %}
+    {% if lm_grams < 5 %}{% assign lm_age = 'Hatchling' %}{% elsif lm_grams < 15 %}{% assign lm_age = 'Juvenile' %}{% elsif lm_grams < 35 %}{% assign lm_age = 'Subadult' %}{% else %}{% assign lm_age = 'Adult' %}{% endif %}
+  {% endif %}
+{% endif %}
+{% assign lm_hatch_short = lm_hatched | replace: '/', ' · ' | replace: '-', ' · ' %}
+{% assign lm_sire_name = lm_sire | split: '·' | first | strip %}{% assign lm_sire_morph = lm_sire | remove_first: lm_sire_name | remove_first: '·' | strip %}
+{% assign lm_dam_name = lm_dam | split: '·' | first | strip %}{% assign lm_dam_morph = lm_dam | remove_first: lm_dam_name | remove_first: '·' | strip %}
+{% assign lm_parent_photo = false %}
+{% if lm_sire != blank or lm_dam != blank %}{% if product.images.size > 1 %}{% assign lm_parent_photo = true %}{% endif %}{% endif %}
+{% assign lm_gallery_count = product.images.size %}{% if lm_parent_photo %}{% assign lm_gallery_count = lm_gallery_count | minus: 1 %}{% endif %}
+{% assign lm_option_id = product.option.id | default: product.options.first.id %}
 
-<div class="lm-home lm-product lm-product--gecko" data-lm-product data-lm-gecko data-lm-name="{{ product.name | escape }}">
-  {{ lm_breadcrumb }}
-  <div class="lm-product__main lm-wrap">
-    <div class="lm-gallery">
-      <div class="lm-gallery__stage ">
-        {% if product.image != blank %}
-          <img
-            class="lm-gallery__img"
-            data-lm-stage
-            alt="{{ product.name | escape }}"
-            fetchpriority="high"
-            src="{{ product.image | product_image_url | constrain: 1000 }}"
-            srcset="{{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 1000 }} 1000w, {{ product.image | product_image_url | constrain: 1400 }} 1400w"
-            sizes="(max-width: 900px) 100vw, 640px"
-          >
-        {% else %}
-          <span class="lm-placeholder">[ photo ]</span>
-        {% endif %}
-        {% if product.status == 'sold-out' %}<span class="lm-card__status">{{ t['products.sold_out'] }}</span>{% elsif product.status == 'coming-soon' %}<span class="lm-card__status">{{ t['products.coming_soon'] }}</span>{% endif %}
-      </div>
-      {% if product.images.size > 1 %}
-        <div class="lm-gallery__thumbs">
-          {% for image in product.images %}
-            <button type="button" class="lm-gallery__thumb" aria-label="Show image {{ forloop.index }} of {{ product.images.size }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
-              data-src="{{ image | product_image_url | constrain: 1000 }}"
-              data-srcset="{{ image | product_image_url | constrain: 600 }} 600w, {{ image | product_image_url | constrain: 1000 }} 1000w, {{ image | product_image_url | constrain: 1400 }} 1400w">
-              <img alt="" loading="lazy" src="{{ image | product_image_url | constrain: 300 }}">
-            </button>
-          {% endfor %}
+{% comment %} Catalogue note: first sentence of the first paragraph becomes the lede {% endcomment %}
+{% assign lm_lede = '' %}{% assign lm_body_first = '' %}
+{% if lm_paras.size > 0 %}
+  {% assign p0 = lm_paras.first | strip_html | strip %}
+  {% assign s1 = p0 | split: '. ' | first %}{% assign s2 = p0 | split: '! ' | first %}{% assign s3 = p0 | split: '? ' | first %}
+  {% assign s = s1 %}{% if s2.size < s.size %}{% assign s = s2 %}{% endif %}{% if s3.size < s.size %}{% assign s = s3 %}{% endif %}
+  {% if s.size < p0.size %}
+    {% assign punct = p0 | slice: s.size, 1 %}
+    {% assign lm_lede = s | append: punct %}
+    {% assign lm_body_first = p0 | remove_first: lm_lede | strip %}
+  {% elsif p0.size < 200 %}
+    {% assign lm_lede = p0 %}
+  {% else %}
+    {% assign lm_body_first = lm_paras.first %}
+  {% endif %}
+{% endif %}
+
+{% capture lm_texas %}<svg class="lm-gk__shipico" aria-hidden="true" viewBox="0 0 556.34 545.37"><path d="M532.43,224.46l.08-65.06c-12.93-6.06-26.65-11.55-39.73-17.46-4.47-2.02-17.61-8.01-21.85-9-3.26-.76-17.05-.51-21.21-.5l-38.84.05c-11.49,0-23.28.09-34.77,0-6.16-.05-16.29-4.91-22.18-7.33l-30.21-12.38c-4.97-2.06-12.85-5.58-17.82-7.21l-.06-105.54-176.93-.03-.04,225.56c-14.23.53-30.33.11-44.73.09l-83.98.15c-.21,10.91-.24,21.83-.08,32.74l43.46,36.82c7.06,5.93,16.22,13.24,22.91,19.34,9.88,9.02,10.7,33.42,10.39,45.88,17.11,9.6,34.17,19.28,51.18,29.04,9.32,5.34,20.03,11.83,29.4,16.76,10.56-14.77,21.72-29.25,32.17-43.97,12.3-.21,24.83,7.94,33.98,15.66,2.54,2.15,10.92,15.97,13.21,19.6l22.33,35.39,13.3,21.02c1.27,2.01,6.73,10.38,7.46,12.2,5.13,12.84,9.29,27.94,13.29,41.22,30.21,12.07,62.49,23.41,93.09,34.97l7.68,2.88c.12-32.3-.24-64.92.15-97.15,20.34-17.62,41.25-35.03,61.96-52.39l-38.87-24.98-71.75,46.11,21.68-82.49-66.03-53.99,85.15-4.87,30.95-79.48,30.95,79.48,85.15,4.87-66.03,53.99,11.17,42.5,12.2-10.33c3.12-2.66,12.14-10.57,15.16-12.12,10.84-5.59,25.03-11.42,36.41-15.88l9.38-48.69c1.51-8.04,3.76-18.57,4.77-26.57-7.73-12.37-16.79-26.28-23.91-38.9Z" fill="currentColor"></path></svg>{% endcapture %}
+{% capture lm_solid1 %}<svg class="lm-solid" aria-hidden="true" viewBox="-20 -20 40 40" fill="none"><path d="M14.87,6.32L0.79,-3.14M14.87,6.32L-12.35,11.27M14.87,6.32L-3.3,-14.44M0.79,-3.14L-12.35,11.27M0.79,-3.14L-3.3,-14.44M-12.35,11.27L-3.3,-14.44" stroke-width="0.9" stroke-linejoin="round"></path><circle cx="14.87" cy="6.32" r="1.5" stroke="none" fill="currentColor" opacity="0.81"></circle><circle cx="0.79" cy="-3.14" r="1.5" stroke="none" fill="currentColor" opacity="0.46"></circle><circle cx="-12.35" cy="11.27" r="1.5" stroke="none" fill="currentColor" opacity="0.77"></circle><circle cx="-3.3" cy="-14.44" r="1.5" stroke="none" fill="currentColor" opacity="0.86"></circle></svg>{% endcapture %}
+{% capture lm_solid2 %}<svg class="lm-solid" aria-hidden="true" viewBox="-20 -20 40 40" fill="none"><path d="M9.67,2.02L8.98,14.4M9.67,2.02L16.8,-1.36M9.67,2.02L7.38,-13.99M9.67,2.02L-5.27,11.51M9.67,2.02L-6.27,-6.04M8.98,14.4L16.8,-1.36M8.98,14.4L-7.38,13.99M8.98,14.4L6.27,6.04M8.98,14.4L-5.27,11.51M16.8,-1.36L5.27,-11.51M16.8,-1.36L6.27,6.04M16.8,-1.36L7.38,-13.99M-7.38,13.99L6.27,6.04M-7.38,13.99L-5.27,11.51M-7.38,13.99L-9.67,-2.02M-7.38,13.99L-16.8,1.36M5.27,-11.51L6.27,6.04M5.27,-11.51L7.38,-13.99M5.27,-11.51L-9.67,-2.02M5.27,-11.51L-8.98,-14.4M6.27,6.04L-9.67,-2.02M7.38,-13.99L-6.27,-6.04M7.38,-13.99L-8.98,-14.4M-5.27,11.51L-6.27,-6.04M-5.27,11.51L-16.8,1.36M-6.27,-6.04L-8.98,-14.4M-6.27,-6.04L-16.8,1.36M-9.67,-2.02L-8.98,-14.4M-9.67,-2.02L-16.8,1.36M-8.98,-14.4L-16.8,1.36" stroke-width="0.9" stroke-linejoin="round"></path><circle cx="9.67" cy="2.02" r="1.5" stroke="none" fill="currentColor" opacity="0.95"></circle><circle cx="8.98" cy="14.4" r="1.5" stroke="none" fill="currentColor" opacity="0.74"></circle><circle cx="16.8" cy="-1.36" r="1.5" stroke="none" fill="currentColor" opacity="0.69"></circle><circle cx="-7.38" cy="13.99" r="1.5" stroke="none" fill="currentColor" opacity="0.62"></circle><circle cx="5.27" cy="-11.51" r="1.5" stroke="none" fill="currentColor" opacity="0.54"></circle><circle cx="6.27" cy="6.04" r="1.5" stroke="none" fill="currentColor" opacity="0.49"></circle><circle cx="7.38" cy="-13.99" r="1.5" stroke="none" fill="currentColor" opacity="0.83"></circle><circle cx="-5.27" cy="11.51" r="1.5" stroke="none" fill="currentColor" opacity="0.91"></circle><circle cx="-6.27" cy="-6.04" r="1.5" stroke="none" fill="currentColor" opacity="0.96"></circle><circle cx="-9.67" cy="-2.02" r="1.5" stroke="none" fill="currentColor" opacity="0.5"></circle><circle cx="-8.98" cy="-14.4" r="1.5" stroke="none" fill="currentColor" opacity="0.71"></circle><circle cx="-16.8" cy="1.36" r="1.5" stroke="none" fill="currentColor" opacity="0.76"></circle></svg>{% endcapture %}
+{% capture lm_solid3 %}<svg class="lm-solid" aria-hidden="true" viewBox="-20 -20 40 40" fill="none"><path d="M13.56,2.75L2.18,15.23M13.56,2.75L-2.18,-15.23M13.56,2.75L10.02,-7.04M13.56,2.75L-10.02,7.04M-13.56,-2.75L2.18,15.23M-13.56,-2.75L-2.18,-15.23M-13.56,-2.75L10.02,-7.04M-13.56,-2.75L-10.02,7.04M2.18,15.23L10.02,-7.04M2.18,15.23L-10.02,7.04M-2.18,-15.23L10.02,-7.04M-2.18,-15.23L-10.02,7.04" stroke-width="0.9" stroke-linejoin="round"></path><circle cx="13.56" cy="2.75" r="1.5" stroke="none" fill="currentColor" opacity="0.57"></circle><circle cx="-13.56" cy="-2.75" r="1.5" stroke="none" fill="currentColor" opacity="0.88"></circle><circle cx="2.18" cy="15.23" r="1.5" stroke="none" fill="currentColor" opacity="0.84"></circle><circle cx="-2.18" cy="-15.23" r="1.5" stroke="none" fill="currentColor" opacity="0.61"></circle><circle cx="10.02" cy="-7.04" r="1.5" stroke="none" fill="currentColor" opacity="0.92"></circle><circle cx="-10.02" cy="7.04" r="1.5" stroke="none" fill="currentColor" opacity="0.53"></circle></svg>{% endcapture %}
+{% capture lm_solid4 %}<svg class="lm-solid" aria-hidden="true" viewBox="-20 -20 40 40" fill="none"><path d="M14.87,6.32L3.3,14.44M14.87,6.32L12.35,-11.27M14.87,6.32L-0.79,3.14M3.3,14.44L0.79,-3.14M3.3,14.44L-12.35,11.27M12.35,-11.27L0.79,-3.14M12.35,-11.27L-3.3,-14.44M0.79,-3.14L-14.87,-6.32M-0.79,3.14L-12.35,11.27M-0.79,3.14L-3.3,-14.44M-12.35,11.27L-14.87,-6.32M-3.3,-14.44L-14.87,-6.32" stroke-width="0.9" stroke-linejoin="round"></path><circle cx="14.87" cy="6.32" r="1.5" stroke="none" fill="currentColor" opacity="0.81"></circle><circle cx="3.3" cy="14.44" r="1.5" stroke="none" fill="currentColor" opacity="0.59"></circle><circle cx="12.35" cy="-11.27" r="1.5" stroke="none" fill="currentColor" opacity="0.68"></circle><circle cx="0.79" cy="-3.14" r="1.5" stroke="none" fill="currentColor" opacity="0.46"></circle><circle cx="-0.79" cy="3.14" r="1.5" stroke="none" fill="currentColor" opacity="0.99"></circle><circle cx="-12.35" cy="11.27" r="1.5" stroke="none" fill="currentColor" opacity="0.77"></circle><circle cx="-3.3" cy="-14.44" r="1.5" stroke="none" fill="currentColor" opacity="0.86"></circle><circle cx="-14.87" cy="-6.32" r="1.5" stroke="none" fill="currentColor" opacity="0.64"></circle></svg>{% endcapture %}
+{% assign lm_care_url = '' %}{% for custom_page in pages.custom_pages %}{% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}{% endfor %}
+{% capture lm_star4 %}<svg class="lm-star lm-star--md" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>{% endcapture %}
+
+<div class="lm-gk" data-lm-kind="gecko" data-lm-product data-lm-gecko data-lm-name="{{ product.name | escape }}" data-lm-hatch="{{ lm_hatched | escape }}">
+  <section class="lm-gk__top">
+    <div class="lm-gk__gallery">
+      <div class="lm-gk__art" aria-hidden="true"><i class="lm-gk__flower"></i><i class="lm-gk__flames"></i></div>
+      <div class="lm-gk__card">
+        <div class="lm-gk__frame">
+          <div class="lm-gk__cardtop">
+            <span class="lm-gk__glyph" data-lm-sign-glyph>777</span>
+            <span class="lm-gk__roman" data-lm-sign-roman>VII</span>
+            <span class="lm-gk__glyph" data-lm-sign-glyph>777</span>
+          </div>
+          <div class="lm-gk__photo">
+            {% if product.image %}
+              <img data-lm-stage src="{{ product.image | product_image_url | constrain: 900 }}" srcset="{{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 900 }} 900w, {{ product.image | product_image_url | constrain: 1300 }} 1300w" sizes="(max-width: 760px) 90vw, 440px" alt="{{ product.name | escape }}">
+            {% endif %}
+            {% if product.status == 'sold-out' %}<span class="lm-tile__flag">Claimed</span>{% endif %}
+          </div>
+          <p class="lm-gk__caption">{{ lm_star4 }}<span>{{ product.name }}</span>{{ lm_star4 }}</p>
         </div>
+      </div>
+      {% if lm_gallery_count > 1 %}
+      <div class="lm-gk__thumbs" role="group" aria-label="Photos">
+        {% for image in product.images %}
+          {% if lm_parent_photo and forloop.last %}{% continue %}{% endif %}
+          <button type="button" class="lm-gallery__thumb" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Photo {{ forloop.index }}" data-src="{{ image | product_image_url | constrain: 900 }}" data-srcset="{{ image | product_image_url | constrain: 600 }} 600w, {{ image | product_image_url | constrain: 900 }} 900w, {{ image | product_image_url | constrain: 1300 }} 1300w">
+            <img src="{{ image | product_image_url | constrain: 200 }}" alt="" loading="lazy">
+          </button>
+        {% endfor %}
+      </div>
       {% endif %}
     </div>
 
-    <div class="lm-buy">
-      <div class="lm-buy__head">
-        {% if product.status == 'sold-out' %}
-          <span class="lm-eyebrow">{{ t['products.sold_out'] }}</span>
-        {% elsif product.status == 'coming-soon' %}
-          <span class="lm-eyebrow">{{ t['products.coming_soon'] }}</span>
-        {% elsif lm_g_eyebrow != blank %}
-          <span class="lm-eyebrow">{{ lm_g_eyebrow }}</span>
+    <div class="lm-gk__buy" id="lm-claim">
+      <nav class="lm-crumbs" aria-label="Breadcrumb"><a href="{{ lm_crumb.url }}">Geckos</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span></nav>
+      <div class="lm-gk__title">
+        <p class="lm-eyebrow">{{ lm_g_eyebrow }}</p>
+        <h1 class="lm-gk__name">{{ product.name }}</h1>
+        {% if lm_first != blank %}
+          <div class="lm-gk__tags">
+            {% for tag in lm_tags %}{% assign t = tag | strip %}{% if t != blank %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ t | url_encode }}"><span>{{ t }}</span></a>{% endif %}{% endfor %}
+          </div>
         {% endif %}
-        <h1 class="lm-display lm-display--lg lm-buy__title">{{ product.name }}</h1>
       </div>
-      {% if lm_first != blank %}
-        <ul class="lm-traits" aria-label="Traits">
-          {% for lm_t in lm_traits %}{% assign lm_tt = lm_t | strip %}{% if lm_tt != blank %}<li class="lm-trait">{{ lm_tt }}</li>{% endif %}{% endfor %}
-        </ul>
+
+      {% if lm_age != blank or lm_weight != blank or lm_hatched != blank %}
+      <dl class="lm-gk__facts">
+        {% if lm_age != blank %}<div><dt>Age</dt><dd>{{ lm_age }}</dd></div>{% endif %}
+        {% if lm_weight != blank %}<div><dt>Mass</dt><dd>{{ lm_weight }}</dd></div>{% endif %}
+        {% if lm_hatched != blank %}<div><dt>Hatched</dt><dd>{{ lm_hatch_short }}</dd></div>{% endif %}
+      </dl>
       {% endif %}
-      {% if lm_rest != blank %}<div class="lm-buy__desc">{{ lm_rest | paragraphs }}</div>{% endif %}
 
       {% if product.status == 'active' %}
-        <form class="lm-buy__form" method="post" action="/cart" accept-charset="utf8" data-lm-form>
-          <input type="hidden" name="utf8" value="✓">
-          <input type="hidden" name="cart[add][id]" value="{{ lm_option_id }}">
-          <div class="lm-buy__step">
-            <span class="lm-eyebrow lm-eyebrow--sm">I · Claim your gecko</span>
-            <div class="lm-claims">
-              <button type="button" class="lm-claim" aria-pressed="true" data-lm-claim="full" data-price="{{ product | product_price: theme.money_format | strip_html | strip }}">
-                <span class="lm-claim__head"><span class="lm-claim__name">Pay in full</span><span class="lm-claim__price">{{ product | product_price: theme.money_format }}</span></span>
-                {% if lm_full_note != blank %}<span class="lm-claim__note">{{ lm_full_note }}</span>{% endif %}
-              </button>
-              {% if lm_deposit != blank %}
-                <button type="button" class="lm-claim" aria-pressed="false" data-lm-claim="hold" data-price="{{ lm_deposit }}">
-                  <span class="lm-claim__head"><span class="lm-claim__name">Hold with deposit</span><span class="lm-claim__price">{{ lm_deposit }}</span></span>
-                  {% if lm_deposit_note != blank %}<span class="lm-claim__note">{{ lm_deposit_note }}</span>{% endif %}
-                </button>
-              {% endif %}
-            </div>
-          </div>
-          <button type="submit" class="lm-cta" data-lm-cta>
-            <span data-lm-cta-label>Claim {{ product.name }}</span>
-            <span data-lm-cta-price>{{ product | product_price: theme.money_format }}</span>
+      <form class="lm-gk__form" method="post" action="/cart" data-lm-form>
+        <input type="hidden" name="cart[add][id]" value="{{ lm_option_id }}">
+        <div class="lm-gk__claims" role="group" aria-label="Claim your gecko">
+          <button type="button" class="lm-claimopt" aria-pressed="true" data-lm-claim="full" data-price="{{ product | product_price | strip_html | strip }}">
+            {{ lm_star4 }}<span><b>Pay in full</b>{% if lm_full_note != blank %}<small>{{ lm_full_note }}</small>{% endif %}</span><em>{{ product | product_price }}</em>
           </button>
-          <a class="lm-link-arrow lm-buy__cart-link" href="/cart" data-lm-cart-link hidden>{{ t['cart.view_cart'] }} →</a>
-        </form>
-      {% else %}
-        <span class="lm-cta lm-cta--off">{% if product.status == 'sold-out' %}{{ t['products.sold_out'] }}{% else %}{{ t['products.coming_soon'] }}{% endif %}</span>
-      {% endif %}
-
-      {% if lm_pickup_title != blank %}
-        <div class="lm-pickup">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 1H10V6.4L13 6.9L16 7.4L19 7.2L21 7.9V15L20 17L17 19.5L15 21L14.6 23L12.5 22L11 19.5L9 16.5L7 15L5.5 15.8L3.5 13.5L1 10V9.2H6Z"/><circle cx="18.6" cy="15.6" r="1.3"/></svg>
-          <div><span class="lm-pickup__title">{{ lm_pickup_title }}</span><p class="lm-pickup__text">{{ lm_pickup_text }}</p></div>
+          {% if lm_deposit != blank %}
+          <button type="button" class="lm-claimopt" aria-pressed="false" data-lm-claim="hold" data-price="{{ lm_deposit }}">
+            {{ lm_star4 }}<span><b>Hold with deposit</b>{% if lm_deposit_note != blank %}<small>{{ lm_deposit_note }}</small>{% endif %}</span><em>{{ lm_deposit }}</em>
+          </button>
+          {% endif %}
         </div>
+        <button type="submit" class="lm-gk__cta" data-lm-cta><span data-lm-cta-label>Claim {{ product.name }}</span><span data-lm-cta-price>{{ product | product_price }}</span></button>
+        <a class="lm-gk__cartlink" href="/cart" data-lm-cart-link hidden>View cart →</a>
+      </form>
+      {% else %}
+      <div class="lm-gk__claimed">
+        <p class="lm-gk__cta is-off"><span>{% if product.status == 'sold-out' %}{{ product.name }} has been claimed{% else %}Coming soon{% endif %}</span></p>
+        <a class="lm-btn lm-btn--ghost" href="{{ lm_crumb.url }}">See available geckos →</a>
+      </div>
+      {% endif %}
+
+      <div class="lm-gk__ship">
+        <div><svg class="lm-gk__shipico" aria-hidden="true" viewBox="0 0 141.41 142.02"><polygon points="0 21.9 70.63 58.64 70.63 142.02 0 105.63 0 21.9" fill="currentColor" opacity=".55"/><polygon points="70.63 58.64 141.41 21.9 141.41 106.26 70.63 142.02 70.63 58.64" fill="currentColor"/><polygon points="29.68 6.71 42.75 0 113.76 37.09 113.76 74.9 99.98 81.96 99.98 44.87 29.68 6.71" fill="currentColor" opacity=".55"/></svg><p><b>{{ lm_ship_title }}</b><span>{{ lm_ship_text }}</span></p></div>
+        <div>{{ lm_texas }}<p><b>{{ lm_pickup_title }}</b><span>{{ lm_pickup_text }}</span></p></div>
+      </div>
+
+      {% if lm_hatched != blank or lm_age != blank or lm_weight != blank or lm_breeder != blank or lm_sire != blank or lm_dam != blank %}
+      <dl class="lm-gk__table">
+        {% if lm_hatched != blank %}<div><dt>Hatched</dt><dd>{{ lm_hatched }}</dd></div>{% endif %}
+        {% if lm_age != blank %}<div><dt>Age</dt><dd>{{ lm_age }}</dd></div>{% endif %}
+        {% if lm_weight != blank %}<div><dt>Mass</dt><dd>{{ lm_weight }}</dd></div>{% endif %}
+        {% if lm_breeder != blank %}<div><dt>Breeder</dt><dd>{{ lm_breeder }}</dd></div>{% endif %}
+        {% if lm_sire_name != blank %}<div><dt>Sire</dt><dd>{{ lm_sire_name }}</dd></div>{% endif %}
+        {% if lm_dam_name != blank %}<div><dt>Dam</dt><dd>{{ lm_dam_name }}</dd></div>{% endif %}
+      </dl>
       {% endif %}
     </div>
-  </div>
-
-  <section class="lm-journey lm-wrap" aria-labelledby="lm-journey-title">
-    <div class="lm-journey__head">
-      <div class="lm-section-head__titles">
-        <span class="lm-eyebrow lm-eyebrow--sm">II · The journey</span>
-        <h2 class="lm-display lm-display--sm" id="lm-journey-title">From my hands to yours</h2>
-      </div>
-      {% if lm_care_url != blank %}<a class="lm-btn lm-btn--outline lm-journey__link" href="{{ lm_care_url }}">Read the care guide →</a>{% endif %}
-    </div>
-    <ol class="lm-journey__steps">
-      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">I</span><h3 class="lm-step__title">Claim</h3><p>Pay in full or place a deposit to claim your gecko. I’ll email within 48 hrs to plan shipping.</p></li>
-      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">II</span><h3 class="lm-step__title">Prepare</h3><p>Set up the enclosure a week ahead and hold temps at 72–78°F.</p></li>
-      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">III</span><h3 class="lm-step__title">Arrival</h3><p>Arrives overnight at your local hub by 10:30am. Live arrival guaranteed.</p></li>
-      <li class="lm-step"><span class="lm-step__n" aria-hidden="true">IV</span><h3 class="lm-step__title">Settle in</h3><p>At least two weeks of limited handling. Let them get settled and feel safe in their new home!</p></li>
-    </ol>
   </section>
+
+  {% if lm_paras.size > 0 %}
+  <section class="lm-gk__note">
+    <div class="lm-sigil lm-sigil--blue lm-gk__notesigil" aria-hidden="true"></div>
+    <div class="lm-gk__notehead">
+      <p class="lm-label lm-muted">○ Catalogue note</p>
+      <h2 class="lm-gk__notetitle">On {{ product.name }}</h2>
+      <svg class="lm-gk__sigil" aria-hidden="true" viewBox="-100 -100 200 200" fill="none" stroke-width=".7"><circle r="87" opacity=".35" stroke-dasharray="7 2 1 2"/><g opacity=".16"><circle cx="29" cy="0" r="29"/><circle cx="14.5" cy="25.11" r="29"/><circle cx="-14.5" cy="25.11" r="29"/><circle cx="-29" cy="0" r="29"/><circle cx="-14.5" cy="-25.11" r="29"/><circle cx="14.5" cy="-25.11" r="29"/><circle r="29"/><circle r="58"/></g><path d="M-10.77,68.16L-64.16,-46.39M-10.77,68.16L10.77,15.84M-10.77,68.16L64.16,-37.61M-64.16,-46.39L10.77,15.84M-64.16,-46.39L64.16,-37.61M10.77,15.84L64.16,-37.61" stroke-width=".9" stroke-linejoin="round"/><path class="lm-flare-s" d="M10.77,-68.16L64.16,46.39M10.77,-68.16L-10.77,-15.84M10.77,-68.16L-64.16,37.61M64.16,46.39L-10.77,-15.84M64.16,46.39L-64.16,37.61M-10.77,-15.84L-64.16,37.61" stroke-width=".9" stroke-linejoin="round"/><path d="M-12.57,68.16a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-65.96,-46.39a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M8.97,15.84a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M62.36,-37.61a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0" stroke="none" fill="currentColor"/><path class="lm-flare-f" d="M8.97,-68.16a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M62.36,46.39a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-12.57,-15.84a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-65.96,37.61a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0" stroke="none"/><circle r="21" stroke-width="1" class="lm-bg-f"/><circle r="25" opacity=".5" stroke-dasharray="1 2.2"/><svg x="-12" y="-12" width="24" height="24" viewBox="0 0 24 24" class="lm-gk__sigilglyph"><use href="#lm-i-sun" data-lm-sign-use/></svg></svg>
+    </div>
+    <div class="lm-gk__notebody">
+      {% if lm_lede != blank %}<p class="lm-gk__lede">{{ lm_lede }}</p>{% endif %}
+      <div class="lm-gk__cols">
+        {% if lm_body_first != blank %}<p>{{ lm_body_first }}</p>{% endif %}
+        {% for para in lm_paras offset: 1 %}{% assign pp = para | strip %}{% if pp != blank %}<p>{{ pp }}</p>{% endif %}{% endfor %}
+      </div>
+      {% if product.status == 'active' %}<a class="lm-btn lm-gk__noteclaim" href="#lm-claim">Claim your gecko</a>{% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if lm_hatched != blank or lm_sire != blank or lm_dam != blank %}
+  <section class="lm-gk__duo{% if lm_sire == blank and lm_dam == blank %} lm-gk__duo--sky{% endif %}" data-lm-duo>
+    <div class="lm-gk__sky" data-lm-sky hidden>
+      <p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-sun" data-lm-sign-use/></svg> {{ lm_pron }} sky at hatching</p>
+      <svg class="lm-gk__skymap" viewBox="4 24 92 52" data-lm-skymap aria-hidden="true"></svg>
+      <p class="lm-gk__skynote" data-lm-skynote></p>
+    </div>
+    {% if lm_sire != blank or lm_dam != blank %}
+    <div class="lm-gk__lineage">
+      <p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-sun"/></svg> <svg class="lm-ico"><use href="#lm-i-moon"/></svg> Lineage</p>
+      <div class="lm-gk__parents{% unless lm_parent_photo %} lm-gk__parents--text{% endunless %}">
+        {% if lm_parent_photo %}<div class="lm-gk__parentphoto"><img src="{{ product.images.last | product_image_url | constrain: 800 }}" alt="{{ lm_sire_name | escape }} and {{ lm_dam_name | escape }}, the parents" loading="lazy"></div>{% endif %}
+        <div class="lm-gk__parentlist">
+          {% if lm_sire != blank %}<div><p class="lm-label lm-muted">Sire <svg class="lm-ico"><use href="#lm-i-mars"/></svg></p><p class="lm-gk__parent">{{ lm_sire_name }}</p>{% if lm_sire_morph != blank %}<p class="lm-muted">{{ lm_sire_morph }}</p>{% endif %}</div>{% endif %}
+          {% if lm_dam != blank %}<div><p class="lm-label lm-muted">Dam <svg class="lm-ico"><use href="#lm-i-venus"/></svg></p><p class="lm-gk__parent">{{ lm_dam_name }}</p>{% if lm_dam_morph != blank %}<p class="lm-muted">{{ lm_dam_morph }}</p>{% endif %}</div>{% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <section class="lm-gk__transit">
+    <p class="lm-label lm-muted"><svg class="lm-ico-inline" aria-hidden="true" viewBox="-10 -10 20 20" fill="none" stroke-width="1.4" stroke-linecap="round"><path d="M-3.6,-9.2A3.6,3.6 0 0 0 3.6,-9.2"/><circle cx="0" cy="-2.4" r="3.6"/><path d="M0,1.2L0,9.4M-3,5.6L3,5.6"/></svg>Initiating transit · From my hands to yours</p>
+    <ol class="lm-gk__steps">
+      <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">I</span>{{ lm_solid1 }}</div><h3>Claim</h3><p>Pay in full or place a deposit to claim your gecko. I’ll email within 48 hrs to plan shipping.</p></li>
+      <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">II</span>{{ lm_solid2 }}</div><h3>Prepare</h3><p>Set up the enclosure a week ahead and hold temps at 72–78°F.</p></li>
+      <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">III</span>{{ lm_solid3 }}</div><h3>Arrival</h3><p>Arrives overnight at your local hub by 10:30am. Live arrival guaranteed.</p></li>
+      <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">IV</span>{{ lm_solid4 }}</div><h3>Settle in</h3><p>At least two weeks of limited handling. Let them get settled and feel safe in their new home!</p></li>
+    </ol>
+    {% if lm_care_url != blank %}<a class="lm-btn lm-btn--ghost lm-gk__care" href="{{ lm_care_url }}">Consult the care guide →</a>{% endif %}
+  </section>
+
+  {% if product.related_products.size > 0 %}
+  <section class="lm-gk__related">
+    <div class="lm-gk__relhead"><p class="lm-eyebrow">More cool things</p><h2 class="lm-display lm-display--md">You might also like</h2></div>
+    <div class="lm-mini-grid">
+      {% for rel in product.related_products limit: 4 %}
+        <a class="lm-mini" href="{{ rel.url }}">
+          <div class="lm-mini__img">{% if rel.image %}<img src="{{ rel.image | product_image_url | constrain: 500 }}" alt="{{ rel.name | escape }}" loading="lazy">{% endif %}</div>
+          <p><span>{{ rel.name }}</span><em>{{ rel | product_price }}</em></p>
+        </a>
+      {% endfor %}
+    </div>
+    <a class="lm-btn lm-btn--ghost lm-gk__all" href="/products">View all wares →</a>
+  </section>
+  {% endif %}
 
   {% if lm_deposit != blank and product.status == 'active' %}
     <dialog class="lm-dialog" data-lm-hold aria-labelledby="lm-hold-title">
-      <form method="dialog"><button class="lm-dialog__close" aria-label="Close">×</button></form>
-      <span class="lm-eyebrow lm-eyebrow--sm">Hold with deposit</span>
+      <form method="dialog"><button class="lm-dialog__close" aria-label="Close">&times;</button></form>
+      <p class="lm-eyebrow">Hold with deposit</p>
       <h2 class="lm-display lm-display--sm" id="lm-hold-title">Claim {{ product.name }}</h2>
-      <p>To purchase {{ product.name }} with a payment plan, a <strong>{{ lm_deposit }}</strong> nonrefundable cash deposit is required upfront to mark the gecko on hold. </p>
+      <p>To purchase {{ product.name }} with a payment plan, a <strong>{{ lm_deposit }}</strong> nonrefundable cash deposit is required upfront to mark the gecko on hold.</p>
       {% if lm_cashapp != blank or lm_zelle != blank or lm_venmo != blank %}
         <ul class="lm-dialog__pay">
           {% if lm_cashapp != blank %}<li><span>Cash App</span><b>{{ lm_cashapp }}</b></li>{% endif %}
@@ -589,58 +712,117 @@
       {% endif %}
       {% if lm_deposit_note != blank %}<p class="lm-dialog__note">{{ lm_deposit_note }}</p>{% endif %}
       <div class="lm-dialog__actions">
-        <a class="lm-btn lm-btn--solid" href="/contact">Message me</a>
-        {% if theme.instagram_url != blank %}<a class="lm-btn lm-btn--outline" href="{{ theme.instagram_url }}">DM on Instagram</a>{% endif %}
+        <a class="lm-btn" href="/contact">Message me</a>
+        {% if lm_instagram_dm != blank %}<a class="lm-btn lm-btn--ghost" href="{{ lm_instagram_dm }}" target="_blank" rel="noopener">DM on Instagram</a>{% endif %}
       </div>
     </dialog>
   {% endif %}
 </div>
 
 <script>
-  /* Lizard Magic: claim (pay in full → cart) or hold (deposit popup) */
+  /* Gecko page: claim (pay in full → cart) or hold (deposit popup) */
   (function () {
-    var root = document.querySelector('[data-lm-gecko]');
-    if (!root) return;
+    var root = document.querySelector('[data-lm-gecko]'); if (!root) return;
+    var form = root.querySelector('[data-lm-form]'); if (!form) return;
     var name = root.getAttribute('data-lm-name');
-    var form = root.querySelector('[data-lm-form]');
-    if (!form) return;
-    var cta = root.querySelector('[data-lm-cta]'), label = root.querySelector('[data-lm-cta-label]'), price = root.querySelector('[data-lm-cta-price]');
+    var label = root.querySelector('[data-lm-cta-label]'), price = root.querySelector('[data-lm-cta-price]'), cta = root.querySelector('[data-lm-cta]');
     var cartLink = root.querySelector('[data-lm-cart-link]'), dialog = root.querySelector('[data-lm-hold]');
     var claims = root.querySelectorAll('[data-lm-claim]');
     var mode = 'full', added = false;
     function render() {
       claims.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lm-claim') === mode)); });
       var picked = root.querySelector('[data-lm-claim="' + mode + '"]');
-      price.textContent = picked ? picked.getAttribute('data-price') : price.textContent;
+      if (picked) price.textContent = picked.getAttribute('data-price');
       label.textContent = mode === 'hold' ? 'Hold ' + name : added ? 'Claimed ✦ in your cart' : 'Claim ' + name;
     }
     claims.forEach(function (b) { b.addEventListener('click', function () { mode = b.getAttribute('data-lm-claim'); render(); }); });
     form.addEventListener('submit', function (e) {
-      if (mode === 'hold') {
-        e.preventDefault();
-        if (dialog && dialog.showModal) dialog.showModal(); else location.href = '/contact';
-        return;
-      }
+      if (mode === 'hold') { e.preventDefault(); if (dialog && dialog.showModal) dialog.showModal(); else location.href = '/contact'; return; }
       if (added) { e.preventDefault(); location.href = '/cart'; return; }
       if (!(window.Cart && typeof Cart.addItem === 'function')) return;
-      e.preventDefault();
-      cta.classList.add('is-busy');
+      e.preventDefault(); cta.classList.add('is-busy');
       Cart.addItem(form.querySelector('[name="cart[add][id]"]').value, 1, function (cart) {
-        added = true; render();
-        if (cartLink) cartLink.hidden = false;
-        var count = document.querySelector('.lm-header__count span');
-        if (count && cart && cart.item_count != null) count.textContent = cart.item_count;
+        added = true; render(); if (cartLink) cartLink.hidden = false;
+        document.querySelectorAll('[data-lm-cart-count]').forEach(function (c) { if (cart && cart.item_count != null) c.textContent = cart.item_count; });
+        document.dispatchEvent(new CustomEvent('lm:cart', { detail: cart }));
       }, { onComplete: function () { cta.classList.remove('is-busy'); } });
     });
-    /* Close the popup when tapping the dimmed backdrop */
     if (dialog) dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
     render();
   })();
+
+  /* Gecko page: sun sign from the hatch date, and her sky at hatching */
+  (function () {
+    var root = document.querySelector('[data-lm-gecko]'); if (!root) return;
+    var raw = (root.getAttribute('data-lm-hatch') || '').trim(), m, mo, d;
+    if ((m = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/))) { mo = +m[1]; d = +m[2]; }
+    else if ((m = raw.match(/^(\d{4})[\/.\-](\d{1,2})[\/.\-](\d{1,2})$/))) { mo = +m[2]; d = +m[3]; }
+    if (!mo || !d || mo > 12 || d > 31) return;
+    /* Tropical sun signs: [last day of sign in its starting month boundary] */
+    var signs = ['capricorn', 'aquarius', 'pisces', 'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn'];
+    var cut = [20, 19, 21, 20, 21, 21, 23, 23, 23, 23, 22, 22];
+    var sign = d >= cut[mo - 1] ? signs[mo] : signs[mo - 1];
+    var order = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+    var roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    var title = sign.charAt(0).toUpperCase() + sign.slice(1);
+    root.querySelectorAll('[data-lm-sign-glyph]').forEach(function (el) { el.innerHTML = '<svg class="lm-ico"><use href="#lm-i-' + sign + '"/></svg>'; el.setAttribute('aria-label', title); });
+    root.querySelectorAll('[data-lm-sign-roman]').forEach(function (el) { el.textContent = roman[order.indexOf(sign)]; });
+    root.querySelectorAll('[data-lm-sign-use]').forEach(function (el) { el.setAttribute('href', '#lm-i-' + sign); });
+
+    /* Constellations: [RA hours, Dec degrees, magnitude], line pairs, bright star index, its name, its epithet */
+    var C = {
+      aries: [[[2.12,23.46,2.0],[1.91,20.81,2.6],[1.89,19.29,3.9],[2.83,27.26,3.6]], '2-1,1-0,0-3', 0, 'Hamal', 'the head of the ram'],
+      taurus: [[[4.60,16.51,0.9],[5.44,28.61,1.7],[5.63,21.14,3.0],[4.48,19.18,3.5],[4.33,15.63,3.6],[4.38,17.54,3.8],[4.48,15.87,3.4],[4.01,12.49,3.4],[3.41,9.03,3.6],[3.79,24.11,2.9]], '2-0,0-6,6-4,4-5,5-3,3-1,4-7,7-8', 0, 'Aldebaran', 'the eye of the bull'],
+      gemini: [[[7.58,31.89,1.6],[7.76,28.03,1.1],[6.63,16.40,1.9],[6.73,25.13,3.0],[6.38,22.51,2.9],[6.25,22.51,3.3],[7.34,21.98,3.5],[7.07,20.57,3.9],[7.74,24.40,3.6]], '0-1,0-3,3-4,4-5,1-8,8-6,6-7,7-2', 1, 'Pollux', 'the immortal twin'],
+      cancer: [[[8.28,9.19,3.5],[8.74,18.15,3.9],[8.72,21.47,4.7],[8.97,11.86,4.3],[8.78,28.76,4.0]], '1-0,1-3,1-2,2-4', 3, 'Acubens', 'the claw of the crab'],
+      leo: [[[10.14,11.97,1.4],[10.12,16.76,3.5],[10.33,19.84,2.0],[10.28,23.42,3.4],[9.88,26.01,3.9],[9.76,23.77,3.0],[11.24,20.52,2.6],[11.24,15.43,3.3],[11.82,14.57,2.1]], '0-1,1-2,2-3,3-4,4-5,2-6,6-8,8-7,7-0', 0, 'Regulus', 'the heart of the lion'],
+      virgo: [[[13.42,-11.16,1.0],[12.69,-1.45,2.7],[13.04,10.96,2.8],[12.93,3.40,3.4],[13.58,-0.60,3.4],[11.84,1.76,3.6],[12.33,-0.67,3.9],[14.27,-6.0,4.1],[14.72,-5.66,3.9]], '5-6,6-1,1-0,1-3,3-2,3-4,4-7,7-8', 0, 'Spica', 'the ear of wheat'],
+      libra: [[[15.28,-9.38,2.6],[14.85,-16.04,2.8],[15.07,-25.28,3.3],[15.59,-14.79,3.9],[15.62,-28.14,3.6],[15.64,-29.78,3.7]], '1-0,0-3,3-1,1-2,3-4,4-5', 0, 'Zubeneschamali', 'the northern claw'],
+      scorpio: [[[16.49,-26.43,1.0],[16.01,-22.62,2.3],[16.09,-19.81,2.6],[15.98,-26.11,2.9],[16.35,-25.59,2.9],[16.60,-28.22,2.8],[16.84,-34.29,2.3],[16.86,-38.05,3.0],[16.90,-42.36,3.6],[17.20,-43.24,3.3],[17.62,-43.0,1.9],[17.79,-40.13,3.0],[17.71,-39.03,2.4],[17.56,-37.10,1.6]], '2-1,1-3,1-4,4-0,0-5,5-6,6-7,7-8,8-9,9-10,10-11,11-12,12-13', 0, 'Antares', 'the heart of the scorpion'],
+      sagittarius: [[[18.40,-34.38,1.8],[18.92,-26.30,2.0],[19.04,-29.88,2.6],[18.35,-29.83,2.7],[18.47,-25.42,2.8],[18.10,-30.42,3.0],[18.76,-26.99,3.2],[19.12,-27.67,3.3],[18.29,-36.76,3.1]], '5-3,3-4,4-6,6-1,1-7,7-2,2-0,0-5,3-0,2-6,0-8', 0, 'Kaus Australis', 'the archer’s bow'],
+      capricorn: [[[21.78,-16.13,2.9],[20.35,-14.78,3.1],[20.30,-12.51,3.6],[21.67,-16.66,3.7],[21.44,-22.41,3.7],[20.86,-26.92,4.1],[20.77,-25.27,4.1],[21.10,-17.23,4.1],[21.37,-16.83,4.3]], '2-1,1-6,6-5,5-4,4-3,3-0,3-8,8-7,7-1', 0, 'Deneb Algedi', 'the tail of the goat'],
+      aquarius: [[[21.53,-5.57,2.9],[22.10,-0.32,3.0],[22.91,-15.82,3.3],[22.36,-1.39,3.8],[22.48,-0.02,3.7],[22.59,-0.12,4.0],[20.79,-9.50,3.8],[22.88,-7.58,3.7],[22.83,-13.59,4.0]], '6-0,0-1,1-3,3-4,4-5,3-7,7-8,8-2', 0, 'Sadalsuud', 'the luckiest of the lucky'],
+      pisces: [[[2.03,2.76,3.8],[1.52,15.35,3.6],[1.76,9.16,4.3],[1.69,5.49,4.4],[1.50,6.14,4.8],[1.05,7.89,4.3],[0.81,7.59,4.4],[-0.01,6.86,4.0],[-0.33,5.63,4.1],[-0.53,6.38,4.3],[-0.71,3.28,3.7],[-0.55,1.26,4.9],[-0.30,1.78,4.5],[1.23,24.58,4.7]], '0-2,2-1,1-13,0-3,3-4,4-5,5-6,6-7,7-8,8-9,9-10,10-11,11-12,12-8', 0, 'Alrescha', 'the knot of the cord']
+    };
+    var c = C[sign]; if (!c) return;
+    var sky = root.querySelector('[data-lm-sky]'), svg = root.querySelector('[data-lm-skymap]');
+    if (!sky || !svg) return;
+    var stars = c[0], dec0 = stars.reduce(function (a, s) { return a + s[1]; }, 0) / stars.length;
+    var pts = stars.map(function (s) { return [-s[0] * 15 * Math.cos(dec0 * Math.PI / 180), -s[1]]; });
+    var xs = pts.map(function (p) { return p[0]; }), ys = pts.map(function (p) { return p[1]; });
+    var minX = Math.min.apply(0, xs), maxX = Math.max.apply(0, xs), minY = Math.min.apply(0, ys), maxY = Math.max.apply(0, ys);
+    var k = Math.min(78 / Math.max(maxX - minX, 1), 40 / Math.max(maxY - minY, 1));
+    var ox = 50 - (minX + maxX) / 2 * k, oy = 50 - (minY + maxY) / 2 * k;
+    pts = pts.map(function (p) { return [+(p[0] * k + ox).toFixed(2), +(p[1] * k + oy).toFixed(2)]; });
+    var NS = 'http://www.w3.org/2000/svg', html = '';
+    /* faint background stars, seeded by the gecko's name so they stay put */
+    var seed = 0, nm = root.getAttribute('data-lm-name'); for (var i = 0; i < nm.length; i++) seed = (seed * 31 + nm.charCodeAt(i)) >>> 0;
+    var rnd = function () { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    for (i = 0; i < 70; i++) html += '<circle class="lm-sky__dust" cx="' + (5 + rnd() * 90).toFixed(2) + '" cy="' + (25 + rnd() * 50).toFixed(2) + '" r="' + (0.08 + rnd() * 0.22).toFixed(2) + '" opacity="' + (0.25 + rnd() * 0.5).toFixed(2) + '"/>';
+    c[1].split(',').forEach(function (pair) {
+      var ab = pair.split('-'), a = pts[+ab[0]], b = pts[+ab[1]];
+      html += '<line class="lm-sky__line" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
+    });
+    var spark = function (x, y, r, cls, rot) {
+      var q = r * 0.12, d = 'M' + x + ',' + (y - r) + 'Q' + (x + q) + ',' + (y - q) + ' ' + (x + r) + ',' + y + 'Q' + (x + q) + ',' + (y + q) + ' ' + x + ',' + (y + r) + 'Q' + (x - q) + ',' + (y + q) + ' ' + (x - r) + ',' + y + 'Q' + (x - q) + ',' + (y - q) + ' ' + x + ',' + (y - r) + 'Z';
+      return '<path class="' + cls + '" d="' + d + '"' + (rot ? ' transform="rotate(45 ' + x + ' ' + y + ')" opacity=".6"' : '') + '/>';
+    };
+    pts.forEach(function (p, i) {
+      if (i === c[2]) return;
+      var r = Math.max(0.9, 2.6 - stars[i][2] * 0.38);
+      html += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (r * 0.55).toFixed(2) + '" fill="url(#lm-sky-glow2)"/>' + spark(p[0], p[1], r, 'lm-sky__star') + spark(p[0], p[1], r * 0.55, 'lm-sky__star', true);
+    });
+    var b = pts[c[2]];
+    html += '<circle cx="' + b[0] + '" cy="' + b[1] + '" r="2.74" fill="url(#lm-sky-glow)"/><circle class="lm-sky__ring" cx="' + b[0] + '" cy="' + b[1] + '" r="1.89"/><circle class="lm-sky__ring lm-sky__ring--dash" cx="' + b[0] + '" cy="' + b[1] + '" r="2.89"/>' + spark(b[0], b[1], 3.04, 'lm-sky__bright') + spark(b[0], b[1], 1.67, 'lm-sky__bright', true).replace(' opacity=".6"', '') + '<circle cx="' + b[0] + '" cy="' + b[1] + '" r=".35" class="lm-sky__core"/>';
+    var lx = b[0] + 2.3, anchor = 'start'; if (lx > 82) { lx = b[0] - 2.3; anchor = 'end'; }
+    html += '<text class="lm-sky__label" x="' + lx.toFixed(2) + '" y="' + (b[1] + 2.74).toFixed(2) + '" text-anchor="' + anchor + '">' + c[3] + '</text>';
+    svg.innerHTML = '<defs><radialGradient id="lm-sky-glow"><stop offset="0" stop-color="#ff4a1c" stop-opacity=".6"/><stop offset="1" stop-color="#ff4a1c" stop-opacity="0"/></radialGradient><radialGradient id="lm-sky-glow2"><stop offset="0" stop-color="#f0f4ff" stop-opacity=".35"/><stop offset="1" stop-color="#f0f4ff" stop-opacity="0"/></radialGradient></defs>' + html;
+    root.querySelector('[data-lm-skynote]').textContent = 'Sun in ' + title + ', beneath ' + c[3] + ', ' + c[4] + '.';
+    sky.hidden = false;
+    var duo = root.querySelector('[data-lm-duo]'); if (duo) duo.classList.add('has-sky');
+  })();
 </script>
-
-
 {{ lm_gallery_js }}
-
 {% else %}
 {% comment %}
   Use page name from Custo if it's been customized, otherwise use the localized default.

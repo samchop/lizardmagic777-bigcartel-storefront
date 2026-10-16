@@ -192,6 +192,9 @@
       if (e.target.closest('[data-lm-filters-close]')) { root.classList.remove('is-filtering'); }
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') root.classList.remove('is-filtering'); });
+    /* #Trait in the URL (from a gecko page's tags) preselects that filter */
+    var want = decodeURIComponent((location.hash || '').slice(1)).replace(/\+/g, ' ').toLowerCase();
+    if (want) ['sex', 'morph', 'base'].forEach(function (g) { tiles.forEach(function (t) { values(t, g).forEach(function (v) { if (v.toLowerCase() === want) state[g] = v; }); }); });
     apply();
   })();
 </script>
