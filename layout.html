@@ -50,6 +50,7 @@
       <symbol id="lm-i-aether" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></symbol>
       <symbol id="lm-i-comet" viewBox="0 0 24 24"><circle cx="8" cy="16" r="4"/><path d="M11 13 20 4M12.5 16.2 21 10M7.8 12 13 3.5"/></symbol>
       <symbol id="lm-i-check" viewBox="0 0 24 24"><path d="m4 12.5 5.5 5.5L20 6"/></symbol>
+      <symbol id="lm-i-neptune" viewBox="0 0 24 24"><path d="M12 22V2M7 14.5h10M4.5 2a7.502 7.502 0 0 0 15 0"/></symbol>
       </defs>
     </svg>
     <a class="lm-skip" href="#main">Skip to content</a>
@@ -92,7 +93,147 @@
     <main id="main" class="lm-main" data-bc-hook="content">
       {% if page.category == 'custom' %}
         {% if page.permalink == 'care-guide' %}
-          {{ page_content }}
+        {% comment %} ===== Care guide: The Keeper's Grimoire (custom page with permalink care-guide) ===== {% endcomment %}
+        {% capture lm_gstar %}<svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>{% endcapture %}
+        <div class="lm-gm" data-lm-grimoire>
+          <section class="lm-hero lm-hero--center lm-gm__hero">
+            <div class="lm-sigil" aria-hidden="true"></div>
+            <p class="lm-eyebrow">The Care Guide · For new + seasoned keepers</p>
+            <h1 class="lm-display lm-gm__title">The Keeper’s Grimoire<sup>*</sup></h1>
+            <p class="lm-italic lm-gm__lede">Five rites, seven days, six omens, and the instruments to keep a crested gecko for fifteen to twenty years.</p>
+            <nav class="lm-gm__toc" aria-label="Sections"><a href="#lm-rites">The Rites</a><span>✦</span><a href="#lm-week">The Week</a><span>✦</span><a href="#lm-omens">Omens</a><span>✦</span><a href="#lm-tools">Instruments</a></nav>
+            <div class="lm-gm__note">
+              <p>* This Grimoire is meant to be used as a starting point for your crestie’s care.</p>
+              <p>You might find that your own animal has preferences that dip outside of standard practice, and that’s okay.</p>
+              <p>Please don’t hesitate to <a href="/contact">contact me</a> with any questions. ♡</p>
+            </div>
+          </section>
+
+          <section class="lm-gm__rites" id="lm-rites">
+            <div class="lm-gm__star">
+              <svg class="lm-gm__ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="lm-gm-ring" d="M50,1.5 a48.5,48.5 0 1,1 0,97 a48.5,48.5 0 1,1 0,-97"/></defs><text><textPath href="#lm-gm-ring" textLength="302" lengthAdjust="spacing">SOLVE ET COAGULA ✦ AS ABOVE SO BELOW ✦ MIST AT DUSK ✦ DRY BY DAWN ✦ FEED THE BODY WELL ✦ EARN THE TRUST ✦ ROOM TO RISE ✦</textPath></text></svg>
+              <svg class="lm-gm__lines" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45.5" class="lm-gm__c1"/><circle cx="50" cy="50" r="40" class="lm-gm__c2"/><circle cx="50" cy="50" r="15" class="lm-gm__c1"/><path d="M50,10 L73.51,82.36 L11.96,37.64 L88.04,37.64 L26.49,82.36 Z" class="lm-gm__c3"/></svg>
+              <div class="lm-gm__core" aria-hidden="true"><svg class="lm-ico" data-lm-core-ico><use href="#lm-i-water"/></svg><span data-lm-core-el>Water</span></div>
+              <button type="button" class="lm-gm__node" style="left:11.96%;top:37.64%" data-lm-node="0" aria-label="Rite I, Air"><svg class="lm-ico"><use href="#lm-i-air"/></svg><span>I</span></button>
+              <button type="button" class="lm-gm__node" style="left:73.51%;top:82.36%" data-lm-node="1" aria-label="Rite II, Fire"><svg class="lm-ico"><use href="#lm-i-fire"/></svg><span>II</span></button>
+              <button type="button" class="lm-gm__node" style="left:88.04%;top:37.64%" data-lm-node="2" aria-label="Rite III, Water"><svg class="lm-ico"><use href="#lm-i-water"/></svg><span>III</span></button>
+              <button type="button" class="lm-gm__node" style="left:26.49%;top:82.36%" data-lm-node="3" aria-label="Rite IV, Earth"><svg class="lm-ico"><use href="#lm-i-earth"/></svg><span>IV</span></button>
+              <button type="button" class="lm-gm__node" style="left:50%;top:10%" data-lm-node="4" aria-label="Rite V, Aether"><svg class="lm-ico"><use href="#lm-i-aether"/></svg><span>V</span></button>
+            </div>
+            <div class="lm-gm__rite" aria-live="polite">
+              <p class="lm-gm__ritehead"><span class="lm-eyebrow">The Five Rites</span><span class="lm-gm__rule"></span><span class="lm-label lm-muted">Rite <span data-lm-r="roman">III</span> of V · <span data-lm-r="element">Water</span></span></p>
+              <div class="lm-gm__ritetitle"><h2 data-lm-r="name">The Mist</h2><p data-lm-r="sub">Mist at dusk, dry by dawn</p></div>
+              <p class="lm-gm__ritebody"><span data-lm-r="body">Offer water two ways. Mist the enclosure at dusk so your gecko can lap droplets off the leaves, and keep a shallow dish of fresh water out at all times. Let the enclosure dry out between mistings to prevent mold and skin trouble.</span> <strong data-lm-r="bold"></strong> <span data-lm-r="post"></span></p>
+              <dl class="lm-gm__specs" data-lm-r="specs"><div><dt>Baseline</dt><dd>50–60%</dd></div><div><dt>After mist</dt><dd>70–80%</dd></div></dl>
+              <div class="lm-gm__dodont">
+                <div><p class="lm-gm__do">{{ lm_gstar }}Do</p><p data-lm-r="doo">Use a hygrometer. Aim for a spike after misting, then a dry-down.</p></div>
+                <div><p class="lm-gm__dont"><span>✕</span>Forbidden</p><p data-lm-r="dont">Constantly wet, or bone-dry for days.</p></div>
+              </div>
+              <div class="lm-gm__ritefoot"><p class="lm-gm__aff">“<span data-lm-r="aff">I nourish with mist and let the dawn dry it.</span>”</p><div class="lm-gm__arrows"><button type="button" data-lm-go="-1" aria-label="Previous rite">←</button><button type="button" data-lm-go="1" aria-label="Next rite" class="is-acc">→</button></div></div>
+            </div>
+          </section>
+
+          <section class="lm-gm__week" id="lm-week">
+            <div class="lm-gm__head"><p class="lm-home__kicker">{{ lm_gstar }}The Planetary Week{{ lm_gstar }}</p><h2 class="lm-display lm-gm__h2">Seven Days, Seven Rulers</h2><p class="lm-italic lm-muted">Each day answers to its planet. Keep to the calendar and the care keeps itself.</p></div>
+            <ol class="lm-gm__days">
+              {% assign lm_days = 'Sunday~the Sun~sun~Inspect~Read the thermometer. Check toes and tail tip for stuck shed.|Monday~the Moon~moon~Feast~Fresh complete diet, mixed and placed up high.|Tuesday~Mars~mars~Clear~Remove yesterday’s food. Spot clean droppings.|Wednesday~Mercury~mercury~Feast~Fresh complete diet. Swap the cup, don’t top it up.|Thursday~Jupiter~jupiter~Bounty~Optional: a few calcium-dusted insects.|Friday~Venus~venus~Feast~Fresh complete diet, then let them be.|Saturday~Saturn~saturn~Reckon~Wipe the glass. First Saturday of the month, weigh in grams.' | split: '|' %}
+              {% for d in lm_days %}{% assign dd = d | split: '~' %}
+                <li class="lm-gm__day" data-lm-day="{{ forloop.index0 }}"><span class="lm-gm__today">Today</span><svg class="lm-ico"><use href="#lm-i-{{ dd[2] }}"/></svg><p><b>{{ dd[0] }}</b><em>of {{ dd[1] }}</em></p><span class="lm-gm__tick"></span><h3>{{ dd[3] }}</h3><p class="lm-gm__daynote">{{ dd[4] }}</p></li>
+              {% endfor %}
+            </ol>
+            <p class="lm-gm__mist"><svg class="lm-ico"><use href="#lm-i-moon"/></svg><em>At dusk, mist the enclosure. As long as it dries out the next day, mist again.</em><svg class="lm-ico"><use href="#lm-i-sun"/></svg></p>
+            <p class="lm-gm__small">Some adults may eat only 2× a week or even every 4–5 days, especially as temps cool in the fall and winter. Observe your crestie’s habits and adjust as needed.</p>
+          </section>
+
+          <section class="lm-gm__omens" id="lm-omens">
+            <div class="lm-gm__head"><p class="lm-home__kicker">{{ lm_gstar }}Ill Omens{{ lm_gstar }}</p><h2 class="lm-display lm-gm__h2">Read the Signs</h2><p class="lm-italic lm-muted">Six portents every keeper should know. Turn a card to read its remedy.</p></div>
+            <div class="lm-gm__cards">
+              {% assign lm_omens = 'moon~The Fast~It will not eat~Normal for the first week or two in a new home. Keep offering fresh food, keep handling to a minimum, and weigh it if the fast passes three weeks.~Hunger returns to the settled.|comet~The Fallen Tail~The tail has dropped~A defense, not a disaster. Keep the enclosure clean while the stump heals. It won’t regrow, and frogbutts live just as long.~What is shed is not lost.|water~The Clinging Skin~Old skin on toes or tail~Raise humidity and give it a humid hide or a damp paper-towel sauna for 15 minutes, then gently roll the skin off. Retained shed can cost toes.~Mist, and the skin lets go.|saturn~The Bent Bone~A kinked spine or soft jaw~Signs of metabolic bone disease. Feed a complete diet with calcium and D3, skip fruit-only meals, and see a reptile vet.~Feed the bones and they stand.|neptune~The Floppy Tail~It hangs folded on the glass~Too much time upside down on bare glass. Add branches, cork and foliage so it rests on surfaces. See a vet if the pelvis looks bent.~Give it a branch to hold.|fire~The Fever~Gaping mouth, lethargy~The room is too hot. Over 82°F is stress; 85°F can kill. Move the enclosure somewhere cool right away and mist lightly.~Cool the hearth at once.' | split: '|' %}
+              {% for o in lm_omens %}{% assign oo = o | split: '~' %}
+                <button type="button" class="lm-omen" aria-pressed="false" data-lm-omen>
+                  <span class="lm-omen__inner">
+                    <span class="lm-omen__face"><span class="lm-omen__frame"><span class="lm-omen__top"><span>OMEN</span><i>✦</i><span>OMEN</span></span><span class="lm-omen__arch"><svg class="lm-ico"><use href="#lm-i-{{ oo[0] }}"/></svg></span><span class="lm-omen__names"><b>{{ oo[1] }}</b><em>{{ oo[2] }}</em></span></span></span>
+                    <span class="lm-omen__back"><span class="lm-omen__frame"><span class="lm-omen__btop"><span>REMEDY</span><svg class="lm-ico"><use href="#lm-i-{{ oo[0] }}"/></svg></span><span class="lm-omen__cure"><b>{{ oo[1] }}</b><span>{{ oo[3] }}</span></span><em>{{ oo[4] }}</em></span></span>
+                  </span>
+                </button>
+              {% endfor %}
+            </div>
+            <p class="lm-label lm-label--sm lm-muted lm-gm__count" data-lm-omen-count>0 of 6 omens read</p>
+          </section>
+
+          <section class="lm-gm__tools" id="lm-tools">
+            <div class="lm-gm__toolhead">
+              <p class="lm-home__kicker lm-home__kicker--left">{{ lm_gstar }}Instruments of the Craft</p>
+              <h2 class="lm-display lm-gm__h2">Prepare for the Summoning</h2>
+              <p class="lm-italic lm-muted">Tick off each instrument before your gecko comes home.</p>
+              <div class="lm-gm__progress"><div class="lm-gm__dial" data-lm-dial><span><b data-lm-got>0</b><i>/9</i></span></div><p data-lm-gotmsg>The circle is undrawn.</p></div>
+            </div>
+            <ul class="lm-gm__list">
+              {% assign lm_tools = 'The Vessel~A tall enclosure. 12×12×18 in for juveniles, 18×18×24 in for adults.~air|Twin Oracles~A digital thermometer and hygrometer, one up high and one down low.~sun|The Mister~A spray bottle or pressure mister for the nightly rite.~water|The Elixir~A complete powdered diet. Keep it the same one they were raised on.~earth|The Altar~A feeding ledge or food cup holder, mounted up high, to place the food offering.~venus|The Chalice~A shallow water dish, kept fresh at all times.~moon|Branches & Cork~Climbing routes at every height, and a cork hide to sleep in.~jupiter|The Canopy~Dense foliage, live or faux, so they can disappear.~mercury|The Floor~Paper towel to start, or a bioactive mix once you’re confident.~saturn' | split: '|' %}
+              {% for t in lm_tools %}{% assign tt = t | split: '~' %}
+                <li><button type="button" class="lm-tool" aria-pressed="false" data-lm-tool="{{ forloop.index0 }}"><span class="lm-tool__box"><svg class="lm-ico"><use href="#lm-i-check"/></svg></span><span class="lm-tool__text"><b>{{ tt[0] }}</b><span>{{ tt[1] }}</span></span><svg class="lm-ico lm-tool__glyph"><use href="#lm-i-{{ tt[2] }}"/></svg></button></li>
+              {% endfor %}
+            </ul>
+          </section>
+
+          <section class="lm-gm__end">
+            <div class="lm-sigil lm-sigil--blue lm-gm__endsigil" aria-hidden="true"></div>
+            <p class="lm-gm__glyphs"><svg class="lm-ico"><use href="#lm-i-air"/></svg><svg class="lm-ico"><use href="#lm-i-fire"/></svg><svg class="lm-ico"><use href="#lm-i-water"/></svg><svg class="lm-ico"><use href="#lm-i-earth"/></svg><svg class="lm-ico"><use href="#lm-i-aether"/></svg></p>
+            <h2 class="lm-display lm-gm__endtitle">Let It Be So</h2>
+            <p class="lm-italic">The grimoire is learned. Now go find the entity it was written for.</p>
+            <div class="lm-home__ctas"><a class="lm-btn" href="/category/live-geckos">Meet the entities</a><a class="lm-btn lm-btn--ghost" href="/products">All wares →</a></div>
+          </section>
+
+          <nav class="lm-gm__dock" aria-label="Jump to"><a href="#lm-rites"><svg class="lm-ico"><use href="#lm-i-air"/></svg>Rites</a><a href="#lm-week"><svg class="lm-ico"><use href="#lm-i-sun"/></svg>Week</a><a href="#lm-omens"><svg class="lm-ico"><use href="#lm-i-comet"/></svg>Omens</a><a href="#lm-tools"><svg class="lm-ico"><use href="#lm-i-check"/></svg>Summon <span data-lm-dockgot>0</span>/9</a></nav>
+        </div>
+        <script>
+          /* Care guide: rites star, today in the week, omen cards, the summoning checklist (remembered on this device) */
+          (function () {
+            var g = document.querySelector('[data-lm-grimoire]'); if (!g) return;
+            var R = [
+              ['I', 'Air', 'air', 'The Vessel', 'Give it room to rise', 'Crested geckos are arboreal. They live up high, so build tall rather than wide. Fill the top half with branches, cork and dense leaves for cover, and use a vent, mesh, or multiple holes in the enclosure for proper airflow while still retaining humidity.', '', '', 'Vertical enclosure, lots of climbing branches and foliage, good airflow.', 'Tanks wider than they are tall, bare walls, sealed glass with no ventilation.', [['Adult', '18×18×24 in'], ['Juvenile', '12×12×18 in']], 'I give my vessel room to rise.'],
+              ['II', 'Fire', 'fire', 'The Hearth', 'Hold the warmth, banish the heat', 'Normal room temperature is usually perfect.', 'Heat lamps are NOT needed.', 'Heat is the real danger: above 82°F they get stressed, and 85°F or more can kill. In winter a gentle drop at night is fine.', 'A thermometer at the top and bottom of the enclosure. Keep it out of direct sun.', 'Heat lamps in a warm room, or an enclosure by a window or radiator.', [['Day', '72–78°F'], ['Night', '65–72°F'], ['Never above', '82°F']], 'I hold the warmth steady and the heat at bay.'],
+              ['III', 'Water', 'water', 'The Mist', 'Mist at dusk, dry by dawn', 'Offer water two ways. Mist the enclosure at dusk so your gecko can lap droplets off the leaves, and keep a shallow dish of fresh water out at all times. Let the enclosure dry out between mistings to prevent mold and skin trouble.', '', '', 'Use a hygrometer. Aim for a spike after misting, then a dry-down.', 'Constantly wet, or bone-dry for days.', [['Baseline', '50–60%'], ['After mist', '70–80%']], 'I nourish with mist and let the dawn dry it.'],
+              ['IV', 'Earth', 'earth', 'The Feast', 'Feed the body well', 'A complete powdered gecko diet mixed with water covers everything they need. Gut-loaded insects dusted with calcium are helpful for adolescent growth, but some adults still enjoy them as well. Remove old food every 24–48 hours so it doesn’t spoil.', '', '', 'Complete diet 2–3× a week, insects 1× a week.', 'Fruit-only diets and wild-caught insects.', [['Diet', 'Complete powder'], ['Insects', 'Optional, 1×/wk']], 'I feed my vessel well, and I am fed in turn.'],
+              ['V', 'Aether', 'aether', 'The Bond', 'Earn the trust', 'Give a new gecko two weeks to settle in before you handle it. Keep sessions short and low to the ground, and let it walk from one hand to the other. Never grab the tail: it can drop off, and it won’t grow back.', '', '', 'Sit on the floor, hand-walk for 5–15 minutes, keep a calm presence.', 'Grabbing, chasing, or handling during shed or right after a meal.', [['Settle-in', '2 weeks'], ['Session', '5–15 min']], 'Patience is my offering; trust is my reward.']
+            ];
+            var keys = ['roman', 'element', 'ico', 'name', 'sub', 'body', 'bold', 'post', 'doo', 'dont', 'specs', 'aff'], sel = 2;
+            var show = function (i) {
+              sel = (i + 5) % 5; var r = R[sel];
+              keys.forEach(function (k, j) {
+                var el = g.querySelector('[data-lm-r="' + k + '"]'); if (!el) return;
+                if (k === 'specs') { el.innerHTML = ''; r[j].forEach(function (s) { var d = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = s[0]; dd.textContent = s[1]; d.appendChild(dt); d.appendChild(dd); el.appendChild(d); }); }
+                else el.textContent = r[j];
+              });
+              g.querySelector('[data-lm-core-ico] use').setAttribute('href', '#lm-i-' + r[2]);
+              g.querySelector('[data-lm-core-el]').textContent = r[1];
+              g.querySelectorAll('[data-lm-node]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-lm-node') === sel)); });
+            };
+            g.querySelectorAll('[data-lm-node]').forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-lm-node')); }); });
+            g.querySelectorAll('[data-lm-go]').forEach(function (b) { b.addEventListener('click', function () { show(sel + +b.getAttribute('data-lm-go')); }); });
+            show(2);
+            var today = g.querySelector('[data-lm-day="' + new Date().getDay() + '"]'); if (today) { today.classList.add('is-today'); var strip = today.parentNode; if (strip.scrollWidth > strip.clientWidth) strip.scrollLeft = today.offsetLeft - strip.offsetLeft - (strip.clientWidth - today.clientWidth) / 2; }
+            var oc = g.querySelector('[data-lm-omen-count]');
+            g.querySelectorAll('[data-lm-omen]').forEach(function (b) { b.addEventListener('click', function () {
+              b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+              var n = g.querySelectorAll('[data-lm-omen][aria-pressed="true"]').length;
+              oc.textContent = n === 6 ? 'All six omens read' : n + ' of 6 omens read';
+            }); });
+            var KEY = 'lm-care-summoning', got = {};
+            try { got = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { got = {}; }
+            var msgs = ['The circle is undrawn.', 'The circle is drawn.', 'The candles are lit.', 'The candles are lit.', 'Ready to summon your entity.'];
+            var tools = g.querySelectorAll('[data-lm-tool]');
+            var paint = function () {
+              var n = 0; tools.forEach(function (b) { var on = !!got[b.getAttribute('data-lm-tool')]; b.setAttribute('aria-pressed', String(on)); if (on) n++; });
+              g.querySelector('[data-lm-got]').textContent = n; g.querySelector('[data-lm-dockgot]').textContent = n;
+              g.querySelector('[data-lm-dial]').style.setProperty('--pct', Math.round(n / tools.length * 100) + '%');
+              var m = g.querySelector('[data-lm-gotmsg]'); m.textContent = msgs[n === 0 ? 0 : n === tools.length ? 4 : n < 3 ? 1 : n < 7 ? 2 : 3];
+              m.classList.toggle('is-done', n === tools.length);
+            };
+            tools.forEach(function (b) { b.addEventListener('click', function () { var k = b.getAttribute('data-lm-tool'); got[k] = !got[k]; try { localStorage.setItem(KEY, JSON.stringify(got)); } catch (e) {} paint(); }); });
+            paint();
+          })();
+        </script>
         {% else %}
           <div class="lm-wrap lm-prose">
             <h1 class="lm-display lm-display--md">{{ page.name }}</h1>
