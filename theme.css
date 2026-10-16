@@ -659,13 +659,14 @@ ul, ol { padding: 0; list-style: none; }
    Home
    ========================================================================== */
 .lm-home { max-width: var(--max); margin: 0 auto; }
-.lm-home__hero { position: relative; z-index: 0; display: grid; grid-template-columns: minmax(0, 1fr) 480px; gap: 72px; align-items: center; padding: 96px 120px 96px var(--pad); }
+.lm-home__hero { position: relative; z-index: 0; display: grid; grid-template-columns: minmax(0, 1fr) 540px; gap: 56px; align-items: center; padding: 80px 96px 80px var(--pad); }
 .lm-home__heroText { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
 .lm-home__title { font-size: 88px; position: relative; z-index: 1; }
 .lm-home__heroText .lm-lede { max-width: 500px; text-wrap: pretty; }
 .lm-home__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
 .lm-home__orb { position: relative; }
-.lm-home__flames { position: absolute; left: 50%; top: 50%; width: 820px; height: 820px; margin: -410px 0 0 -410px; z-index: -1; pointer-events: none; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; animation: lm-spin 240s linear infinite; }
+/* flames always ~1.84x the photo, centred on it, at every screen size */
+.lm-home__flames { position: absolute; inset: -42%; z-index: -1; pointer-events: none; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; animation: lm-spin 240s linear infinite; }
 .lm-home__photo { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--plate); box-shadow: inset 0 0 0 .5px var(--acc); }
 .lm-home__photo img { width: 100%; height: 100%; object-fit: cover; }
 .lm-home__vows { position: relative; display: flex; justify-content: center; align-items: center; gap: 36px; margin: 0 var(--pad); padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 75%, transparent); font: var(--w-label) 9.5px var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; color: var(--ink); text-align: center; }
@@ -800,19 +801,20 @@ ul, ol { padding: 0; list-style: none; }
 .lm-summon__btn:hover { background: var(--onacc); color: var(--acc); }
 
 @media (max-width: 1100px) {
-  .lm-home__hero { grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; padding-right: var(--pad); }
-  .lm-home__flames { width: 620px; height: 620px; margin: -310px 0 0 -310px; }
+  .lm-home__hero { grid-template-columns: minmax(0, 1fr) clamp(320px, 41vw, 420px); gap: 40px; padding-right: var(--pad); }
   .lm-home__title { font-size: 68px; }
   .lm-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .lm-rites { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .lm-rite--4, .lm-rite--5 { margin-top: 0; }
+  /* Five Rites: one swipeable row, edge to edge, cards snap to centre */
+  .lm-rites { display: flex; gap: 16px; width: auto; align-self: stretch; margin: 28px calc(var(--pad) * -1) 0; padding: 8px var(--pad) 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--pad); scrollbar-width: none; }
+  .lm-rites::-webkit-scrollbar { display: none; }
+  .lm-rite { flex: none; width: 220px; height: 300px; margin-top: 0 !important; scroll-snap-align: center; }
+  .lm-rite:hover { transform: none; }
   .lm-home__elixir { grid-template-columns: 320px minmax(0, 1fr); gap: 48px; }
   .lm-home__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .lm-home__hero { display: flex; flex-direction: column-reverse; gap: 28px; padding: 36px var(--pad) 40px; }
-  .lm-home__orb { width: 100%; max-width: 300px; margin: 20px auto 10px; }
-  .lm-home__flames { width: 480px; height: 480px; margin: -240px 0 0 -240px; }
+  .lm-home__orb { width: 100%; max-width: 330px; margin: 40px auto 30px; }
   .lm-home__title { font-size: 48px; line-height: 1; }
   .lm-home__ctas, .lm-home__ctas .lm-btn { width: 100%; }
   .lm-home__vows { flex-direction: column; gap: 12px; padding: 20px 0; font-size: 8.5px; letter-spacing: 2.2px; }
@@ -827,18 +829,15 @@ ul, ol { padding: 0; list-style: none; }
   .lm-grid--4 .lm-tile__traits { font-size: 7.5px; letter-spacing: 1.6px; }
   .lm-home__rites { padding: 56px var(--pad) 32px; }
   .lm-home__ritestitle { font-size: 52px; }
-  .lm-rites { grid-template-columns: 1fr 1fr; gap: 14px; }
-  .lm-rite { height: 260px; margin-top: 0 !important; }
-  .lm-rite--5 { grid-column: 1 / -1; width: 50%; justify-self: center; }
-  .lm-rite__name { font-size: 24px; }
-  .lm-rite__glyph { font-size: 42px; }
-  .lm-rite__line { font-size: 12.5px; }
-  /* back of the card: let the text use more of the width */
-  .lm-rite__back { padding: 5px; }
-  .lm-rite__back .lm-rite__frame { gap: 8px; padding: 30px 6px 14px; }
-  .lm-rite__back .lm-rite__k { letter-spacing: 1.6px; text-align: center; }
-  .lm-rite__v { font-size: 25px; text-align: center; }
-  .lm-rite__line { text-align: center; }
+  .lm-rites { gap: 14px; padding-top: 4px; }
+  .lm-rite { width: 200px; height: 290px; }
+  .lm-rite__name { font-size: 28px; }
+  .lm-rite__glyph { font-size: 50px; }
+  .lm-rite__face, .lm-rite__back { padding: 7px; }
+  .lm-rite__back .lm-rite__frame { padding: 32px 14px 18px; }
+  .lm-rite__back .lm-rite__k { text-align: center; }
+  .lm-rite__v { font-size: 27px; text-align: center; }
+  .lm-rite__line { font-size: 13px; text-align: center; }
   .lm-home__chapgrid { grid-template-columns: 1fr; }
   .lm-home__chapgrid a + a { border-left: 0; border-top: 1px solid var(--line); }
   .lm-home__elixir { grid-template-columns: 1fr; gap: 32px; padding: 40px var(--pad) 56px; }
