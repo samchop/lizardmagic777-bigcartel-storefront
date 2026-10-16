@@ -977,7 +977,12 @@ ul, ol { padding: 0; list-style: none; }
 .lm-gm__node span { font: var(--w-label) 7px var(--f-label); letter-spacing: 1.6px; }
 .lm-gm__node:hover { background: color-mix(in srgb, var(--acc) 15%, var(--bg)); }
 .lm-gm__node[aria-pressed="true"] { background: var(--acc); color: var(--onacc); box-shadow: 0 0 0 8px color-mix(in srgb, var(--acc) 15%, transparent), 0 0 40px color-mix(in srgb, var(--acc) 33%, transparent); }
+.lm-gm__ritewrap { min-width: 0; }
 .lm-gm__rite { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.lm-gm__rite[hidden] { display: none; }
+/* Plain-language subtitle inside each poetic heading (what people actually search for) */
+.lm-gm__kw { display: block; margin-top: 14px; font: var(--w-label) 10px/1.5 var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; word-spacing: normal; color: var(--acc); text-shadow: none; }
+.lm-gm__title .lm-gm__kw { margin-top: 18px; font-size: 11px; letter-spacing: 3px; }
 .lm-gm__ritehead { display: flex; align-items: center; gap: 16px; }
 .lm-gm__rule { flex: 1; height: 1px; background: var(--line); }
 .lm-gm__ritehead .lm-label { white-space: nowrap; }

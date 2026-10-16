@@ -44,9 +44,9 @@
       <i class="lm-home__flames" aria-hidden="true"></i>
       <div class="lm-home__photo">
         {% if theme.images.welcome_image.url != blank %}
-          <img src="{{ theme.images.welcome_image.url | constrain: 960 }}" alt="" fetchpriority="high">
+          <img src="{{ theme.images.welcome_image.url | constrain: 960 }}" alt="Crested gecko from Lizard Magic, Houston, Texas" fetchpriority="high">
         {% elsif lm_geckos and lm_geckos.products.first.image %}
-          <img src="{{ lm_geckos.products.first.image | product_image_url | constrain: 960 }}" alt="" fetchpriority="high">
+          <img src="{{ lm_geckos.products.first.image | product_image_url | constrain: 960 }}" alt="{{ lm_geckos.products.first.name | escape }}, a crested gecko from Lizard Magic" fetchpriority="high">
         {% endif %}
       </div>
     </div>
