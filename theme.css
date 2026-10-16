@@ -818,6 +818,12 @@ ul, ol { padding: 0; list-style: none; }
   .lm-rite__name { font-size: 24px; }
   .lm-rite__glyph { font-size: 42px; }
   .lm-rite__line { font-size: 12.5px; }
+  /* back of the card: let the text use more of the width */
+  .lm-rite__back { padding: 5px; }
+  .lm-rite__back .lm-rite__frame { gap: 8px; padding: 30px 6px 14px; }
+  .lm-rite__back .lm-rite__k { letter-spacing: 1.6px; text-align: center; }
+  .lm-rite__v { font-size: 25px; text-align: center; }
+  .lm-rite__line { text-align: center; }
   .lm-home__chapgrid { grid-template-columns: 1fr; }
   .lm-home__chapgrid a + a { border-left: 0; border-top: 1px solid var(--line); }
   .lm-home__elixir { grid-template-columns: 1fr; gap: 32px; padding: 40px var(--pad) 56px; }
