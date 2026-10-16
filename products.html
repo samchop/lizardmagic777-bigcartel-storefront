@@ -268,8 +268,52 @@
   </section>
 </div>
 
+{% elsif lm_layout == 'all' %}
+{% assign lm_geckos = nil %}{% assign lm_merch = nil %}
+{% for category in categories.active %}
+  {% if category.permalink == 'live-geckos' %}{% assign lm_geckos = category %}{% endif %}
+  {% if category.permalink == 'merch' %}{% assign lm_merch = category %}{% endif %}
+{% endfor %}
+<div class="lm-doors-page">
+  <section class="lm-hero lm-hero--center">
+    <div class="lm-sigil" aria-hidden="true"></div>
+    <p class="lm-eyebrow">The wares · Two paths</p>
+    <h1 class="lm-display lm-doors__title">Choose Your Own Adventure</h1>
+    <p class="lm-doors__sub"><span></span>{{ lm_star }}<em>a living familiar, or a garment to carry the spell</em>{{ lm_star }}<span></span></p>
+  </section>
+  <div class="lm-doors">
+    {% for door in (1..2) %}
+      {% if door == 1 %}{% assign c = lm_geckos %}{% assign lm_kicker = 'Live geckos' %}{% assign lm_ico = 'jupiter' %}{% assign lm_big = 'Entities' %}{% assign lm_cta = 'Meet the entities' %}{% else %}{% assign c = lm_merch %}{% assign lm_kicker = 'Merch drops' %}{% assign lm_ico = 'venus' %}{% assign lm_big = 'Artifacts' %}{% assign lm_cta = 'Browse the artifacts' %}{% endif %}
+      {% if c %}
+        {% assign lm_count = 0 %}{% assign lm_min = 0 %}{% assign lm_img = nil %}
+        {% for product in c.products %}
+          {% if product.status == 'active' %}
+            {% assign lm_count = lm_count | plus: 1 %}
+            {% if lm_img == nil and product.image %}{% assign lm_img = product.image %}{% endif %}
+            {% assign lm_p = product.default_price %}{% if product.variable_pricing %}{% assign lm_p = product.min_price %}{% endif %}
+            {% if lm_min == 0 or lm_p < lm_min %}{% assign lm_min = lm_p %}{% endif %}
+          {% endif %}
+        {% endfor %}
+        {% if door == 2 %}<div class="lm-doors__or" aria-hidden="true"><span></span><i>or</i><span></span></div>{% endif %}
+        <a class="lm-door" href="{{ c.url }}">
+          <div class="lm-door__arch">
+            <span class="lm-door__n">{% if door == 1 %}I{% else %}II{% endif %}</span>
+            <div class="lm-door__frame"><div class="lm-door__in"><div class="lm-door__photo">{% if lm_img %}<img src="{{ lm_img | product_image_url | constrain: 800 }}" alt="" loading="lazy">{% endif %}</div></div></div>
+          </div>
+          <div class="lm-door__text">
+            <p class="lm-door__kicker"><svg class="lm-ico"><use href="#lm-i-{{ lm_ico }}"/></svg>{{ lm_kicker }}</p>
+            <h2 class="lm-door__big">{{ lm_big }}</h2>
+            <dl class="lm-door__stats"><div><dt>Available</dt><dd>{{ lm_count }}</dd></div><div><dt>From</dt><dd>{% if lm_count > 0 %}{{ lm_min | money: theme.money_format }}{% else %}—{% endif %}</dd></div></dl>
+            <span class="lm-btn{% if door == 2 %} lm-btn--ghost{% endif %}">{{ lm_cta }} →</span>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
 {% else %}
-{% comment %} Placeholder listing for all wares / search until their phases are built {% endcomment %}
+{% comment %} Search results (phase 6 adds the search overlay) {% endcomment %}
 <div class="lm-list">
   <section class="lm-hero lm-hero--center">
     <div class="lm-sigil" aria-hidden="true"></div>

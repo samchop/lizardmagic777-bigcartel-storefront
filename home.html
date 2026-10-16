@@ -1,299 +1,197 @@
 {% comment %}
-  Lizard Magic home page.
-  Built from the "Crested Gecko Store Mockups" design (Home · desktop / Home · mobile).
-  Styles live at the bottom of theme.css under "LIZARD MAGIC · HOME".
-
-  Things you can change without touching the markup below:
-  - lm_geckos_permalink / lm_merch_permalink: the category permalinks used for the
-    "Chosen this cycle" and "Merch" sections.
-  - lm_newsletter_action: paste a mailing-list form action URL (Mailchimp, Kit, etc.)
-    to turn on the email signup. Leave it blank to show an Instagram link instead.
-  - Hero image: upload the Lizard Magic seal as the Welcome image in
-    Customize Design > Home. It sits inside the magic circle.
-  - Gecko morph / sex line: the first line of each product's description is shown
-    under the gecko's name (e.g. "Extreme Harlequin · Female").
+  Home page.
+  Hero photo: the "Welcome image" in Customize (falls back to the first gecko's photo).
+  Elixir photo: assets/photos/elixir.jpg on Cloudflare (lizardmagic-assets.pages.dev/photos/elixir.jpg).
+  Copy for each section is in the settings below.
 {% endcomment %}
-{% assign lm_geckos_permalink = 'live-geckos' %}
-{% assign lm_merch_permalink = 'merch' %}
-{% assign lm_featured_limit = 4 %}
-{% assign lm_merch_limit = 3 %}
-{% assign lm_newsletter_action = '' %}
+{% assign lm_hero_eyebrow = 'Welcome' %}
+{% assign lm_hero_title = 'Lizardry, Wizardry,<br>& Much More' %}
+{% assign lm_hero_lede = 'Small Texas shop raising cresties with care, and designing limited-run merch for the people who love them.' %}
+{% assign lm_vows = 'Live arrival, guaranteed~Overnight shipping, insulated + insured. Shipped Mon–Wed when temps & schedules allow.|Lifetime support~Lineage & lifetime support come with each gecko. Get questions answered anytime.|Local pickup~Skip the shipping and meet your gecko in the Houston or Beaumont, TX areas.' | split: '|' %}
+{% assign lm_geckos_lede = 'Whether you’re looking to add to a rad breeding project, or searching for a beautiful new pet, the perfect gecko has been conjured up just for you.' %}
+{% assign lm_merch_lede = 'Limited edition tees & talismans to carry the good vibes with you. This ain’t your average brand tee!!' %}
+{% assign lm_elixir_text = 'All our geckos are given a recipe of rotating brands and flavors. Recently we’ve been adding Gargeer to the mix!' %}
+{% assign lm_elixir_caption = 'Gargeer · Gentle Geck Tropical Diet' %}
+{% assign lm_elixir_link = 'https://gargeer.com/products/gargeer-2oz-complete-crested-gecko-food-diet-premium-mix-ready-to-use-freshly-made-powder-unique-formula-developed-made-in-the-usa-enjoy-tropical-insects-protein?variant=43611931246835' %}
+{% assign lm_cdn = 'https://lizardmagic-assets.pages.dev' %}
 
-{% assign lm_geckos = nil %}
-{% assign lm_merch = nil %}
+{% assign lm_geckos = nil %}{% assign lm_merch = nil %}
 {% for category in categories.active %}
-  {% if category.permalink == lm_geckos_permalink %}{% assign lm_geckos = category %}{% endif %}
-  {% if category.permalink == lm_merch_permalink %}{% assign lm_merch = category %}{% endif %}
+  {% if category.permalink == 'live-geckos' %}{% assign lm_geckos = category %}{% endif %}
+  {% if category.permalink == 'merch' %}{% assign lm_merch = category %}{% endif %}
 {% endfor %}
-
-{% assign lm_care_url = nil %}
-{% for custom_page in pages.custom_pages %}
-  {% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}
-{% endfor %}
-
-{% assign lm_geckos_url = '/products' %}
-{% assign lm_available = 0 %}
-{% if lm_geckos %}
-  {% assign lm_geckos_url = lm_geckos.url %}
-  {% for product in lm_geckos.products %}
-    {% if product.status == 'active' %}{% assign lm_available = lm_available | plus: 1 %}{% endif %}
-  {% endfor %}
-{% endif %}
-{% assign lm_merch_url = '/products' %}
-{% if lm_merch %}{% assign lm_merch_url = lm_merch.url %}{% endif %}
-
-{% comment %} Alchemical element glyphs, reused by the promise bar and the care rites {% endcomment %}
-{% capture lm_glyph_fire %}<polygon points="20,5 36,33 4,33"/>{% endcapture %}
-{% capture lm_glyph_water %}<polygon points="4,7 36,7 20,35"/>{% endcapture %}
-{% capture lm_glyph_air %}<polygon points="20,5 36,33 4,33"/><line x1="10" y1="22" x2="30" y2="22"/>{% endcapture %}
-{% capture lm_glyph_earth %}<polygon points="4,7 36,7 20,35"/><line x1="10" y1="18" x2="30" y2="18"/>{% endcapture %}
-{% capture lm_glyph_aether %}<circle cx="20" cy="20" r="14"/><circle class="lm-glyph-dot" cx="20" cy="20" r="3"/>{% endcapture %}
+{% assign lm_care_url = '' %}{% for custom_page in pages.custom_pages %}{% if custom_page.permalink == 'care-guide' %}{% assign lm_care_url = custom_page.url %}{% endif %}{% endfor %}
+{% if lm_care_url == blank %}{% assign lm_care_url = '/contact' %}{% endif %}
+{% assign lm_roman = 'I,II,III,IV,V,VI,VII' | split: ',' %}
+{% capture lm_star %}<svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>{% endcapture %}
 
 <div class="lm-home">
-
-  {% comment %} ============ HERO ============ {% endcomment %}
-  <section class="lm-hero lm-wrap">
-    <div class="lm-hero__copy">
-      <span class="lm-eyebrow lm-desktop-only">Welcome</span>
-      <h1 class="lm-display lm-display--lg lm-hero__title">Your new favorite gecko awaits you...</h1>
-      <p class="lm-hero__text lm-desktop-only">Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.</p>
-      <p class="lm-hero__text lm-mobile-only">The perfect gecko has been conjured up just for you.</p>
-      <div class="lm-hero__actions">
-        <a class="lm-btn lm-btn--solid" href="{{ lm_geckos_url }}">Shop live geckos</a>
-        <a class="lm-btn lm-btn--outline lm-desktop-only" href="{{ lm_merch_url }}">Shop merch</a>
-      </div>
-      <div class="lm-hero__stats lm-desktop-only">
-        <span><b>{{ lm_available }}</b> entities available </span>
-        <span><b>Overnight</b> summoning </span>
+  <section class="lm-home__hero">
+    <div class="lm-sigil" aria-hidden="true"></div>
+    <div class="lm-home__heroText">
+      <p class="lm-eyebrow">{{ lm_hero_eyebrow }}</p>
+      <h1 class="lm-display lm-home__title">{{ lm_hero_title }}</h1>
+      <p class="lm-lede">{{ lm_hero_lede }}</p>
+      <div class="lm-home__ctas">
+        <a class="lm-btn" href="{% if lm_geckos %}{{ lm_geckos.url }}{% else %}/products{% endif %}">Meet the geckos</a>
+        <a class="lm-btn lm-btn--ghost" href="{% if lm_merch %}{{ lm_merch.url }}{% else %}/products{% endif %}">Merch drop →</a>
       </div>
     </div>
-
-    <div class="lm-hero__circle">
-      <svg class="lm-circle" viewBox="0 0 700 700" aria-hidden="true">
-        <defs><path id="lm-hero-ring" d="M350,350 m-300,0 a300,300 0 1,1 600,0 a300,300 0 1,1 -600,0"/></defs>
-        <circle class="lm-circle__outer" cx="350" cy="350" r="338"/>
-        <circle cx="350" cy="350" r="268"/>
-        <circle class="lm-circle__thin" cx="350" cy="350" r="256"/>
-        <polygon points="350,94 572,478 128,478"/>
-        <polygon points="350,606 128,222 572,222"/>
-        <circle class="lm-circle__dash" cx="350" cy="350" r="150"/>
-        <g class="lm-circle__ring">
-          <text><textPath href="#lm-hero-ring">✦ WHAT I NURTURE NURTURES ME ✦ WHAT I NURTURE NURTURES ME ✦ WHAT I NURTURE NURTURES ME </textPath></text>
-        </g>
-        <g class="lm-circle__glyph" transform="translate(370,30) rotate(180)"><polygon points="20,5 36,33 4,33"/></g>
-        <g class="lm-circle__glyph" transform="translate(710,330) rotate(90)"><polygon points="4,7 36,7 20,35"/></g>
-        <g class="lm-circle__glyph" transform="translate(370,710) rotate(180)"><polygon points="4,7 36,7 20,35"/><line x1="10" y1="18" x2="30" y2="18"/></g>
-        <g class="lm-circle__glyph" transform="translate(30,330) rotate(90)"><polygon points="20,5 36,33 4,33"/><line x1="10" y1="22" x2="30" y2="22"/></g>
-      </svg>
-      {% if theme.images.welcome_image != blank %}
-        <img
-          class="lm-hero__seal"
-          alt="{{ store.name | escape }} seal"
-          fetchpriority="high"
-          src="{{ theme.images.welcome_image.url | constrain: 800 }}"
-          srcset="{{ theme.images.welcome_image.url | constrain: 400 }} 400w, {{ theme.images.welcome_image.url | constrain: 800 }} 800w, {{ theme.images.welcome_image.url | constrain: 1200 }} 1200w"
-          sizes="(max-width: 900px) 60vw, 380px"
-        >
-      {% else %}
-        <div class="lm-hero__seal lm-hero__seal--sigil" data-lm-sigil="{{ store.name | escape }}" data-lm-sigil-ring="44"></div>
-      {% endif %}
-    </div>
-  </section>
-
-  {% comment %} ============ PROMISES ============ {% endcomment %}
-  <section class="lm-promises" aria-label="Our promises">
-    <div class="lm-promise">
-      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_fire }}</svg>
-      <div><h2 class="lm-promise__title">Live arrival, period.</h2><p class="lm-promise__body">Overnight shipping, insulated + insured.</p></div>
-    </div>
-    <div class="lm-promise">
-      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_earth }}</svg>
-      <div><h2 class="lm-promise__title">Lineage available</h2><p class="lm-promise__body">Sire, dam and hatch date for every gecko produced here.</p></div>
-    </div>
-    <div class="lm-promise">
-      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_air }}</svg>
-      <div><h2 class="lm-promise__title">Lovingly raised</h2><p class="lm-promise__body">Tended to and doted on by me personally!</p></div>
-    </div>
-    <div class="lm-promise">
-      <svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_water }}</svg>
-      <div><h2 class="lm-promise__title">Lifetime support</h2><p class="lm-promise__body">Get assistance with your gecko at anytime.</p></div>
-    </div>
-  </section>
-
-  {% comment %} ============ CHOSEN THIS CYCLE ============ {% endcomment %}
-  <section class="lm-band lm-featured">
-    <div class="lm-wrap">
-      <div class="lm-section-head">
-        <div class="lm-section-head__titles">
-          <span class="lm-eyebrow">Available Entities</span>
-          <h2 class="lm-display lm-display--md">For Your Exquisite Selection</h2>
-        </div>
-        <a class="lm-link-arrow lm-desktop-only" href="{{ lm_geckos_url }}">View all {% if lm_available > 0 %}{{ lm_available }} {% endif %}geckos →</a>
-      </div>
-
-      {% assign lm_shown = 0 %}
-      <div class="lm-gecko-grid">
-        {% if lm_geckos %}
-          {% for product in lm_geckos.products %}
-            {% if product.status == 'active' and lm_shown < lm_featured_limit %}
-              {% assign lm_shown = lm_shown | plus: 1 %}
-              {% assign lm_morph = product.description | split: '</p>' | first | split: '<br' | first | strip_html | strip | newline_to_br | split: '<br />' | first | strip | truncate: 48 %}
-              <article class="lm-gecko">
-                <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
-                  <div class="lm-gecko__arch">
-                    {% if product.image != blank %}
-                      <img
-                        alt=""
-                        loading="lazy"
-                        src="{{ product.image | product_image_url | constrain: 600 }}"
-                        srcset="{{ product.image | product_image_url | constrain: 320 }} 320w, {{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 900 }} 900w"
-                        sizes="(max-width: 900px) 45vw, 290px"
-                      >
-                    {% else %}
-                      <span class="lm-placeholder">[ gecko photo ]</span>
-                    {% endif %}
-                  </div>
-                  <span class="lm-gecko__badge">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
-                </a>
-                <div class="lm-gecko__row">
-                  <h3 class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></h3>
-                  <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
-                </div>
-                {% if lm_morph != blank %}<span class="lm-gecko__morph">{{ lm_morph }}</span>{% endif %}
-                <a class="lm-btn lm-btn--solid lm-gecko__add" href="{{ product.url }}">Select</a>
-              </article>
-            {% endif %}
-          {% endfor %}
+    <div class="lm-home__orb">
+      <i class="lm-home__flames" aria-hidden="true"></i>
+      <div class="lm-home__photo">
+        {% if theme.images.welcome_image.url != blank %}
+          <img src="{{ theme.images.welcome_image.url | constrain: 960 }}" alt="" fetchpriority="high">
+        {% elsif lm_geckos and lm_geckos.products.first.image %}
+          <img src="{{ lm_geckos.products.first.image | product_image_url | constrain: 960 }}" alt="" fetchpriority="high">
         {% endif %}
       </div>
-
-      {% if lm_shown == 0 %}
-        <p class="lm-empty">The next clutch is still in the egg. Check back soon, or join the list below for the next drop.</p>
-      {% endif %}
-
-      <a class="lm-btn lm-btn--ghost lm-mobile-only lm-featured__all" href="{{ lm_geckos_url }}">View all{% if lm_available > 0 %} {{ lm_available }}{% endif %}</a>
     </div>
   </section>
 
-  {% comment %} ============ MERCH ============ {% endcomment %}
-  {% if lm_merch and lm_merch.products.size > 0 %}
-    <section class="lm-merch lm-wrap">
-      <div class="lm-merch__intro">
-        <span class="lm-eyebrow">Arcane Artifacts</span>
-        <h2 class="lm-display lm-display--md">Wear the Magic</h2>
-        <p class="lm-muted">Tees & talismans to carry the good vibes with you.</p>
-        <p class="lm-muted">This aint your average brand tee!!</p>
-        <a class="lm-link-arrow" href="{{ lm_merch_url }}">Shop all merch →</a>
-      </div>
-      <div class="lm-merch__grid">
-        {% for product in lm_merch.products limit: lm_merch_limit %}
-          <a class="lm-merch__item" href="{{ product.url }}">
-            <div class="lm-merch__image">
-              {% if product.image != blank %}
-                <img
-                  alt=""
-                  loading="lazy"
-                  src="{{ product.image | product_image_url | constrain: 500 }}"
-                  srcset="{{ product.image | product_image_url | constrain: 300 }} 300w, {{ product.image | product_image_url | constrain: 500 }} 500w, {{ product.image | product_image_url | constrain: 800 }} 800w"
-                  sizes="(max-width: 900px) 45vw, 280px"
-                >
-              {% else %}
-                <span class="lm-placeholder">[ product shot ]</span>
-              {% endif %}
-            </div>
-            <div class="lm-merch__meta">
-              <span>{{ product.name }}</span>
-              <span class="lm-gold">{% if product.status == 'sold-out' %}{{ t['products.sold_out'] }}{% else %}{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}{% endif %}</span>
-            </div>
-          </a>
-        {% endfor %}
-      </div>
-    </section>
+  <div class="lm-home__vows">
+    {% for vow in lm_vows %}{% assign v = vow | split: '~' %}
+      <div class="lm-home__vow">{{ lm_star }}<p><b>{{ v[0] }}</b><span>{{ v[1] }}</span></p></div>
+    {% endfor %}
+  </div>
+
+  {% if lm_geckos and lm_geckos.products.size > 0 %}
+  <section class="lm-home__row">
+    <div class="lm-home__rowhead">
+      <div><p class="lm-eyebrow">Available Entities</p><h2 class="lm-display lm-display--md">For Your Exquisite Selection</h2><p class="lm-lede">{{ lm_geckos_lede }}</p></div>
+      <div class="lm-home__rowcta"><i class="lm-home__icon lm-home__icon--hand" aria-hidden="true"></i><a class="lm-btn lm-btn--ghost" href="{{ lm_geckos.url }}">View all geckos →</a></div>
+    </div>
+    <div class="lm-grid lm-grid--4">
+      {% assign lm_n = 0 %}
+      {% for product in lm_geckos.products %}
+        {% if product.status == 'active' and lm_n < 4 %}
+        {% assign lm_first = product.description | replace: '<br />', '<br>' | replace: '<br/>', '<br>' | replace: '</p>', '<br>' | split: '<br>' | first | strip_html | strip %}
+        {% assign lm_bits = lm_first | replace: '✦', '·' | replace: '|', '·' | split: '·' %}
+        <a class="lm-tile" href="{{ product.url }}">
+          <div class="lm-tile__card">
+            <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[lm_n] }}</span><span>777</span></div>
+            <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 600 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
+          </div>
+          <div class="lm-tile__meta">
+            <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{{ product | product_price }}</span></p>
+            {% if lm_first != blank %}<p class="lm-tile__traits">{% for b in lm_bits limit: 2 %}{{ b | strip }}{% unless forloop.last %} · {% endunless %}{% endfor %}</p>{% endif %}
+          </div>
+        </a>
+        {% assign lm_n = lm_n | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
   {% endif %}
 
-  {% comment %} ============ CARE RITES + MUDRA ============ {% endcomment %}
-  <section class="lm-rites-row">
-    <div class="lm-rites">
-      <div class="lm-section-head">
-        <div class="lm-section-head__titles">
-          <span class="lm-eyebrow">Care guide</span>
-          <h2 class="lm-display lm-display--md">The 5 Rites of Crestie Care</h2>
-        </div>
-        {% if lm_care_url %}<a class="lm-link-arrow" href="{{ lm_care_url }}">Read →</a>{% endif %}
-      </div>
-      <div class="lm-rites__grid">
-        {% capture lm_rite_open %}{% if lm_care_url %}<a class="lm-rite" href="{{ lm_care_url }}">{% else %}<div class="lm-rite">{% endif %}{% endcapture %}
-        {% capture lm_rite_close %}{% if lm_care_url %}</a>{% else %}</div>{% endif %}{% endcapture %}
-        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_air }}</svg><span class="lm-rite__element">Air</span><span class="lm-rite__name">The Vessel</span>{{ lm_rite_close }}
-        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_fire }}</svg><span class="lm-rite__element">Fire</span><span class="lm-rite__name">Warmth</span>{{ lm_rite_close }}
-        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_water }}</svg><span class="lm-rite__element">Water</span><span class="lm-rite__name">Mist</span>{{ lm_rite_close }}
-        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_earth }}</svg><span class="lm-rite__element">Earth</span><span class="lm-rite__name">Sustenance</span>{{ lm_rite_close }}
-        {{ lm_rite_open }}<svg class="lm-glyph" viewBox="0 0 40 40" aria-hidden="true">{{ lm_glyph_aether }}</svg><span class="lm-rite__element">Aether</span><span class="lm-rite__name">Communion</span>{{ lm_rite_close }}
-      </div>
+  {% if lm_merch and lm_merch.products.size > 0 %}
+  <section class="lm-home__row">
+    <div class="lm-home__rowhead">
+      <div><p class="lm-eyebrow">Available Artifacts</p><h2 class="lm-display lm-display--md">Choose Your Talisman</h2><p class="lm-lede">{{ lm_merch_lede }}</p></div>
+      <div class="lm-home__rowcta"><svg class="lm-home__icon" viewBox="0 0 64 56" aria-hidden="true"><path d="M22,4 L10,9 L2,22 L11,27 L15,21 L15,52 L49,52 L49,21 L53,27 L62,22 L54,9 L42,4 Q32,13 22,4 Z"/><path d="M24,5.5 Q32,11 40,5.5"/><path d="M32,20 L33.6,25.4 L39,27 L33.6,28.6 L32,34 L30.4,28.6 L25,27 L30.4,25.4 Z"/></svg><a class="lm-btn lm-btn--ghost" href="{{ lm_merch.url }}">View all merch →</a></div>
     </div>
+    <div class="lm-grid">
+      {% for product in lm_merch.products limit: 3 %}
+        <a class="lm-mini lm-mini--lg" href="{{ product.url }}">
+          <div class="lm-mini__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
+          <p><span>{{ product.name }}</span><em>{% if product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product | product_price }}{% endif %}</em></p>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
-    <div class="lm-mudra">
-      {% comment %} Swap the sigil for the Kubera hand illustration once it's drawn {% endcomment %}
-      <div class="lm-mudra__frame" data-lm-sigil="Kubera for abundance" aria-hidden="true"></div>
-      <div class="lm-mudra__copy">
-        <span class="lm-eyebrow lm-eyebrow--sm">Mudra of the month</span>
-        <h2 class="lm-display lm-display--sm">Kubera · for abundance</h2>
-        <p class="lm-muted lm-desktop-only">Touch the tips of your thumb, index and middle fingers together, and fold the other two into your palm. Hold it for three breaths while you say today's affirmation.</p>
-        <p class="lm-muted lm-mobile-only">Thumb, index and middle tips together. Three breaths.</p>
+  <section class="lm-home__rites" data-lm-rites>
+    <div class="lm-sigil lm-home__ritessigil" aria-hidden="true"></div>
+    <p class="lm-home__kicker">{{ lm_star }}From the Keeper’s Grimoire{{ lm_star }}</p>
+    <h2 class="lm-display lm-home__ritestitle">The Five Rites</h2>
+    <p class="lm-italic lm-muted lm-home__riteslede">Five elements rule the keeping of a crested gecko. <strong>Tap each one</strong> to learn its secret.</p>
+    <div class="lm-rites">
+      {% assign lm_rites = 'I~Air~air~The Vessel~Give it room to rise~Adult enclosure~18×18×24 in~Build tall, not wide, with plenty of cover up high.|II~Fire~fire~The Hearth~Hold the warmth~Day temperature~72–78°F~Heat lamps are NOT needed. Never above 82°F.|III~Water~water~The Mist~Mist at dusk~Humidity~50–60%~Mist at dusk and keep a water dish out at all times.|IV~Earth~earth~The Feast~Feed the body well~Complete diet~2–3× a week~Remove old food every 24–48 hours.|V~Aether~aether~The Bond~Earn the trust~Settle-in~2 weeks~Let them settle before handling. Never grab the tail.' | split: '|' %}
+      {% for rite in lm_rites %}{% assign r = rite | split: '~' %}
+        <button type="button" class="lm-rite lm-rite--{{ forloop.index }}" aria-pressed="false" data-lm-rite>
+          <span class="lm-rite__inner">
+            <span class="lm-rite__face">
+              <span class="lm-rite__frame">
+                <svg class="lm-ico lm-rite__glyph"><use href="#lm-i-{{ r[2] }}"/></svg>
+                <span class="lm-rite__names"><span class="lm-rite__el">{{ r[0] }} · {{ r[1] }}</span><span class="lm-rite__name">{{ r[3] }}</span><span class="lm-rite__sub">{{ r[4] }}</span></span>
+              </span>
+            </span>
+            <span class="lm-rite__back">
+              <span class="lm-rite__frame">
+                <svg class="lm-ico lm-rite__glyph lm-rite__glyph--sm"><use href="#lm-i-{{ r[2] }}"/></svg>
+                <span class="lm-rite__k">{{ r[5] }}</span><span class="lm-rite__v">{{ r[6] }}</span><span class="lm-rite__rule"></span><span class="lm-rite__line">{{ r[7] }}</span>
+              </span>
+            </span>
+          </span>
+        </button>
+      {% endfor %}
+    </div>
+    <div class="lm-home__ritesfoot"><a class="lm-btn" href="{{ lm_care_url }}">Open the Grimoire →</a><span class="lm-label lm-label--sm lm-muted" data-lm-rites-count>0 of 5 rites revealed</span></div>
+    <div class="lm-home__chapters">
+      <p class="lm-home__divider"><span></span><span class="lm-label lm-label--sm lm-muted">Also inside the Grimoire</span><span></span></p>
+      <div class="lm-home__chapgrid">
+        <a href="{{ lm_care_url }}#lm-week"><svg class="lm-ico"><use href="#lm-i-sun"/></svg><b>The Planetary Week</b><span>Seven days, seven rulers, one simple care calendar.</span><em>Turn to it →</em></a>
+        <a href="{{ lm_care_url }}#lm-omens"><svg class="lm-ico"><use href="#lm-i-comet"/></svg><b>Ill Omens</b><span>Six signs every keeper should know, and their remedies.</span><em>Turn to it →</em></a>
+        <a href="{{ lm_care_url }}#lm-tools"><svg class="lm-ico"><use href="#lm-i-check"/></svg><b>The Summoning</b><span>The checklist to have ready before your gecko comes home.</span><em>Turn to it →</em></a>
       </div>
     </div>
   </section>
 
-  {% comment %} ============ AFFIRMATION + SIGNUP ============ {% endcomment %}
-  <section class="lm-band lm-coven">
-    <div class="lm-wrap lm-coven__inner">
-      <p class="lm-display lm-display--md lm-coven__aff">“<span data-lm-affirmation>I am a vessel of infinite abundance.</span>”</p>
-      <div class="lm-coven__signup">
-        <span class="lm-coven__label">Join the coven: new drops + a weekly affirmation</span>
-        {% if lm_newsletter_action != blank %}
-          <form class="lm-coven__form" method="post" action="{{ lm_newsletter_action }}" target="_blank">
-            <label class="lm-visually-hidden" for="lm-coven-email">Email address</label>
-            <input id="lm-coven-email" type="email" name="EMAIL" placeholder="your@email.com" required>
-            <button type="submit" class="lm-btn lm-btn--solid">Subscribe</button>
-          </form>
-        {% elsif pages.subscribe_page %}
-          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="{{ pages.subscribe_page.url }}">{{ t['navigation.subscribe'] }}</a></div>
-        {% elsif theme.instagram_url != blank %}
-          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="{{ theme.instagram_url }}">Follow @lizardmagic777</a></div>
-        {% else %}
-          <div class="lm-coven__form"><a class="lm-btn lm-btn--solid" href="/contact">Get in touch</a></div>
-        {% endif %}
+  <section class="lm-home__elixir">
+    <figure class="lm-home__arch">
+      <div class="lm-home__archframe"><div class="lm-home__archin"><div class="lm-home__archphoto"><img src="{{ lm_cdn }}/photos/elixir.jpg" alt="" loading="lazy" onerror="this.remove()"></div></div></div>
+      <figcaption>{{ lm_elixir_caption }}</figcaption>
+    </figure>
+    <div class="lm-home__elixirtext">
+      <p class="lm-home__kicker lm-home__kicker--left">{{ lm_star }}Currently feeding</p>
+      <h2 class="lm-display lm-home__elixirtitle">The Elixir</h2>
+      <p class="lm-home__body">{{ lm_elixir_text }}</p>
+      <div class="lm-home__formula">
+        <div><svg class="lm-ico"><use href="#lm-i-earth"/></svg><span>1 part powder</span></div><i>+</i>
+        <div><svg class="lm-ico"><use href="#lm-i-water"/></svg><span>2 parts water</span></div><i>=</i>
+        <div class="is-acc"><svg class="lm-ico"><use href="#lm-i-mercury"/></svg><span>One offering</span></div>
       </div>
+      <ol class="lm-home__steps">
+        <li><p><svg class="lm-ico"><use href="#lm-i-water"/></svg><span></span></p><b>Dissolve</b><span>Stir the powder into the water until smooth.</span></li>
+        <li><p><svg class="lm-ico"><use href="#lm-i-earth"/></svg><span></span></p><b>Bind</b><span>Let it rest a few minutes to thicken.</span></li>
+        <li><p><svg class="lm-ico"><use href="#lm-i-venus"/></svg><span></span></p><b>Offer</b><span>Place it in a food cup on a ledge, or down low.</span></li>
+        <li><p><svg class="lm-ico"><use href="#lm-i-saturn"/></svg><span></span></p><b>Banish</b><span>Remove old food every 24–48 hours.</span></li>
+      </ol>
+      <a class="lm-btn lm-home__jar" href="{{ lm_elixir_link }}" target="_blank" rel="noopener">Procure a jar</a>
     </div>
+  </section>
+
+  <section class="lm-home__reviews">
+    <p class="lm-home__kicker">{{ lm_star }}From other keepers{{ lm_star }}</p>
+    <figure class="lm-home__lead">
+      <span class="lm-home__quotemark" aria-hidden="true">“</span>
+      <blockquote>Excellent customer service from start to finish!</blockquote>
+      <figcaption><span></span><svg class="lm-ico"><use href="#lm-i-jupiter"/></svg><b>coolcraze10 · Jacksonville, FL</b><span></span></figcaption>
+    </figure>
+    <div class="lm-home__letters">
+      <figure class="lm-letter"><span class="lm-letter__seal"><svg class="lm-ico"><use href="#lm-i-venus"/></svg></span><blockquote>“Great business and will answer any questions you have!! Highly recommend, the tangerine girl I got is stunning and has great structure!! Thank you Lizard Magic for the new addition!”</blockquote><figcaption>A4reptiles · Buna, TX</figcaption></figure>
+      <figure class="lm-letter"><span class="lm-letter__seal"><svg class="lm-ico"><use href="#lm-i-mercury"/></svg></span><blockquote>“Sammy is the best! Not only are her lives sooo much fun but she goes above and beyond with all her orders. Couldn’t be happier to have received multiple packages from her. Thanks Sammy so much 💕”</blockquote><figcaption>ily.exotics · Hollister, CA</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="lm-summon">
+    <div><p class="lm-label lm-label--sm">Send word</p><h2 class="lm-summon__title">Questions? Summon me.</h2></div>
+    <a class="lm-summon__btn" href="/contact">Contact me →</a>
   </section>
 </div>
 
 <script>
-  /* Lizard Magic: name sigils */
+  /* Home: Five Rites flip cards */
   (function () {
-    // A sigil is built from its words: vowels and repeated letters drop out,
-    // and what's left is traced on a three-ring letter wheel.
-    function sigil(text, ring) {
-      var R = ring || 40;
-      var letters = (text || '').toUpperCase().replace(/[^A-Z]/g, '');
-      var unique = function (s) { return s.split('').filter(function (c, i, a) { return a.indexOf(c) === i; }); };
-      var kept = unique(letters.replace(/[AEIOU]/g, ''));
-      if (kept.length < 2) kept = unique(letters);
-      if (kept.length < 2) kept = ['L', 'M'];
-      var pts = kept.map(function (ch) {
-        var i = ch.charCodeAt(0) - 65, a = (i / 26) * Math.PI * 2 - Math.PI / 2, r = R * [1, 0.7, 0.4][i % 3];
-        return [50 + r * Math.cos(a), 50 + r * Math.sin(a)];
+    var box = document.querySelector('[data-lm-rites]'); if (!box) return;
+    var count = box.querySelector('[data-lm-rites-count]');
+    box.querySelectorAll('[data-lm-rite]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        var n = box.querySelectorAll('[data-lm-rite][aria-pressed="true"]').length;
+        count.textContent = n === 5 ? 'All five rites revealed' : n + ' of 5 rites revealed';
       });
-      var last = pts[pts.length - 1], prev = pts[pts.length - 2];
-      var dx = last[0] - prev[0], dy = last[1] - prev[1], d = Math.hypot(dx, dy) || 1;
-      dx /= d; dy /= d;
-      var f = function (n) { return +n.toFixed(2); };
-      return '<svg viewBox="0 0 100 100"><polyline points="' + pts.map(function (p) { return f(p[0]) + ',' + f(p[1]); }).join(' ') + '"/>' +
-        '<circle cx="' + f(pts[0][0]) + '" cy="' + f(pts[0][1]) + '" r="6"/>' +
-        '<line x1="' + f(last[0] - dy * 6) + '" y1="' + f(last[1] + dx * 6) + '" x2="' + f(last[0] + dy * 6) + '" y2="' + f(last[1] - dx * 6) + '"/></svg>';
-    }
-    document.querySelectorAll('[data-lm-sigil]').forEach(function (el) {
-      el.innerHTML = sigil(el.getAttribute('data-lm-sigil'), +el.getAttribute('data-lm-sigil-ring') || 40);
     });
   })();
 </script>
