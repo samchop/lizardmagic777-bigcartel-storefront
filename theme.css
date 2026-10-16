@@ -270,9 +270,10 @@ ul, ol { padding: 0; list-style: none; }
 .lm-tile__flag { position: absolute; left: 10px; bottom: 10px; padding: 7px 10px 6px; background: var(--bg); font: var(--w-label) 7.5px var(--f-label); letter-spacing: 2px; text-transform: uppercase; color: var(--ink); }
 .lm-tile--sold-out .lm-tile__img img { filter: grayscale(.7) brightness(.7); }
 .lm-tile__meta { display: flex; flex-direction: column; gap: 8px; }
-.lm-tile__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.lm-tile__name { font: 400 34px/1 var(--f-serif); }
-.lm-tile__price { font: 400 28px/1 var(--f-serif); white-space: nowrap; }
+/* Name + price under every product thumbnail (listings, home rows, related, search) */
+.lm-tile__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 12px; }
+.lm-tile__name { font: 400 30px/1 var(--f-serif); }
+.lm-tile__price { font: 400 26px/1 var(--f-serif); white-space: nowrap; }
 .lm-tile__traits { font: var(--w-label) 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
 
 /* Mobile filter bar + sheet */
@@ -293,8 +294,6 @@ ul, ol { padding: 0; list-style: none; }
   .lm-tile__card { padding: 8px; }
   .lm-tile__top { height: 30px; font-size: 7.5px; }
   .lm-tile__n { font-size: 16px; }
-  .lm-tile__name { font-size: 30px; }
-  .lm-tile__price { font-size: 26px; }
   .lm-tile__traits { font-size: 8.5px; letter-spacing: 2.2px; }
   .lm-filters {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; max-height: 85vh; overflow-y: auto;
@@ -454,9 +453,6 @@ ul, ol { padding: 0; list-style: none; }
 .lm-mini:hover { transform: translateY(-4px); }
 .lm-mini__img { background: var(--bg2); padding: 8px; box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--acc) 45%, var(--bg2)), 0 30px 50px -30px rgba(0, 0, 0, .45); }
 .lm-mini__img img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--plate); }
-.lm-mini p { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.lm-mini span { font: var(--w-label) 10px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; }
-.lm-mini em { font: 400 24px/1 var(--f-serif); font-style: normal; white-space: nowrap; }
 
 /* Hold popup */
 .lm-dialog { position: fixed; inset: 0; margin: auto; height: fit-content; max-height: calc(100% - 32px); overflow: auto; width: min(480px, calc(100% - 32px)); padding: 32px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); flex-direction: column; gap: 14px; }
@@ -505,8 +501,9 @@ ul, ol { padding: 0; list-style: none; }
   .lm-gk__care, .lm-gk__all { align-self: stretch; }
   .lm-gk__related { padding: 56px var(--pad) 64px; gap: 28px; }
   .lm-mini-grid { gap: 24px 16px; }
-  .lm-mini em { font-size: 20px; }
-  .lm-mini p { flex-direction: column; gap: 6px; }
+  .lm-mini .lm-tile__row { flex-direction: column; }
+  .lm-mini .lm-tile__name { font-size: 22px; }
+  .lm-mini .lm-tile__price { font-size: 20px; }
 }
 .lm-gk__duo:not(.has-sky) .lm-gk__parents { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 56px; }
 @media (max-width: 760px) { .lm-gk__duo:not(.has-sky) .lm-gk__parents { grid-template-columns: 1fr; gap: 28px; } }
@@ -655,9 +652,6 @@ ul, ol { padding: 0; list-style: none; }
 .lm-home__icon { width: 64px; height: 56px; fill: none; stroke: var(--acc); stroke-width: 1; stroke-linejoin: round; overflow: visible; }
 .lm-home__icon--hand { display: block; width: 61px; height: 58px; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/icons/gecko-hand.svg) center / contain no-repeat; mask: url(https://lizardmagic-assets.pages.dev/icons/gecko-hand.svg) center / contain no-repeat; }
 .lm-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.lm-grid--4 .lm-tile__name { font-size: 30px; }
-.lm-grid--4 .lm-tile__price { font-size: 26px; }
-.lm-mini--lg em { font-size: 28px; }
 
 /* Five Rites */
 .lm-home__rites { position: relative; z-index: 0; padding: 96px var(--pad) 48px; border-top: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; overflow: hidden; }

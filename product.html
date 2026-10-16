@@ -150,7 +150,7 @@
     <div class="lm-gk__relhead"><p class="lm-eyebrow">More cool things</p><h2 class="lm-display lm-display--md">You might also like</h2></div>
     <div class="lm-mini-grid">
       {% for rel in product.related_products limit: 4 %}
-        <a class="lm-mini" href="{{ rel.url }}"><div class="lm-mini__img">{% if rel.image %}<img src="{{ rel.image | product_image_url | constrain: 500 }}" alt="{{ rel.name | escape }}" loading="lazy">{% endif %}</div><p><span>{{ rel.name }}</span><em>{{ rel | product_price }}</em></p></a>
+        <a class="lm-mini" href="{{ rel.url }}"><div class="lm-mini__img">{% if rel.image %}<img src="{{ rel.image | product_image_url | constrain: 500 }}" alt="{{ rel.name | escape }}" loading="lazy">{% endif %}</div><p class="lm-tile__row"><span class="lm-tile__name">{{ rel.name }}</span><span class="lm-tile__price">{% if rel.status == 'sold-out' %}{% assign lm_g = false %}{% for c in rel.categories %}{% if c.permalink == 'live-geckos' %}{% assign lm_g = true %}{% endif %}{% endfor %}{% if lm_g %}Claimed{% else %}Sold out{% endif %}{% elsif rel.variable_pricing %}{{ rel.min_price | money: theme.money_format }}–{{ rel.max_price | money: theme.money_format }}{% else %}{{ rel.default_price | money: theme.money_format }}{% endif %}</span></p></a>
       {% endfor %}
     </div>
     <a class="lm-btn lm-btn--ghost lm-gk__all" href="/products">View all wares →</a>
@@ -594,7 +594,7 @@
       {% for rel in product.related_products limit: 4 %}
         <a class="lm-mini" href="{{ rel.url }}">
           <div class="lm-mini__img">{% if rel.image %}<img src="{{ rel.image | product_image_url | constrain: 500 }}" alt="{{ rel.name | escape }}" loading="lazy">{% endif %}</div>
-          <p><span>{{ rel.name }}</span><em>{{ rel | product_price }}</em></p>
+          <p class="lm-tile__row"><span class="lm-tile__name">{{ rel.name }}</span><span class="lm-tile__price">{% if rel.status == 'sold-out' %}{% assign lm_g = false %}{% for c in rel.categories %}{% if c.permalink == 'live-geckos' %}{% assign lm_g = true %}{% endif %}{% endfor %}{% if lm_g %}Claimed{% else %}Sold out{% endif %}{% elsif rel.variable_pricing %}{{ rel.min_price | money: theme.money_format }}–{{ rel.max_price | money: theme.money_format }}{% else %}{{ rel.default_price | money: theme.money_format }}{% endif %}</span></p>
         </a>
       {% endfor %}
     </div>

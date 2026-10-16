@@ -116,7 +116,7 @@
               </div>
             </div>
             <div class="lm-tile__meta">
-              <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Claimed{% else %}{{ product | product_price }}{% endif %}</span></p>
+              <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Claimed{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p>
               {% if lm_first != blank %}<p class="lm-tile__traits">{{ lm_bits | join: ' · ' | strip }}</p>{% endif %}
             </div>
           </a>
@@ -249,7 +249,7 @@
               {% if product.status == 'sold-out' %}<span class="lm-tile__flag">Sold out</span>{% elsif product.status == 'coming-soon' %}<span class="lm-tile__flag">Coming soon</span>{% endif %}
             </div>
           </div>
-          <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product | product_price }}{% endif %}</span></p></div>
+          <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Sold out{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p></div>
         </a>
       {% endfor %}
     </div>
@@ -347,7 +347,7 @@
               <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
               <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
             </div>
-            <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}{% if lm_is_gecko %}Claimed{% else %}Sold out{% endif %}{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}+{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p></div>
+            <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}{% if lm_is_gecko %}Claimed{% else %}Sold out{% endif %}{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p></div>
           </a>
         {% endfor %}
       </div>

@@ -73,7 +73,7 @@
             <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 600 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
           </div>
           <div class="lm-tile__meta">
-            <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{{ product | product_price }}</span></p>
+            <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Claimed{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p>
             {% if lm_first != blank %}<p class="lm-tile__traits">{% for b in lm_bits limit: 2 %}{{ b | strip }}{% unless forloop.last %} · {% endunless %}{% endfor %}</p>{% endif %}
           </div>
         </a>
@@ -94,7 +94,7 @@
       {% for product in lm_merch.products limit: 3 %}
         <a class="lm-mini lm-mini--lg" href="{{ product.url }}">
           <div class="lm-mini__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
-          <p><span>{{ product.name }}</span><em>{% if product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product | product_price }}{% endif %}</em></p>
+          <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Sold out{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p>
         </a>
       {% endfor %}
     </div>
