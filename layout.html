@@ -455,7 +455,8 @@
         {% else %}
           <div class="lm-wrap lm-prose">
             <h1 class="lm-display lm-display--md">{{ page.name }}</h1>
-            {{ page_content | paragraphs }}
+            {% comment %} Pages written with HTML (headings, lists) render as-is; plain text gets paragraphs. {% endcomment %}
+            {% if page_content contains '<h2' or page_content contains '<p' or page_content contains '<ul' or page_content contains '<ol' %}{{ page_content }}{% else %}{{ page_content | paragraphs }}{% endif %}
           </div>
         {% endif %}
       {% else %}

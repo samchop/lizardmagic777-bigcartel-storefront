@@ -533,6 +533,10 @@
         {% if lm_dam_name != blank %}<div><dt>Dam</dt><dd>{{ lm_dam_name }}</dd></div>{% endif %}
       </dl>
       {% endif %}
+      {% comment %} Terms line: links to the custom page whose permalink contains "terms" (e.g. Terms of Service). {% endcomment %}
+      {% assign lm_terms_url = '/terms-of-service' %}
+      {% for custom_page in pages.custom_pages %}{% if custom_page.permalink contains 'terms' %}{% assign lm_terms_url = custom_page.url %}{% endif %}{% endfor %}
+      <p class="lm-gk__terms">By purchasing or placing a deposit on any gecko, you wholly agree to the <a href="{{ lm_terms_url }}">Terms of Service</a>.</p>
     </div>
   </section>
 
