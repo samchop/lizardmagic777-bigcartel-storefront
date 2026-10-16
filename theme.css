@@ -1001,7 +1001,10 @@ ul, ol { padding: 0; list-style: none; }
 .lm-gm__rite[hidden] { display: none; }
 /* Plain-language subtitle inside each poetic heading (what people actually search for) */
 .lm-gm__kw { display: block; margin-top: 14px; font: var(--w-label) 10px/1.5 var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; word-spacing: normal; color: var(--acc); text-shadow: none; }
-.lm-gm__title .lm-gm__kw { margin-top: 18px; font-size: 11px; letter-spacing: 3px; }
+/* the eyebrow lives inside the h1 (keywords first for search) but looks like the usual eyebrow */
+.lm-gm__title .lm-gm__titlekicker { display: block; margin-bottom: 22px; line-height: 1.5; word-spacing: normal; text-shadow: none; }
+.lm-gm__titlekicker > span { white-space: nowrap; }
+@media (max-width: 600px) { .lm-gm__title .lm-gm__titlekicker { margin-bottom: 16px; } .lm-gm__titlekicker > span { display: block; } .lm-gm__titlekicker .lm-gm__kdot { display: none; } }
 .lm-gm__ritehead { display: flex; align-items: center; gap: 16px; }
 .lm-gm__rule { flex: 1; height: 1px; background: var(--line); }
 .lm-gm__ritehead .lm-label { white-space: nowrap; }
