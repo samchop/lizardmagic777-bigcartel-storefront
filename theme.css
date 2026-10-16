@@ -333,7 +333,7 @@ ul, ol { padding: 0; list-style: none; }
 .lm-crumbs [aria-current] { color: var(--body); }
 
 .lm-gk__top { display: grid; grid-template-columns: minmax(0, 700px) minmax(0, 1fr); z-index: 0; }
-.lm-gk__gallery { position: relative; z-index: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; gap: 32px; padding: 72px 24px 44px; background: color-mix(in srgb, var(--acc) 3.5%, transparent); }
+.lm-gk__gallery { position: relative; z-index: 0; display: flex; flex-direction: column; align-items: center; gap: 32px; padding: 72px 24px 44px; background: color-mix(in srgb, var(--acc) 3.5%, transparent); }
 .lm-gk__art { position: absolute; left: 50%; top: 382px; width: 1000px; height: 1000px; margin: -500px 0 0 -500px; z-index: -1; pointer-events: none; }
 .lm-gk__art i { position: absolute; inset: 0; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/art/flower.svg) center / contain no-repeat; mask: url(https://lizardmagic-assets.pages.dev/art/flower.svg) center / contain no-repeat; }
 .lm-gk__art .lm-gk__flames { -webkit-mask-image: url(https://lizardmagic-assets.pages.dev/art/flames.svg); mask-image: url(https://lizardmagic-assets.pages.dev/art/flames.svg); animation: lm-spin 240s linear infinite; }
