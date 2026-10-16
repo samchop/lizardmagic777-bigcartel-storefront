@@ -126,6 +126,13 @@ signs, planets, aspects, houses), copied from commit `75bdad0`. MIT licensed: ke
 (24px grid, 1px line). All use `currentColor`, so CSS `color` sets the line color. They'll be pasted
 inline into the templates when the 1c rebrand is built, so they don't count toward the theme.css limit.
 
+## Hosted assets (Cloudflare Pages)
+
+The `assets/` folder is published to Cloudflare Pages, so the store can load files from it, e.g.
+`https://<project>.pages.dev/icons/moon/full-moon.svg` (no `assets/` in the URL). Pages settings:
+production branch `claude/big-cartel-home-page-7vwp4t`, framework preset None, no build command,
+build output directory `assets`. `assets/_headers` allows cross-origin loading. Every push redeploys.
+
 ## NCL Enigmatic
 
 The headline font is a commercial font, so it is not committed to this public

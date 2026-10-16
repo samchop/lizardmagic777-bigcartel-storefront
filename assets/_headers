@@ -1,0 +1,4 @@
+# Cloudflare Pages headers. Lets the Big Cartel store load these files
+# cross-origin (needed for CSS mask-image icons and fetch).
+/*
+  Access-Control-Allow-Origin: *
