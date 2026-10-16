@@ -1,149 +1,84 @@
 # Lizard Magic · Big Cartel theme
 
-Custom code for the Lizard Magic Big Cartel store, based on the
-"Crested Gecko Store Mockups" design.
+Custom code for the Lizard Magic Big Cartel store, built from the "Elevated Explorations"
+redesign (geckos, merch, care guide, contact, plus search and cart).
 
 ## Files
 
 These map one-to-one to Big Cartel's **Customize Design > Code** editor:
-`layout.html`, `home.html`, `products.html`, `product.html`, `cart.html`,
-`contact.html`, `maintenance.html`, `care-guide.html` and `theme.css`.
-`settings.json` is a snapshot of the current Customize settings.
+`layout.html`, `home.html`, `products.html`, `product.html`, `cart.html`, `contact.html`,
+`maintenance.html` and `theme.css`. Paste them **all at once**. The pages share classes, so a
+half-pasted theme looks broken. `settings.json` is a snapshot of the Customize settings.
+
+The theme no longer loads the stock `theme.js` or jQuery. It only needs Big Cartel's `api.js`.
+
+## Where things live
+
+| Page | Template | Notes |
+| --- | --- | --- |
+| Home | `home.html` | Hero photo is Customize > **Welcome image**. If it's blank, the first gecko's photo is used. Copy (vows, rites, Elixir, reviews) is set at the top of the file. |
+| All wares `/products` | `products.html` | Two doors (Entities / Artifacts) with live counts and starting prices. |
+| Geckos `/category/live-geckos` | `products.html` | Filters are built from each gecko's categories and first description line. `#Lilly+White` style links preselect a filter. |
+| Merch `/category/merch` | `products.html` | Drop badge, the two vessels (Relic / Familiar), copy at the top of the file. |
+| Search `/products?search=…` | `products.html` | Result grid. The instant search overlay lives in `layout.html`. |
+| Gecko page | `product.html` | Used when the product is in **Live Geckos**. Deposit, pickup and shipping text are at the top of the gecko branch. |
+| Tee page | `product.html` | Everything else. Size charts and fit notes are in the `#lm-tee-config` JSON block. |
+| Cart `/cart` | `cart.html` | Works without JavaScript. Geckos show "One of a kind" and no quantity stepper. |
+| Cart drawer ("Satchel") | `layout.html` | Opens from the header cart link and after add-to-cart. |
+| Contact | `contact.html` | Uses Big Cartel's own fields and reCAPTCHA. Customize > Contact text overrides the lede. |
+| Care guide | `layout.html` | Rendered whenever the custom page's permalink is `care-guide`. **The page body typed into Big Cartel is ignored.** Edit the guide in `layout.html`. `care-guide.html` is the old version, kept for reference only. |
+
+## Gecko listings
+
+- **Categories:** tick **Live Geckos**, one category per trait (Lilly White, Tricolor, Quadstripe,
+  Extreme Harlequin…) and one base category ending in "Base" (Dark Base, Red Base).
+- **Description, first line:** `Morph · Sex · RTB`, separated by `·`.
+- **Following lines** (each one is optional):
+
+```
+Hatched: 05/05/2024
+Weight: 42g
+Age: Adult
+Breeder: Miami Art Gecko
+Sire: Dr Whoo · Yellow Harlequin
+Dam: Nirvana · Lilly White
+```
+
+  `Hatched` accepts `2025`, `09/2023` or `05/05/2024`. The sky chart (sun sign) only shows for a full
+  date. When `Age` is missing it's estimated from the weight.
+- **Photos:** when Sire or Dam is listed, the **last** photo is used as the parents' photo.
+- Everything after those lines is the catalogue note.
 
 ## Big Cartel's size limit
 
-Big Cartel silently refuses to save `theme.css` above roughly **150,000
-characters** (no error, the save just doesn't happen). It's ~125,000 now.
-Check before pasting:
+Big Cartel silently refuses to save `theme.css` above roughly **150,000 characters** (no error,
+the save just doesn't happen). It's about 95,000 now. Check before pasting:
 
 ```
 python3 -c "print(len(open('theme.css', encoding='utf-8').read()))"
 ```
 
-Big inline data (the NCL Enigmatic `@font-face`) lives in Customize Design's
-Custom CSS box instead.
+## NCL Enigmatic
 
-## Home page
-
-- `home.html` holds the markup; the styles are at the end of `theme.css`
-  under `LIZARD MAGIC · HOME`.
-- `layout.html` loads Almendra, Recursive and Unbounded from Google Fonts. Recursive's Casual and Mono settings are `--lm-body-casual` / `--lm-body-mono` at the top of the Lizard Magic styles in `theme.css`.
-- **Hero seal:** upload `assets/lizard-magic-seal.png` as the Welcome image
-  (Customize Design > Home). It sits inside the magic circle.
-- **Categories:** "Chosen this cycle" pulls the first 4 available products
-  from the `live-geckos` category; "Merch" shows the first 3 from `merch`.
-  Change the permalinks at the top of `home.html` if yours differ.
-- **Morph / sex line:** the first line of each gecko's product description,
-  e.g. `Extreme Harlequin · Female`.
-- **Newsletter:** set `lm_newsletter_action` at the top of `home.html` to a
-  mailing-list form URL to show the email field. Otherwise the button links
-  to Instagram (if set) or the contact page.
-
-## Merch page
-
-`products.html` gives the Merch category the same head and cards as Live
-Geckos, without the sidebar, with the spinning drop badge in the header and
-the "Two vessels" tee panel below the products. The tee names, prices, descriptions and sizes are `lm_tee1_*` /
-`lm_tee2_*` at the top of `products.html` (typed in, so update them if the
-product prices change). The spinning drop badge's text is `lm_drop_label` /
-`lm_drop_month` / `lm_drop_day` (plus an optional `lm_drop_note`) in the same
-spot; set `lm_drop_month` to `''` to hide the badge between drops. The day is
-sized automatically to match the month's width. Starburst size is
-`--lm-drop-burst` in `theme.css`.
-
-## Merch product page
-
-`product.html` gives products in the Merch category their own layout: photo
-gallery, an Age toggle, vessel (Style) cards, size pills, an add-to-cart that
-stays on the page, the size chart, and related products. Everything else
-in Live Geckos uses the gecko layout below.
-
-- Ages, styles, sizes, prices and sold-out sizes come straight from the
-  product's Big Cartel variants (option groups named **Age**, **Style**,
-  **Sizes**).
-- What Big Cartel can't store lives in the `lm-tee-config` JSON block in
-  `product.html`: each style's subtitle, spec rows, fit notes, and size-chart
-  measurements in inches `[chest, length]`, keyed by the exact option names.
-  The size chart only shows when there's chart data for the chosen style + age.
-- `lm_eyebrow` and `lm_note` at the top set the small line above the title and
-  the note under the button.
-
-## Type scale
-
-All Lizard Magic text sizes live as variables at the top of the Lizard Magic
-section in `theme.css`. Tablet (≤1100px) and mobile (≤900px) only change
-those variables, so a new page just uses the same names:
-
-| Variable | Desktop | Tablet | Mobile | Used for |
-| --- | --- | --- | --- | --- |
-| `--lm-text` | 16px | 16px | 15px | paragraphs |
-| `--lm-text-sm` | 14px | 14px | 13px | paragraphs in tight spots |
-| `--lm-leading` | 1.6 | | | paragraph line height |
-| `--lm-heading-lg` (`.lm-display--lg`) | 72px | 60px | 44px | page titles |
-| `--lm-heading-md` (`.lm-display--md`) | 52px | 44px | 34px | section titles |
-| `--lm-heading-sm` (`.lm-display--sm`) | 32px | 32px | 24px | small headings |
-| `--lm-card-title` | 28px | 26px | 24px | gecko names |
-| `--lm-heading-leading` | 1.05 | | | heading line height |
-
-Paragraphs inside `.lm-home` inherit `--lm-text` / `--lm-leading`
-automatically; only small text needs `font-size: var(--lm-text-sm)`.
-
-## Header + footer (layout.html)
-
-- **Announcement bar:** today's affirmation, followed by the Announcement
-  text from Customize Design. If that's empty it shows "Live arrival
-  guaranteed · Free shipping over $500".
-- **Header:** Live Geckos / Merch / Care Guide on the left, the store name as
-  the wordmark in the middle, Search and Cart on the right. On phones it's
-  MENU · wordmark · CART.
-- **Footer:** @lizardmagic777 (links to Instagram when that's set in
-  Customize), your custom pages except the Care Guide, Big Cartel's required
-  pages and Contact, then "Made & raised with love in Texas".
-- The affirmation list lives in the script near the end of `layout.html`.
-
-## Gecko product page
-
-Products in the Live Geckos category get the gecko layout: breadcrumb, arched
-photo, name, trait chips, the description, "Claim your gecko" options, local
-pickup, and "From my hands to yours".
-
-- The description's first line (`Morph ✦ Sex`) becomes the trait chips; the
-  rest of the description shows under them.
-- **Pay in full** adds the gecko to the cart. **Hold with deposit** opens a
-  popup explaining the deposit (Cash App, Zelle or Venmo) with links to message
-  you; nothing goes in the cart, so the gecko stays listed until you mark it.
-- Settings at the top of the gecko section of `product.html`: `lm_deposit`,
-  `lm_deposit_note`, `lm_full_note`, `lm_cashapp` / `lm_zelle` / `lm_venmo`
-  (shown in the popup when filled in), and the pickup text.
-- The "Read the care guide" button appears once a custom page with the
-  permalink `care-guide` exists.
-
-## Astro icons
-
-`assets/icons/astro/` holds the [Astroicons](https://github.com/marcmarine/astroicons) set (zodiac
-signs, planets, aspects, houses), copied from commit `75bdad0`. MIT licensed: keep
-`assets/icons/astro/LICENSE` with them. `assets/icons/moon/` has the 8 moon phases, drawn to match
-(24px grid, 1px line). All use `currentColor`, so CSS `color` sets the line color. They'll be pasted
-inline into the templates when the 1c rebrand is built, so they don't count toward the theme.css limit.
+The headline font is a commercial font, so it is not committed to this public repo. Paste its
+`@font-face` rule into Customize Design's **Custom CSS** box. Without it, headings fall back to
+Instrument Serif.
 
 ## Hosted assets (Cloudflare Pages)
 
-The `assets/` folder is published to Cloudflare Pages, so the store can load files from it, e.g.
-`https://lizardmagic-assets.pages.dev/icons/moon/full-moon.svg` (no `assets/` in the URL). Pages settings:
-production branch `claude/big-cartel-home-page-7vwp4t`, framework preset None, no build command,
-build output directory `assets`. `assets/_headers` allows cross-origin loading. Every push redeploys.
+The `assets/` folder is published to Cloudflare Pages, so the store loads files from it, e.g.
+`https://lizardmagic-assets.pages.dev/art/pentacle.svg` (no `assets/` in the URL). Every push to
+`claude/big-cartel-home-page-7vwp4t` redeploys. Pages settings: framework preset None, no build
+command, build output directory `assets`. `assets/_headers` allows cross-origin loading.
 
-## NCL Enigmatic
+- `art/`: pentacle, barbed wire, flower and flames ornaments
+- `icons/`: gecko hand, Astroicons and moon phases
+- `photos/elixir.jpg`: the Elixir photo on the home page. **Not uploaded yet.** Until it is, that
+  section shows without a photo.
 
-The headline font is a commercial font, so it is not committed to this public
-repo. Until it's added, headings fall back to Almendra. If your license
-covers web embedding, paste its `@font-face` rule at the very end of
-`theme.css` in Big Cartel.
+## Astro icons
 
-## Up next
-
-- **Trait filters from categories:** a gecko can have several traits (e.g. Tricolor + Lily White + Red Base).
-  Plan: create a Big Cartel category per trait, tick every one that applies on each gecko (alongside
-  Live Geckos), and build the listing's filter chips from `product.categories`. Picking several chips
-  shows geckos that have all of them. Sex stays in the description's first line. Still to decide: one
-  "Traits" group or separate groups (Morph, Base color…). Waiting on the categories being set up.
+`assets/icons/astro/` holds the [Astroicons](https://github.com/marcmarine/astroicons) set, copied from
+commit `75bdad0`. MIT licensed: keep `assets/icons/astro/LICENSE` with them. `assets/icons/moon/` has
+the 8 moon phases, drawn to match. The icons the theme uses are inlined as an SVG sprite at the top of
+`layout.html` (`<use href="#lm-i-mars"/>`), so they don't count toward the theme.css limit.

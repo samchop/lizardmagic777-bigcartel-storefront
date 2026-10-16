@@ -1209,3 +1209,14 @@ ul, ol { padding: 0; list-style: none; }
   .lm-cartpage__list .lm-satchel__img { width: 84px; }
   .lm-cartpage__list .lm-satchel__info b { font-size: 24px; }
 }
+
+/* ---------- Maintenance page ---------- */
+.maintenance-page { min-height: 100vh; display: grid; place-items: center; padding: 40px var(--pad); text-align: center; }
+.maintenance-content { display: flex; flex-direction: column; align-items: center; gap: 22px; max-width: 560px; }
+.maintenance-content img { max-width: 320px; border-radius: 160px 160px 14px 14px; }
+.maintenance-content .store-name { font: 400 clamp(48px, 9vw, 84px)/1 var(--f-display); letter-spacing: .02em; word-spacing: -.1em; }
+.maintenance-message { font: italic 400 20px/1.45 var(--f-serif); color: var(--body); }
+.maintenance-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.social-icons { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; list-style: none; padding: 0; margin: 0; }
+.social-icons svg { width: 20px; height: 20px; fill: var(--muted); transition: fill .2s ease; }
+.social-icons a:hover svg { fill: var(--acc); }
