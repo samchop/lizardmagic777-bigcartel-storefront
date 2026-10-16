@@ -271,10 +271,11 @@ ul, ol { padding: 0; list-style: none; }
 .lm-tile--sold-out .lm-tile__img img { filter: grayscale(.7) brightness(.7); }
 .lm-tile__meta { display: flex; flex-direction: column; gap: 8px; }
 /* Name + price under every product thumbnail (listings, home rows, related, search) */
-.lm-tile__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 12px; }
-@media (max-width: 640px) { .lm-tile__row { column-gap: 8px; } }
-.lm-tile__name { font: 400 30px/1 var(--f-serif); }
-.lm-tile__price { font: 400 26px/1 var(--f-serif); white-space: nowrap; }
+.lm-tile__row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+/* Name in Unbounded, cut off with … when it runs into the price */
+.lm-tile__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--w-label) 11px/1.5 var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--ink); }
+.lm-tile__price { flex: none; font: 400 26px/1 var(--f-serif); white-space: nowrap; }
+@media (max-width: 640px) { .lm-tile__row { gap: 10px; } }
 .lm-tile__traits { font: 400 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
 
 /* Mobile filter bar + sheet */
@@ -506,7 +507,7 @@ ul, ol { padding: 0; list-style: none; }
   .lm-gk__care, .lm-gk__all { align-self: stretch; }
   .lm-gk__related { padding: 56px var(--pad) 64px; gap: 28px; }
   .lm-mini-grid { gap: 24px 16px; }
-  .lm-mini .lm-tile__name { font-size: 22px; }
+  .lm-mini .lm-tile__name { font-size: 9px; letter-spacing: 1.8px; }
   .lm-mini .lm-tile__price { font-size: 20px; }
 }
 .lm-gk__duo:not(.has-sky) .lm-gk__parents:not(.lm-gk__parents--text) { grid-template-columns: minmax(0, 400px) auto; justify-content: center; gap: 56px; }
@@ -803,7 +804,7 @@ ul, ol { padding: 0; list-style: none; }
   .lm-home__rowcta { flex-direction: row; justify-content: space-between; order: 2; }
   .lm-home__rowhead > div:first-child { order: 1; }
   .lm-grid--4 { grid-template-columns: 1fr 1fr; gap: 24px 14px; }
-  .lm-grid--4 .lm-tile__name { font-size: 22px; }
+  .lm-grid--4 .lm-tile__name { font-size: 9px; letter-spacing: 1.8px; }
   .lm-grid--4 .lm-tile__price { font-size: 20px; }
   .lm-grid--4 .lm-tile__traits { font-size: 7.5px; letter-spacing: 1.6px; }
   .lm-home__rites { padding: 56px var(--pad) 32px; }
