@@ -275,6 +275,8 @@ ul, ol { padding: 0; list-style: none; }
 /* Name in Unbounded, cut off with … when it runs into the price */
 .lm-tile__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--w-label) 11px/1.5 var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--ink); }
 .lm-tile__price { flex: none; font: 400 26px/1 var(--f-serif); white-space: nowrap; }
+/* Geckos listing keeps the name in Instrument Serif (with the morph line underneath) */
+.lm-list--geckos .lm-tile__name { font: 400 30px/1.1 var(--f-serif); letter-spacing: normal; text-transform: none; }
 @media (max-width: 640px) { .lm-tile__row { gap: 10px; } }
 .lm-tile__traits { font: 400 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
 

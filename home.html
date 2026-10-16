@@ -77,7 +77,6 @@
           </div>
           <div class="lm-tile__meta">
             <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Claimed{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}–{{ product.max_price | money: theme.money_format }}{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p>
-            {% if lm_first != blank %}<p class="lm-tile__traits">{% for b in lm_bits limit: 2 %}{{ b | strip }}{% unless forloop.last %} · {% endunless %}{% endfor %}</p>{% endif %}
           </div>
         </a>
         {% assign lm_n = lm_n | plus: 1 %}
