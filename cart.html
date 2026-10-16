@@ -26,20 +26,20 @@
       </div>
     {% else %}
       {% assign lm_any_gecko = false %}
-      <form method="post" action="/cart" accept-charset="utf8" class="lm-cartpage__grid" data-lm-cartform>
+      <form method="post" action="/cart" accept-charset="utf8" class="lm-cartpage__grid" data-lm-cartform data-count="{{ cart.item_count }}">
         <input type="hidden" name="utf8" value="✓">
         <ul class="lm-satchel__list lm-cartpage__list">
           {% for item in cart.items %}
             {% assign lm_gecko = false %}
             {% for c in item.product.categories %}{% if c.permalink == 'live-geckos' %}{% assign lm_gecko = true %}{% assign lm_any_gecko = true %}{% endif %}{% endfor %}
-            <li class="lm-satchel__item">
+            <li class="lm-satchel__item" data-id="{{ item.id }}" data-qty="{{ item.quantity }}"{% if lm_gecko %} data-lm-gecko{% endif %}>
               <a class="lm-satchel__img" href="{{ item.product.url }}"><img src="{{ item.product.image | product_image_url | constrain: 300, 300 }}" alt="{{ item.product.name | escape }}"></a>
               <div class="lm-satchel__info">
                 <a href="{{ item.product.url }}"><b>{{ item.product.name }}</b></a>
                 {% unless item.product.has_default_option %}<small>{{ item.option.name | replace: ' / ', ' · ' }}</small>{% endunless %}
                 {% if lm_gecko %}
                   <span class="lm-satchel__one">One of a kind</span>
-                  <input type="hidden" name="cart[update][{{ item.id }}]" value="{{ item.quantity }}" data-lm-qty>
+                  <input type="hidden" name="cart[update][{{ item.id }}]" value="1" data-lm-qty>
                 {% else %}
                   <div class="lm-satchel__qty">
                     <button type="button" data-q="-1" aria-label="One fewer {{ item.product.name | escape }}">−</button>
@@ -59,7 +59,7 @@
             <p class="lm-label lm-muted">The reckoning</p>
             {% if lm_any_gecko %}<p class="lm-satchel__live"><svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>Live arrival · ships overnight Mon–Wed, weather permitting.</p>{% endif %}
             {% if theme.cart_text != blank %}<p class="lm-satchel__note">{{ theme.cart_text }}</p>{% endif %}
-            <p class="lm-satchel__sub"><span class="lm-label lm-muted">Subtotal</span><b>{{ cart.total | money: theme.money_format }}</b></p>
+            <p class="lm-satchel__sub"><span class="lm-label lm-muted">Subtotal</span><b data-lm-total>{{ cart.total | money: theme.money_format }}</b></p>
             <p class="lm-satchel__note">Shipping &amp; taxes calculated at checkout.</p>
             <button type="submit" name="checkout" value="1" class="lm-btn lm-btn--block">Checkout →</button>
             <button type="submit" class="lm-cartpage__update" data-lm-update hidden>Update satchel</button>

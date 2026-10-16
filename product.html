@@ -635,7 +635,7 @@
     var label = root.querySelector('[data-lm-cta-label]'), price = root.querySelector('[data-lm-cta-price]'), cta = root.querySelector('[data-lm-cta]');
     var cartLink = root.querySelector('[data-lm-cart-link]'), dialog = root.querySelector('[data-lm-hold]');
     var claims = root.querySelectorAll('[data-lm-claim]');
-    var mode = 'full', added = false;
+    var mode = 'full', added = {% assign lm_in_cart = false %}{% for item in cart.items %}{% if item.product.id == product.id %}{% assign lm_in_cart = true %}{% endif %}{% endfor %}{{ lm_in_cart }};
     function render() {
       claims.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lm-claim') === mode)); });
       var picked = root.querySelector('[data-lm-claim="' + mode + '"]');
@@ -645,7 +645,7 @@
     claims.forEach(function (b) { b.addEventListener('click', function () { mode = b.getAttribute('data-lm-claim'); render(); }); });
     form.addEventListener('submit', function (e) {
       if (mode === 'hold') { e.preventDefault(); if (dialog && dialog.showModal) dialog.showModal(); else location.href = '/contact'; return; }
-      if (added) { e.preventDefault(); location.href = '/cart'; return; }
+      if (added) { e.preventDefault(); document.dispatchEvent(new CustomEvent('lm:cart')); return; }
       if (!(window.Cart && typeof Cart.addItem === 'function')) return;
       e.preventDefault(); cta.classList.add('is-busy');
       Cart.addItem(form.querySelector('[name="cart[add][id]"]').value, 1, function (cart) {

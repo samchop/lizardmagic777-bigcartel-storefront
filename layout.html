@@ -292,9 +292,7 @@
     </dialog>
 
     {% comment %} ===== Cart drawer ("the Satchel") ===== {% endcomment %}
-    {% assign lm_gecko_links = '' %}
-    {% for category in categories.active %}{% if category.permalink == 'live-geckos' %}{% for product in category.products %}{% assign lm_gecko_links = lm_gecko_links | append: product.permalink | append: ',' %}{% endfor %}{% endif %}{% endfor %}
-    <dialog class="lm-satchel" id="lm-satchel" aria-label="Cart" data-lm-satchel data-lm-geckos="{{ lm_gecko_links }}">
+    <dialog class="lm-satchel" id="lm-satchel" aria-label="Cart" data-lm-satchel>
       <div class="lm-satchel__panel">
         <div class="lm-satchel__head">
           <div><p class="lm-label lm-label--sm lm-muted" data-lm-sat-count>0 items</p><h2 class="lm-satchel__title">Your Satchel</h2></div>
@@ -430,64 +428,57 @@
           input.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); seek.close(); } });
         }
 
-        /* ---------- Cart drawer ---------- */
+        /* ---------- Cart drawer ----------
+           Reads the /cart page (cart.html) so photos, options and "One of a kind" match it exactly. */
         var sat = document.querySelector('[data-lm-satchel]');
         if (sat && sat.showModal && window.Cart) {
           var body = sat.querySelector('[data-lm-sat-body]'), foot = sat.querySelector('[data-lm-sat-foot]');
-          var geckos = (sat.getAttribute('data-lm-geckos') || '').split(',').filter(Boolean);
-          var byOption = {};
-          var indexCatalog = function (list) { list.forEach(function (p) { (p.options || []).forEach(function (o) { byOption[o.id] = p; }); }); };
+          var empty = '<div class="lm-satchel__empty"><p class="lm-satchel__emptytitle">Your satchel is empty.</p><p class="lm-muted">Two paths lie before you.</p><div class="lm-satchel__doors"><a href="/category/live-geckos"><span>I</span><b>Entities</b><small>Live geckos</small></a><a href="/category/merch"><span>II</span><b>Artifacts</b><small>Merch drops</small></a></div></div>';
+          var trimmed = {};
           var setCount = function (n) {
             document.querySelectorAll('[data-lm-cart-count]').forEach(function (c) { c.textContent = n; });
             sat.querySelector('[data-lm-sat-count]').textContent = n + (n === 1 ? ' item' : ' items');
           };
-          var render = function (cart) {
-            cart = cart || { items: [] };
-            var items = cart.items || [], n = cart.item_count != null ? cart.item_count : items.reduce(function (a, i) { return a + (+i.quantity || 0); }, 0);
-            setCount(n);
-            if (!items.length) {
-              foot.hidden = true;
-              body.innerHTML = '<div class="lm-satchel__empty"><p class="lm-satchel__emptytitle">Your satchel is empty.</p><p class="lm-muted">Two paths lie before you.</p><div class="lm-satchel__doors"><a href="/category/live-geckos"><span>I</span><b>Entities</b><small>Live geckos</small></a><a href="/category/merch"><span>II</span><b>Artifacts</b><small>Merch drops</small></a></div></div>';
-              return;
-            }
-            var anyGecko = false;
-            body.innerHTML = '<ul class="lm-satchel__list">' + items.map(function (it) {
-              var opt = it.option || {}, p = byOption[opt.id] || it.product || {};
-              var perm = p.permalink || ((p.url || '').split('/product/')[1] || '');
-              var gecko = geckos.indexOf(perm) > -1 || isGecko(p); if (gecko) anyGecko = true;
-              var name = p.name || it.name || 'Item', optName = opt.name && opt.name !== name ? opt.name : '';
-              var unit = it.unit_price != null ? it.unit_price : opt.price, line = it.price != null ? it.price : unit * it.quantity;
-              return '<li class="lm-satchel__item" data-id="' + esc(it.id) + '"><a class="lm-satchel__img" href="' + esc(p.url || '#') + '">' + (img(p) ? '<img src="' + esc(img(p, 200)) + '" alt="">' : '') + '</a>' +
-                '<div class="lm-satchel__info"><a href="' + esc(p.url || '#') + '"><b>' + esc(name) + '</b></a>' + (optName ? '<small>' + esc(optName.replace(/ \/ /g, ' · ')) + '</small>' : '') +
-                (gecko ? '<span class="lm-satchel__one">One of a kind</span>' :
-                  '<div class="lm-satchel__qty"><button type="button" data-q="-1" aria-label="One fewer">−</button><span>' + esc(it.quantity) + '</span><button type="button" data-q="1" aria-label="One more">+</button></div>') +
-                '<button type="button" class="lm-satchel__remove" data-remove>Remove</button></div><em>' + money(line) + '</em></li>';
-            }).join('') + '</ul>';
-            sat.querySelector('[data-lm-sat-total]').textContent = money(cart.total != null ? cart.total : cart.price);
-            sat.querySelector('[data-lm-sat-live]').hidden = !anyGecko;
+          var render = function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html'), form = doc.querySelector('[data-lm-cartform]');
+            doc.querySelectorAll('[data-currency-amount]').forEach(function (x) { x.textContent = lmMoney(x.getAttribute('data-currency-amount')); });
+            if (!form) { setCount(0); foot.hidden = true; body.innerHTML = empty; return; }
+            var list = form.querySelector('.lm-satchel__list'); list.classList.remove('lm-cartpage__list');
+            list.querySelectorAll('input[type=number]').forEach(function (i) { var sp = document.createElement('span'); sp.textContent = i.value; i.replaceWith(sp); });
+            list.querySelectorAll('input').forEach(function (i) { i.remove(); });
+            /* a gecko is one of a kind: trim any duplicate back to one */
+            var extra = list.querySelector('[data-lm-gecko]:not([data-qty="1"])');
+            if (extra && !trimmed[extra.getAttribute('data-id')]) { trimmed[extra.getAttribute('data-id')] = 1; Cart.updateItem(extra.getAttribute('data-id'), 1, function () { refresh(); }); }
+            setCount(+form.getAttribute('data-count') || list.children.length);
+            body.innerHTML = ''; body.appendChild(document.importNode(list, true));
+            var total = form.querySelector('[data-lm-total]');
+            sat.querySelector('[data-lm-sat-total]').textContent = total ? total.textContent.trim() : '';
+            sat.querySelector('[data-lm-sat-live]').hidden = !list.querySelector('[data-lm-gecko]');
             foot.hidden = false;
           };
           var refresh = function () {
             var done = false, slow = setTimeout(function () { if (!done) body.innerHTML = '<p class="lm-satchel__loading">Still gathering… <a href="/cart">open the full cart</a>.</p>'; }, 8000);
-            Cart.refresh(function (cart) { done = true; clearTimeout(slow); render(cart); });
+            fetch('/cart', { credentials: 'same-origin', cache: 'no-store' }).then(function (r) { return r.text(); })
+              .then(function (html) { done = true; clearTimeout(slow); render(html); })
+              .catch(function () { done = true; clearTimeout(slow); body.innerHTML = '<p class="lm-satchel__loading">Couldn’t open your satchel here. <a href="/cart">See the full cart</a>.</p>'; });
           };
           var openSat = function (e) {
             if (e) e.preventDefault();
             var menu = document.getElementById('lm-menu'); if (menu && menu.open) menu.close();
             if (!sat.open) sat.showModal();
-            loadCatalog(function (list) { indexCatalog(list); refresh(); });
+            refresh();
           };
           if (location.pathname.replace(/\/$/, '') !== '/cart') {
             document.querySelectorAll('[data-lm-cart-open]').forEach(function (a) { a.addEventListener('click', openSat); });
           }
-          document.addEventListener('lm:cart', function (e) { loadCatalog(function (list) { indexCatalog(list); render(e.detail); if (!sat.open) sat.showModal(); }); });
+          document.addEventListener('lm:cart', function () { openSat(); });
           sat.querySelector('[data-lm-sat-close]').addEventListener('click', function () { sat.close(); });
           sat.addEventListener('click', function (e) {
             if (e.target === sat) { sat.close(); return; }
             var li = e.target.closest('.lm-satchel__item'); if (!li) return;
             var id = li.getAttribute('data-id'), q = e.target.closest('[data-q]');
-            if (e.target.closest('[data-remove]')) { li.classList.add('is-busy'); Cart.removeItem(id, render); }
-            else if (q) { var cur = +li.querySelector('.lm-satchel__qty span').textContent, next = Math.max(0, cur + +q.getAttribute('data-q')); li.classList.add('is-busy'); Cart.updateItem(id, next, render); }
+            if (e.target.closest('[data-remove]')) { li.classList.add('is-busy'); Cart.removeItem(id, refresh); }
+            else if (q) { var cur = +li.getAttribute('data-qty') || 1, next = Math.max(0, cur + +q.getAttribute('data-q')); li.classList.add('is-busy'); Cart.updateItem(id, next, refresh); }
           });
         }
       })();
