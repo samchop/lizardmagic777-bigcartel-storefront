@@ -534,6 +534,30 @@
       })();
     </script>
     <script>
+      /* Big names ([data-lm-fitname]): shrink only as much as needed so the longest single word fits its column.
+         Several words still wrap between words; nothing is split mid-word. */
+      (function () {
+        var els = document.querySelectorAll('[data-lm-fitname]'); if (!els.length) return;
+        var fit = function () {
+          els.forEach(function (el) {
+            el.style.fontSize = '';
+            var cs = getComputedStyle(el), size = parseFloat(cs.fontSize), avail = el.clientWidth - 10;
+            if (!avail) return;
+            var probe = document.createElement('span');
+            probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:0';
+            el.appendChild(probe);
+            var widest = 0;
+            el.textContent.trim().split(/\s+/).forEach(function (w) { if (w) { probe.textContent = w; widest = Math.max(widest, probe.getBoundingClientRect().width); } });
+            el.removeChild(probe);
+            if (widest > avail) el.style.fontSize = Math.max(28, Math.floor(size * avail / widest)) + 'px';
+          });
+        };
+        fit();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+        var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fit, 120); });
+      })();
+    </script>
+    <script>
       /* Lizard Magic: current section in the nav, mobile menu */
       (function () {
         var path = location.pathname, kind = document.querySelector('[data-lm-kind]');

@@ -78,7 +78,7 @@
       <nav class="lm-crumbs" aria-label="Breadcrumb"><a href="{% if lm_crumb %}{{ lm_crumb.url }}{% else %}/products{% endif %}">{% if lm_crumb %}{{ lm_crumb.name }}{% else %}Wares{% endif %}</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span></nav>
       <div class="lm-gk__title">
         <p class="lm-label">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
-        <h1 class="lm-gk__name lm-gk__name--md">{{ product.name }}</h1>
+        <h1 class="lm-gk__name lm-gk__name--md" data-lm-fitname>{{ product.name }}</h1>
         <div class="lm-gk__tags">{% for tag in lm_tee_tags %}<span class="lm-gk__tag"><span>{{ tag }}</span></span>{% endfor %}</div>
       </div>
 
@@ -481,7 +481,7 @@
       <nav class="lm-crumbs" aria-label="Breadcrumb"><a href="{{ lm_crumb.url }}">Geckos</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span></nav>
       <div class="lm-gk__title">
         <p class="lm-eyebrow">{{ lm_g_eyebrow }}</p>
-        <h1 class="lm-gk__name">{{ product.name }}</h1>
+        <h1 class="lm-gk__name" data-lm-fitname>{{ product.name }}</h1>
         {% capture lm_tag_html %}{% for c in product.categories %}{% unless c.permalink == 'live-geckos' or c.permalink == 'merch' %}{% assign cn = c.name | downcase %}{% unless cn contains ' base' %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ c.name | url_encode }}"><span>{{ c.name }}</span></a>{% endunless %}{% endunless %}{% endfor %}{% for c in product.categories %}{% assign cn = c.name | downcase %}{% if cn contains ' base' %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ c.name | url_encode }}"><span>{{ c.name }}</span></a>{% endif %}{% endfor %}{% if lm_sex != blank %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ lm_sex }}"><span>{{ lm_sex }}</span></a>{% endif %}{% endcapture %}
         {% assign lm_tag_html = lm_tag_html | strip %}
         {% if lm_tag_html != blank %}<div class="lm-gk__tags">{{ lm_tag_html }}</div>{% endif %}
