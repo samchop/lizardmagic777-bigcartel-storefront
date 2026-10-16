@@ -972,13 +972,11 @@ ul, ol { padding: 0; list-style: none; }
 .lm-gm { max-width: var(--max); margin: 0 auto; }
 .lm-gm__title { font-size: 104px; }
 .lm-gm__title sup { font: 400 36px var(--f-serif); color: var(--acc); vertical-align: top; position: relative; top: .3em; margin-left: 4px; }
-.lm-gm__lede { max-width: 560px; }
+.lm-gm__intro { max-width: 540px; font-size: 17px; line-height: 1.65; color: var(--body); text-wrap: balance; }
 .lm-gm__toc { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px; font: var(--w-label) 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; }
 .lm-gm__toc a { border-bottom: 1px solid var(--line); padding-bottom: 4px; transition: color .2s, border-color .2s; }
 .lm-gm__toc a:hover { color: var(--acc); border-color: var(--acc); }
 .lm-gm__toc span { color: var(--dim); font-size: 8px; }
-.lm-gm__note { max-width: 560px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--muted); text-wrap: balance; }
-.lm-gm__note a { color: var(--ink); border-bottom: 1px solid var(--acc); }
 .lm-gm__rites { display: grid; grid-template-columns: 540px minmax(0, 1fr); gap: 72px; align-items: center; padding: 72px var(--pad) 96px; border-top: 1px solid var(--line); }
 .lm-gm__star { position: relative; width: 100%; max-width: 540px; aspect-ratio: 1; }
 .lm-gm__ring, .lm-gm__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
