@@ -309,6 +309,17 @@
       window.bigcartel.account = window.bigcartel.account || {};
       window.bigcartel.account.currency = window.bigcartel.account.currency || "{{ store.currency.code }}";
       window.bigcartel.account.moneyFormat = "{{ theme.money_format }}";
+      /* Big Cartel's money filter prints a bare number ("400.00"); show "$400" instead. */
+      (function () {
+        var code = window.bigcartel.account.currency || 'USD';
+        var fmt = function (n) {
+          try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: code, minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }).format(n); }
+          catch (e) { return '$' + (n % 1 ? n.toFixed(2) : n); }
+        };
+        window.lmMoney = fmt;
+        document.querySelectorAll('[data-currency-amount]').forEach(function (s) { s.textContent = fmt(+s.getAttribute('data-currency-amount')); });
+        document.querySelectorAll('[data-price]').forEach(function (b) { var v = b.getAttribute('data-price'); if (/^[\d.,]+$/.test(v)) b.setAttribute('data-price', fmt(+v.replace(/,/g, ''))); });
+      })();
     </script>
     <script>
       /* Lizard Magic: current section in the nav, mobile menu */
@@ -453,7 +464,10 @@
             sat.querySelector('[data-lm-sat-live]').hidden = !anyGecko;
             foot.hidden = false;
           };
-          var refresh = function () { Cart.refresh(function (cart) { render(cart); }); };
+          var refresh = function () {
+            var done = false, slow = setTimeout(function () { if (!done) body.innerHTML = '<p class="lm-satchel__loading">Still gathering… <a href="/cart">open the full cart</a>.</p>'; }, 8000);
+            Cart.refresh(function (cart) { done = true; clearTimeout(slow); render(cart); });
+          };
           var openSat = function (e) {
             if (e) e.preventDefault();
             var menu = document.getElementById('lm-menu'); if (menu && menu.open) menu.close();
