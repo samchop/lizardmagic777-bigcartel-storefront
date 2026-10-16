@@ -1059,6 +1059,29 @@ ul, ol { padding: 0; list-style: none; }
 .lm-omen__back em { font: italic 400 18px/1.25 var(--f-serif); }
 .lm-gm__count { text-align: center; margin-top: -20px; }
 
+/* Whispered Questions (FAQ): native <details> rows, answers stay in the page for search */
+.lm-gm__faq { border-top: 1px solid var(--line); padding: 96px var(--pad); display: flex; flex-direction: column; align-items: center; gap: 48px; }
+.lm-gm__qs { width: 100%; max-width: 860px; border-bottom: 1px solid var(--line); }
+.lm-gm__q { border-top: 1px solid var(--line); }
+.lm-gm__q summary { display: flex; align-items: center; gap: 18px; padding: 22px 4px; cursor: pointer; list-style: none; }
+.lm-gm__q summary::-webkit-details-marker { display: none; }
+.lm-gm__q summary .lm-ico { flex: none; font-size: 18px; color: var(--acc); }
+.lm-gm__q h3 { flex: 1; font: 400 25px/1.2 var(--f-serif); color: var(--body); transition: color .2s ease; }
+.lm-gm__q summary:hover h3, .lm-gm__q[open] h3 { color: var(--ink); }
+.lm-gm__qplus { position: relative; flex: none; width: 14px; height: 14px; }
+.lm-gm__qplus::before, .lm-gm__qplus::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; margin-top: -.5px; background: var(--acc); transition: transform .25s ease; }
+.lm-gm__qplus::after { transform: rotate(90deg); }
+.lm-gm__q[open] .lm-gm__qplus::after { transform: rotate(0deg); }
+.lm-gm__q summary:focus-visible { outline: 1px solid var(--acc); outline-offset: 2px; }
+.lm-gm__qa { display: flex; flex-direction: column; gap: 12px; padding: 0 36px 26px 40px; font-size: 16px; line-height: 1.65; color: var(--body); max-width: 760px; text-wrap: pretty; }
+.lm-gm__qmore { font: italic 400 20px/1.4 var(--f-serif); color: var(--muted); text-align: center; }
+.lm-gm__qmore a { color: var(--acc); }
+@media (max-width: 760px) {
+  .lm-gm__faq { padding: 56px var(--pad); gap: 32px; }
+  .lm-gm__q summary { gap: 14px; padding: 18px 0; }
+  .lm-gm__q h3 { font-size: 21px; }
+  .lm-gm__qa { padding: 0 0 22px 32px; font-size: 15px; }
+}
 .lm-gm__tools { border-top: 1px solid var(--line); padding: 96px var(--pad); display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 80px; align-items: start; }
 .lm-gm__toolhead { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 24px; }
 .lm-gm__toolhead .lm-italic { font-size: 22px; }
