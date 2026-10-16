@@ -270,6 +270,39 @@
       {% unless theme.hide_big_cartel_credit %}<div class="lm-foot__credit" data-bc-hook="credit">{{ big_cartel_credit_logo }}</div>{% endunless %}
     </footer>
 
+    {% comment %} ===== Search overlay ===== {% endcomment %}
+    <dialog class="lm-seek" id="lm-seek" aria-label="Search the shop" data-lm-seek>
+      <div class="lm-seek__wrap">
+        <div class="lm-seek__top"><p class="lm-eyebrow">Search the shop</p><button type="button" class="lm-seek__close" aria-label="Close search" data-lm-seek-close>&times;</button></div>
+        <form class="lm-seek__form" action="/products" method="get" role="search" data-lm-seek-form>
+          <label class="lm-sr" for="lm-seek-q">Search</label>
+          <input id="lm-seek-q" class="lm-seek__input" type="search" name="search" placeholder="What do you seek?" autocomplete="off" spellcheck="false" data-lm-seek-input>
+        </form>
+        <div class="lm-seek__chips" data-lm-seek-chips></div>
+        <div class="lm-seek__results" data-lm-seek-results aria-live="polite"></div>
+      </div>
+    </dialog>
+
+    {% comment %} ===== Cart drawer ("the Satchel") ===== {% endcomment %}
+    {% assign lm_gecko_links = '' %}
+    {% for category in categories.active %}{% if category.permalink == 'live-geckos' %}{% for product in category.products %}{% assign lm_gecko_links = lm_gecko_links | append: product.permalink | append: ',' %}{% endfor %}{% endif %}{% endfor %}
+    <dialog class="lm-satchel" id="lm-satchel" aria-label="Cart" data-lm-satchel data-lm-geckos="{{ lm_gecko_links }}">
+      <div class="lm-satchel__panel">
+        <div class="lm-satchel__head">
+          <div><p class="lm-label lm-label--sm lm-muted" data-lm-sat-count>0 items</p><h2 class="lm-satchel__title">Your Satchel</h2></div>
+          <button type="button" class="lm-seek__close" aria-label="Close cart" data-lm-sat-close>&times;</button>
+        </div>
+        <div class="lm-satchel__body" data-lm-sat-body><p class="lm-satchel__loading">Gathering your things…</p></div>
+        <div class="lm-satchel__foot" data-lm-sat-foot hidden>
+          <p class="lm-satchel__live" data-lm-sat-live hidden><svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>Live arrival · ships overnight Mon–Wed, weather permitting.</p>
+          <p class="lm-satchel__sub"><span class="lm-label lm-muted">Subtotal</span><b data-lm-sat-total></b></p>
+          <p class="lm-satchel__note">Shipping &amp; taxes calculated at checkout.</p>
+          <form method="post" action="/cart"><button type="submit" name="checkout" value="1" class="lm-btn lm-btn--block">Checkout →</button></form>
+          <a class="lm-satchel__full" href="/cart">View full cart</a>
+        </div>
+      </div>
+    </dialog>
+
     <script src="{{ 'api' | theme_js_url }}"></script>
     <script>
       window.bigcartel = window.bigcartel || {};
@@ -293,6 +326,152 @@
           menu.addEventListener('close', function () { opener.setAttribute('aria-expanded', 'false'); });
           menu.querySelector('[data-lm-menu-close]').addEventListener('click', function () { menu.close(); });
           menu.addEventListener('click', function (e) { if (e.target === menu) menu.close(); });
+        }
+      })();
+    </script>
+    <script>
+      /* Lizard Magic: instant search + cart drawer. The product list (/products.js) is loaded once and shared. */
+      (function () {
+        var catalog = null, waiting = [];
+        var loadCatalog = function (cb) {
+          if (catalog) return cb(catalog);
+          waiting.push(cb); if (waiting.length > 1) return;
+          var done = function (list) { catalog = list || []; waiting.splice(0).forEach(function (f) { f(catalog); }); };
+          try { var c = sessionStorage.getItem('lm-catalog'); if (c) { var o = JSON.parse(c); if (Date.now() - o.t < 600000) return done(o.p); } } catch (e) {}
+          fetch('/products.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (list) {
+            try { sessionStorage.setItem('lm-catalog', JSON.stringify({ t: Date.now(), p: list })); } catch (e) {}
+            done(list);
+          }).catch(function () { done([]); });
+        };
+        var money = function (n) { n = +n || 0; return '$' + (n % 1 ? n.toFixed(2) : n); };
+        var img = function (p, w) { var u = p && p.images && p.images[0] && p.images[0].url; return u ? u.split('?')[0] + '?auto=format&fit=max&w=' + (w || 160) : ''; };
+        var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+        var isGecko = function (p) { return (p.categories || []).some(function (c) { return c.permalink === 'live-geckos'; }); };
+        var firstLine = function (p) {
+          var d = (p.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]+>/g, '');
+          d = d.split('\n').map(function (s) { return s.trim(); }).filter(Boolean)[0] || '';
+          return d.replace(/[✦|]/g, '·').split('·').map(function (s) { return s.trim(); }).filter(Boolean).slice(0, 3).join(' · ');
+        };
+        var priceOf = function (p) {
+          var ps = (p.options || []).map(function (o) { return +o.price; }).filter(function (x) { return x > 0; });
+          if (!ps.length) return money(p.default_price || p.price);
+          var lo = Math.min.apply(0, ps), hi = Math.max.apply(0, ps); return lo === hi ? money(lo) : money(lo) + '–' + money(hi);
+        };
+
+        /* ---------- Search ---------- */
+        var seek = document.querySelector('[data-lm-seek]');
+        if (seek && seek.showModal) {
+          var input = seek.querySelector('[data-lm-seek-input]'), out = seek.querySelector('[data-lm-seek-results]'), chips = seek.querySelector('[data-lm-seek-chips]');
+          var openSeek = function (e) {
+            if (e) e.preventDefault();
+            var menu = document.getElementById('lm-menu'); if (menu && menu.open) menu.close();
+            seek.showModal(); setTimeout(function () { input.focus(); }, 30);
+            loadCatalog(function (list) { buildChips(list); run(); });
+          };
+          document.querySelectorAll('[data-lm-search-open]').forEach(function (b) { b.addEventListener('click', openSeek); });
+          seek.querySelector('[data-lm-seek-close]').addEventListener('click', function () { seek.close(); });
+          seek.addEventListener('click', function (e) { if (e.target === seek) seek.close(); });
+          document.addEventListener('keydown', function (e) {
+            var tag = (e.target.tagName || '').toLowerCase();
+            if (e.key === '/' && tag !== 'input' && tag !== 'textarea' && !seek.open) openSeek(e);
+          });
+          var built = false;
+          var buildChips = function (list) {
+            if (built) return; built = true;
+            var seen = {}, words = [];
+            var add = function (w) { var k = w.toLowerCase(); if (w && !seen[k]) { seen[k] = 1; words.push(w); } };
+            list.forEach(function (p) {
+              if (!isGecko(p)) return;
+              firstLine(p).split(' · ').forEach(function (b) { if (/^(male|female)$/i.test(b)) add(b.charAt(0).toUpperCase() + b.slice(1).toLowerCase()); });
+            });
+            list.forEach(function (p) { (p.categories || []).forEach(function (c) { if (c.permalink !== 'live-geckos' && c.permalink !== 'merch' && !/ base$/i.test(c.name)) add(c.name); }); });
+            if (list.some(function (p) { return !isGecko(p); })) add('Tees');
+            words.slice(0, 8).forEach(function (w) {
+              var b = document.createElement('button'); b.type = 'button'; b.className = 'lm-chip lm-chip--sm'; b.innerHTML = '<span></span>'; b.firstChild.textContent = w;
+              b.addEventListener('click', function () { input.value = w; run(); input.focus(); });
+              chips.appendChild(b);
+            });
+          };
+          var haystack = function (p) {
+            return [p.name, firstLine(p), (p.categories || []).map(function (c) { return c.name; }).join(' '), isGecko(p) ? 'gecko geckos crested entity entities' : 'merch tee tees shirt shirts artifact artifacts', (p.description || '').replace(/<[^>]+>/g, ' ')].join(' ').toLowerCase();
+          };
+          var row = function (p) {
+            var meta = isGecko(p) ? firstLine(p) : 'Artifact';
+            return '<a class="lm-seek__row' + (p.status !== 'active' ? ' is-off' : '') + '" href="' + esc(p.url) + '"><span class="lm-seek__img">' + (img(p) ? '<img src="' + esc(img(p, 160)) + '" alt="" loading="lazy">' : '') + '</span><span class="lm-seek__txt"><b>' + esc(p.name) + '</b><small>' + esc(meta) + '</small></span><em>' + (p.status === 'sold-out' ? (isGecko(p) ? 'Claimed' : 'Sold out') : esc(priceOf(p))) + '</em></a>';
+          };
+          var run = function () {
+            if (!catalog) return;
+            var q = input.value.trim().toLowerCase(), terms = q.split(/\s+/).filter(Boolean);
+            var hits = catalog.filter(function (p) { var h = haystack(p); return terms.every(function (t) { return h.indexOf(t) > -1 || (t.length > 3 && /s$/.test(t) && h.indexOf(t.slice(0, -1)) > -1); }); });
+            hits.sort(function (a, b) { return (a.status === 'active' ? 0 : 1) - (b.status === 'active' ? 0 : 1); });
+            var g = hits.filter(isGecko), m = hits.filter(function (p) { return !isGecko(p); });
+            if (!hits.length) { out.innerHTML = '<p class="lm-seek__none">Nothing answers to “' + esc(input.value) + '” yet. <a href="/contact">Ask me</a> and I’ll keep watch.</p>'; return; }
+            var html = '';
+            if (g.length) html += '<div class="lm-seek__group"><p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-jupiter"/></svg>Entities <span>' + g.length + '</span></p>' + g.slice(0, 6).map(row).join('') + '</div>';
+            if (m.length) html += '<div class="lm-seek__group"><p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-venus"/></svg>Artifacts <span>' + m.length + '</span></p>' + m.slice(0, 6).map(row).join('') + '</div>';
+            if (q) html += '<a class="lm-seek__all" href="/products?search=' + encodeURIComponent(input.value.trim()) + '">See every result for “' + esc(input.value.trim()) + '” →</a>';
+            out.innerHTML = html;
+          };
+          input.addEventListener('input', run);
+          input.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.preventDefault(); seek.close(); } });
+        }
+
+        /* ---------- Cart drawer ---------- */
+        var sat = document.querySelector('[data-lm-satchel]');
+        if (sat && sat.showModal && window.Cart) {
+          var body = sat.querySelector('[data-lm-sat-body]'), foot = sat.querySelector('[data-lm-sat-foot]');
+          var geckos = (sat.getAttribute('data-lm-geckos') || '').split(',').filter(Boolean);
+          var byOption = {};
+          var indexCatalog = function (list) { list.forEach(function (p) { (p.options || []).forEach(function (o) { byOption[o.id] = p; }); }); };
+          var setCount = function (n) {
+            document.querySelectorAll('[data-lm-cart-count]').forEach(function (c) { c.textContent = n; });
+            sat.querySelector('[data-lm-sat-count]').textContent = n + (n === 1 ? ' item' : ' items');
+          };
+          var render = function (cart) {
+            cart = cart || { items: [] };
+            var items = cart.items || [], n = cart.item_count != null ? cart.item_count : items.reduce(function (a, i) { return a + (+i.quantity || 0); }, 0);
+            setCount(n);
+            if (!items.length) {
+              foot.hidden = true;
+              body.innerHTML = '<div class="lm-satchel__empty"><p class="lm-satchel__emptytitle">Your satchel is empty.</p><p class="lm-muted">Two paths lie before you.</p><div class="lm-satchel__doors"><a href="/category/live-geckos"><span>I</span><b>Entities</b><small>Live geckos</small></a><a href="/category/merch"><span>II</span><b>Artifacts</b><small>Merch drops</small></a></div></div>';
+              return;
+            }
+            var anyGecko = false;
+            body.innerHTML = '<ul class="lm-satchel__list">' + items.map(function (it) {
+              var opt = it.option || {}, p = byOption[opt.id] || it.product || {};
+              var perm = p.permalink || ((p.url || '').split('/product/')[1] || '');
+              var gecko = geckos.indexOf(perm) > -1 || isGecko(p); if (gecko) anyGecko = true;
+              var name = p.name || it.name || 'Item', optName = opt.name && opt.name !== name ? opt.name : '';
+              var unit = it.unit_price != null ? it.unit_price : opt.price, line = it.price != null ? it.price : unit * it.quantity;
+              return '<li class="lm-satchel__item" data-id="' + esc(it.id) + '"><a class="lm-satchel__img" href="' + esc(p.url || '#') + '">' + (img(p) ? '<img src="' + esc(img(p, 200)) + '" alt="">' : '') + '</a>' +
+                '<div class="lm-satchel__info"><a href="' + esc(p.url || '#') + '"><b>' + esc(name) + '</b></a>' + (optName ? '<small>' + esc(optName.replace(/ \/ /g, ' · ')) + '</small>' : '') +
+                (gecko ? '<span class="lm-satchel__one">One of a kind</span>' :
+                  '<div class="lm-satchel__qty"><button type="button" data-q="-1" aria-label="One fewer">−</button><span>' + esc(it.quantity) + '</span><button type="button" data-q="1" aria-label="One more">+</button></div>') +
+                '<button type="button" class="lm-satchel__remove" data-remove>Remove</button></div><em>' + money(line) + '</em></li>';
+            }).join('') + '</ul>';
+            sat.querySelector('[data-lm-sat-total]').textContent = money(cart.total != null ? cart.total : cart.price);
+            sat.querySelector('[data-lm-sat-live]').hidden = !anyGecko;
+            foot.hidden = false;
+          };
+          var refresh = function () { Cart.refresh(function (cart) { render(cart); }); };
+          var openSat = function (e) {
+            if (e) e.preventDefault();
+            var menu = document.getElementById('lm-menu'); if (menu && menu.open) menu.close();
+            if (!sat.open) sat.showModal();
+            loadCatalog(function (list) { indexCatalog(list); refresh(); });
+          };
+          if (location.pathname.replace(/\/$/, '') !== '/cart') {
+            document.querySelectorAll('[data-lm-cart-open]').forEach(function (a) { a.addEventListener('click', openSat); });
+          }
+          document.addEventListener('lm:cart', function (e) { loadCatalog(function (list) { indexCatalog(list); render(e.detail); if (!sat.open) sat.showModal(); }); });
+          sat.querySelector('[data-lm-sat-close]').addEventListener('click', function () { sat.close(); });
+          sat.addEventListener('click', function (e) {
+            if (e.target === sat) { sat.close(); return; }
+            var li = e.target.closest('.lm-satchel__item'); if (!li) return;
+            var id = li.getAttribute('data-id'), q = e.target.closest('[data-q]');
+            if (e.target.closest('[data-remove]')) { li.classList.add('is-busy'); Cart.removeItem(id, render); }
+            else if (q) { var cur = +li.querySelector('.lm-satchel__qty span').textContent, next = Math.max(0, cur + +q.getAttribute('data-q')); li.classList.add('is-busy'); Cart.updateItem(id, next, render); }
+          });
         }
       })();
     </script>

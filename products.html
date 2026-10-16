@@ -313,26 +313,45 @@
 </div>
 
 {% else %}
-{% comment %} Search results (phase 6 adds the search overlay) {% endcomment %}
+{% comment %} Search results (/products?search=...) and any other plain listing {% endcomment %}
 <div class="lm-list">
   <section class="lm-hero lm-hero--center">
     <div class="lm-sigil" aria-hidden="true"></div>
-    <p class="lm-eyebrow">{% if lm_layout == 'merch' %}Available artifacts{% elsif lm_layout == 'search' %}Search{% else %}The wares{% endif %}</p>
-    <h1 class="lm-display">{% if lm_layout == 'merch' %}Choose Your Talisman{% elsif lm_layout == 'search' %}What you seek{% else %}All Wares{% endif %}</h1>
+    <p class="lm-eyebrow">{% if lm_layout == 'search' %}Search{% else %}The wares{% endif %}</p>
+    <h1 class="lm-display">{% if lm_layout == 'search' %}What You Seek{% else %}All Wares{% endif %}</h1>
+    {% if lm_layout == 'search' %}
+      <form class="lm-seekpage" action="/products" method="get" role="search">
+        <label class="lm-sr" for="lm-seekpage-q">Search</label>
+        <input id="lm-seekpage-q" type="search" name="search" placeholder="What do you seek?" data-lm-seekpage>
+        <button type="submit" class="lm-btn">Seek →</button>
+      </form>
+      <script>(function () { var q = new URLSearchParams(location.search).get('search') || '', i = document.querySelector('[data-lm-seekpage]'); if (i) i.value = q; })();</script>
+    {% endif %}
   </section>
   {% paginate products from products.current by 100 %}
   <div class="lm-wrap lm-list__plain">
-    <div class="lm-grid">
-      {% for product in products %}
-        <a class="lm-tile" href="{{ product.url }}">
-          <div class="lm-tile__card">
-            <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
-            <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
-          </div>
-          <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{{ product | product_price }}</span></p></div>
-        </a>
-      {% endfor %}
-    </div>
+    {% if products == blank %}
+      <div class="lm-seekpage__none">
+        <p class="lm-italic">Nothing answers to that name yet.</p>
+        <p class="lm-muted">Try a morph, a trait, or a size. Or <a href="/contact">send word</a> and I’ll keep watch for you.</p>
+        <div class="lm-seekpage__doors"><a class="lm-btn" href="/category/live-geckos">Entities →</a><a class="lm-btn lm-btn--ghost" href="/category/merch">Artifacts →</a></div>
+      </div>
+    {% else %}
+      <p class="lm-label lm-muted lm-seekpage__count">{{ products.size }} {% if products.size == 1 %}result{% else %}results{% endif %}</p>
+      <div class="lm-grid">
+        {% for product in products %}
+          {% assign lm_is_gecko = false %}
+          {% for c in product.categories %}{% if c.permalink == 'live-geckos' %}{% assign lm_is_gecko = true %}{% endif %}{% endfor %}
+          <a class="lm-tile{% if product.status == 'sold-out' %} lm-tile--sold-out{% endif %}" href="{{ product.url }}">
+            <div class="lm-tile__card">
+              <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
+              <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
+            </div>
+            <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}{% if lm_is_gecko %}Claimed{% else %}Sold out{% endif %}{% elsif product.variable_pricing %}{{ product.min_price | money: theme.money_format }}+{% else %}{{ product.default_price | money: theme.money_format }}{% endif %}</span></p></div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
   {% endpaginate %}
 </div>
