@@ -1,449 +1,223 @@
 {% comment %}
-  Lizard Magic listings. Two categories get their own layout, sharing the same cards:
-  - Live Geckos: filters + sort sidebar. Morph and sex come from the first line of each
-    description, e.g. "Lily White ✦ Male".
-  - Merch: no sidebar, price under the name, a spinning drop badge, then the two-tees panel.
-  Every other product page (all products, search) keeps the theme layout below.
+  Product listings.
+  /category/live-geckos  -> Geckos listing: filters (sex from the description's first line,
+                            morph + base from categories), sort, tarot tiles.
+  /category/merch        -> Merch listing (phase 3)
+  /products, search      -> All wares (phase 4) / search results (phase 6)
 {% endcomment %}
-{% assign lm_layout = '' %}
+
+{% comment %} ---- Geckos page settings ---- {% endcomment %}
+{% assign lm_g_eyebrow = 'Available entities' %}
+{% assign lm_g_title = 'For Your Exquisite Selection' %}
+{% assign lm_g_lede = 'Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.' %}
+{% assign lm_ship_price = '$55' %}
+{% assign lm_ship_title = 'Overnight Summoning' %}
+{% assign lm_ship_points = 'Live arrival guaranteed|Ships Mon–Wed, weather permitting|Local pickup in Houston & Beaumont' | split: '|' %}
+
+{% assign lm_layout = 'all' %}
 {% if page.full_url contains '/category/live-geckos' %}{% assign lm_layout = 'geckos' %}{% endif %}
 {% if page.full_url contains '/category/merch' %}{% assign lm_layout = 'merch' %}{% endif %}
-
-{% comment %} Merch page copy: edit the two tee types and their prices here {% endcomment %}
-{% assign lm_tee1_name = 'The Relic' %}
-{% assign lm_tee1_price = '$44' %}
-{% assign lm_tee1_text = 'Heavyweight cotton, vintage wash, oversized streetwear cut. High quality material and printing.' %}
-{% assign lm_tee1_sizes = 'Adult S–2XL · Hatchling S–XL' %}
-{% assign lm_tee2_name = 'The Familiar' %}
-{% assign lm_tee2_price = '$36' %}
-{% assign lm_tee2_text = 'Bella+Canvas heather polyblend. Super soft & comfy, light and true to size, with the brightest print of the two.' %}
-{% assign lm_tee2_sizes = 'Adult XS–4XL · Hatchling S–XL' %}
-{% comment %} Spinning drop badge in the Merch header. Leave lm_drop_month blank to hide the badge.
-  The day is automatically sized to match the month's width. lm_drop_note is an optional small line. {% endcomment %}
-{% assign lm_drop_label = 'Drop ends' %}
-{% assign lm_drop_month = 'Nov' %}
-{% assign lm_drop_day = '30' %}
-{% assign lm_drop_note = '' %}
-
-{% if lm_layout != '' %}
-<div class="lm-home lm-listing lm-listing--{{ lm_layout }}">
-  <div class="lm-listing__head lm-wrap">
-    <div class="lm-listing__intro">
-      {% if lm_layout == 'merch' %}
-        <span class="lm-eyebrow">Available artifacts</span>
-        <h1 class="lm-display lm-display--lg lm-listing__title">Choose Your Talisman</h1>
-        <p class="lm-listing__lede">Limited Edition designs on quality material. </p>
-      {% else %}
-        <span class="lm-eyebrow">Available entities</span>
-        <h1 class="lm-display lm-display--lg lm-listing__title">For Your Exquisite Selection</h1>
-        <p class="lm-listing__lede">Raised with love, and bred with careful selection and intention. The perfect gecko has been conjured up just for you.</p>
-      {% endif %}
-    </div>
-    {% if lm_layout == 'geckos' %}<p class="lm-listing__quote">“The right gecko finds its keeper.”</p>{% endif %}
-    {% if lm_layout == 'merch' and lm_drop_month != blank %}
-      <div class="lm-drop">
-        <div class="lm-drop__burst" aria-hidden="true"></div>
-        <svg class="lm-drop__ring" viewBox="0 0 200 200" aria-hidden="true">
-          <circle cx="100" cy="100" r="80" stroke-width="1"/>
-          <circle cx="100" cy="100" r="88.5" stroke-width=".6"/>
-          <circle cx="100" cy="100" r="83.25" stroke-width="2.5" pathLength="72" stroke-dasharray=".08 .92"/>
-          <circle cx="100" cy="100" r="84.5" stroke-width="5" pathLength="12" stroke-dasharray=".025 .975"/>
-        </svg>
-        <svg class="lm-drop__ring lm-drop__ring--text" viewBox="0 0 200 200" aria-hidden="true">
-          <defs><path id="lm-drop-ring" d="M100,100 m-71,0 a71,71 0 1,1 142,0 a71,71 0 1,1 -142,0"/></defs>
-          <text><textPath href="#lm-drop-ring" textLength="440" lengthAdjust="spacing">LIZARD MAGIC ☉︎ ☽︎ ☿︎ ♀︎ LIMITED EDITION ♂︎ ♃︎ ♄︎ ✦︎ </textPath></text>
-          <circle cx="100" cy="100" r="62" stroke-width=".8"/>
-          <circle cx="100" cy="100" r="60" stroke-width=".4" stroke-dasharray="1.5 2.5"/>
-          <circle class="lm-drop__dot" cx="142.43" cy="142.43" r="2.2"/>
-          <circle class="lm-drop__dot" cx="57.57" cy="142.43" r="2.2"/>
-          <circle class="lm-drop__dot" cx="57.57" cy="57.57" r="2.2"/>
-          <circle class="lm-drop__dot" cx="142.43" cy="57.57" r="2.2"/>
-        </svg>
-        <p class="lm-drop__copy">
-          <span class="lm-drop__label">{{ lm_drop_label }}</span>
-          <span class="lm-drop__month">{{ lm_drop_month }}</span>
-          {% if lm_drop_day != blank %}<span class="lm-drop__day">{{ lm_drop_day }}</span>{% endif %}
-          {% if lm_drop_note != blank %}<span class="lm-drop__note">{{ lm_drop_note }}</span>{% endif %}
-        </p>
-      </div>
-    {% endif %}
-  </div>
-
-  {% paginate products from products.current by 100 %}
-    <div class="lm-listing__body">
-      {% if lm_layout == 'geckos' %}
-      <aside class="lm-listing__side" aria-label="Filter geckos">
-        <div class="lm-filter" data-lm-filter="sex" hidden>
-          <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-sex">Sex</span>
-          <div class="lm-chips" role="group" aria-labelledby="lm-filter-sex"></div>
-        </div>
-        <div class="lm-filter" data-lm-filter="morph" hidden>
-          <span class="lm-eyebrow lm-eyebrow--sm" id="lm-filter-morph">Morph</span>
-          <div class="lm-chips" role="group" aria-labelledby="lm-filter-morph"></div>
-        </div>
-        <div class="lm-listing__note">
-          <span class="lm-listing-ship-price">$55</span>
-          <span class="lm-eyebrow lm-eyebrow--sm">Overnight Summoning</span>
-          <p>Ships overnight, weather permitting. 45-90&deg; Live arrival guaranteed.</p>
-        </div>
-      </aside>
-      {% endif %}
-
-      <div class="lm-listing__main">
-        {% if lm_layout == 'geckos' %}
-        <div class="lm-listing__toolbar">
-          <span class="lm-listing__count" data-lm-count aria-live="polite">{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %}</span>
-          <label class="lm-sort">
-            <span class="lm-visually-hidden">Sort geckos</span>
-            <select data-lm-sort>
-              <option value="featured">Sort: Featured</option>
-              <option value="price-asc">Sort: Price low → high</option>
-              <option value="price-desc">Sort: Price high → low</option>
-            </select>
-          </label>
-        </div>
-        {% endif %}
-
-        <div class="lm-listing__grid" data-lm-grid>
-          {% for product in products %}
-            {% assign lm_first = product.description | split: '</p>' | first | split: '<br' | first | strip_html | strip | newline_to_br | split: '<br />' | first | strip %}
-            {% assign lm_parts = lm_first | replace: '·', '✦' | replace: '|', '✦' | split: '✦' %}
-            {% assign lm_sex = '' %}
-            {% assign lm_morph = '' %}
-            {% for lm_part in lm_parts %}
-              {% assign lm_p = lm_part | strip %}
-              {% assign lm_pd = lm_p | downcase %}
-              {% if lm_pd == 'female' or lm_pd == 'male' or lm_pd == 'unsexed' %}
-                {% assign lm_sex = lm_p | capitalize %}
-              {% elsif lm_morph == blank and lm_p != blank %}
-                {% assign lm_morph = lm_p %}
-              {% endif %}
-            {% endfor %}
-            {% assign lm_status = '' %}
-            {% case product.status %}
-              {% when 'sold-out' %}{% assign lm_status = t['products.sold_out'] %}
-              {% when 'coming-soon' %}{% assign lm_status = t['products.coming_soon'] %}
-            {% endcase %}
-            <article class="lm-gecko lm-card{% if lm_layout == 'merch' %} lm-card--merch{% endif %}{% if product.status != 'active' %} lm-card--unavailable{% endif %}" data-lm-index="{{ forloop.index0 }}" data-lm-price="{{ product.default_price }}" data-lm-sex="{{ lm_sex | escape }}" data-lm-morph="{{ lm_morph | escape }}">
-              <a class="lm-gecko__frame" href="{{ product.url }}" aria-label="{{ product.name | escape }}">
-                <div class="lm-gecko__arch">
-                  {% if product.image != blank %}
-                    <img
-                      alt=""
-                      {% if forloop.index > 6 %}loading="lazy"{% endif %}
-                      src="{{ product.image | product_image_url | constrain: 600 }}"
-                      srcset="{{ product.image | product_image_url | constrain: 320 }} 320w, {{ product.image | product_image_url | constrain: 600 }} 600w, {{ product.image | product_image_url | constrain: 900 }} 900w"
-                      sizes="(max-width: 900px) 45vw, 300px"
-                    >
-                  {% else %}
-                    <span class="lm-placeholder">[ photo ]</span>
-                  {% endif %}
-                </div>
-                <span class="lm-gecko__badge">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
-                {% if lm_status != blank %}<span class="lm-card__status">{{ lm_status }}</span>{% endif %}
-              </a>
-              <div class="lm-gecko__row">
-                <div class="lm-gecko__name"><a href="{{ product.url }}">{{ product.name }}</a></div>
-                <span class="lm-gecko__price">{{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}</span>
-              </div>
-              {% if lm_layout == 'geckos' and lm_first != blank %}<span class="lm-gecko__morph">{{ lm_first | truncate: 48 }}</span>{% endif %}
-              <a class="lm-btn lm-btn--solid lm-gecko__add" href="{{ product.url }}">{% if product.status == 'active' %}Select{% else %}View{% endif %}</a>
-            </article>
-          {% endfor %}
-        </div>
-
-        <div class="lm-listing__empty" data-lm-empty {% if products.size > 0 %}hidden{% endif %}>
-          <p class="lm-display lm-display--sm">This vessel hasn't arrived yet</p>
-          <p class="lm-muted">{% if lm_layout == 'merch' %}New relics are being conjured. Check back soon for the next drop.{% elsif products.size > 0 %}No geckos match those filters right now. <button type="button" class="lm-listing__reset" data-lm-reset>Show all geckos</button>{% else %}The next clutch is still in the egg. Check back soon for the next drop.{% endif %}</p>
-        </div>
-
-        {% if paginate.pages > 1 %}
-          <nav class="lm-listing__pages" aria-label="Pagination">{{ paginate | default_pagination, 'page-numbers', 'page-numbers' }}</nav>
-        {% endif %}
-      </div>
-    </div>
-  {% endpaginate %}
-
-  {% if lm_layout == 'merch' %}
-    <section class="lm-tees lm-wrap" aria-label="Tee styles">
-      <div class="lm-tees__panel">
-        <div class="lm-tees__intro">
-          <span class="lm-eyebrow">Two vessels</span>
-          <h2 class="lm-display lm-display--sm">One design, two ways to wear it</h2>
-        </div>
-        <div class="lm-tee">
-          <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee1_name }}</h3><span class="lm-tee__price">{{ lm_tee1_price }}</span></div>
-          <p class="lm-tee__desc">{{ lm_tee1_text }}</p>
-          <p class="lm-tee__sizes">{{ lm_tee1_sizes }}</p>
-        </div>
-        <div class="lm-tee">
-          <div class="lm-tee__head"><h3 class="lm-tee__name">{{ lm_tee2_name }}</h3><span class="lm-tee__price">{{ lm_tee2_price }}</span></div>
-          <p class="lm-tee__desc">{{ lm_tee2_text }}</p>
-          <p class="lm-tee__sizes">{{ lm_tee2_sizes }}</p>
-        </div>
-      </div>
-    </section>
-
-  {% endif %}
-</div>
-
-{% if lm_layout == 'merch' %}
-<script>
-  /* Lizard Magic: size the drop badge's day to match the month's width (capped) */
-  (function () {
-    var month = document.querySelector('.lm-drop__month'), day = document.querySelector('.lm-drop__day');
-    if (!month || !day) return;
-    function fit() {
-      day.style.fontSize = '';
-      var base = parseFloat(getComputedStyle(month).fontSize);
-      var ratio = month.getBoundingClientRect().width / day.getBoundingClientRect().width;
-      var size = parseFloat(getComputedStyle(day).fontSize) * ratio;
-      if (isFinite(size) && size > 0) day.style.fontSize = Math.min(size, base * 2.2) + 'px';
-    }
-    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
-  })();
-</script>
-{% endif %}
+{% if page.full_url contains 'search=' %}{% assign lm_layout = 'search' %}{% endif %}
+{% assign lm_roman = 'I,II,III,IV,V,VI,VII,VIII,IX,X,XI,XII,XIII,XIV,XV,XVI,XVII,XVIII,XIX,XX,XXI,XXII,XXIII,XXIV,XXV,XXVI,XXVII,XXVIII,XXIX,XXX,XXXI,XXXII,XXXIII,XXXIV,XXXV,XXXVI,XXXVII,XXXVIII,XXXIX,XL' | split: ',' %}
+{% capture lm_star %}<svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>{% endcapture %}
 
 {% if lm_layout == 'geckos' %}
-<script>
-  /* Lizard Magic: gecko filters + sort (state lives in the URL, e.g. ?sex=female&morph=tricolor) */
-  (function () {
-    var grid = document.querySelector('[data-lm-grid]');
-    if (!grid) return;
-    var cards = Array.prototype.slice.call(grid.children);
-    var countEl = document.querySelector('[data-lm-count]');
-    var emptyEl = document.querySelector('[data-lm-empty]');
-    var sortEl = document.querySelector('[data-lm-sort]');
-    var params = new URLSearchParams(location.search);
-    var state = { sex: params.get('sex') || '', morph: params.get('morph') || '', sort: params.get('sort') || 'featured' };
-    var slug = function (s) { return (s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); };
+<div class="lm-list lm-list--geckos" data-lm-list>
+  <section class="lm-hero lm-hero--center">
+    <div class="lm-sigil" aria-hidden="true"></div>
+    <p class="lm-eyebrow">{{ lm_g_eyebrow }}</p>
+    <h1 class="lm-display">{{ lm_g_title }}</h1>
+    <p class="lm-lede">{{ lm_g_lede }}</p>
+  </section>
 
-    function options(key, order) {
-      var seen = {};
-      cards.forEach(function (c) {
-        var label = c.getAttribute('data-lm-' + key);
-        if (!label) return;
-        var id = slug(label);
-        if (!seen[id]) seen[id] = { id: id, label: label, count: 0 };
-        seen[id].count++;
-      });
-      var list = Object.keys(seen).map(function (k) { return seen[k]; });
-      list.sort(function (a, b) {
-        if (order) return order.indexOf(a.id) - order.indexOf(b.id);
-        return a.label.localeCompare(b.label);
-      });
-      return list;
-    }
-
-    function buildChips(key, order) {
-      var box = document.querySelector('[data-lm-filter="' + key + '"]');
-      var list = options(key, order);
-      if (!box || list.length < 2) return;
-      var wrap = box.querySelector('.lm-chips');
-      [{ id: '', label: 'All', count: cards.length }].concat(list).forEach(function (o) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'lm-chip';
-        b.setAttribute('data-value', o.id);
-        b.innerHTML = '<span></span><span class="lm-chip__count"></span>';
-        b.firstChild.textContent = o.label;
-        b.lastChild.textContent = o.count;
-        b.addEventListener('click', function () { state[key] = o.id; render(); });
-        wrap.appendChild(b);
-      });
-      box.hidden = false;
-    }
-
-    function render() {
-      var shown = 0;
-      cards.forEach(function (c) {
-        var ok = (!state.sex || slug(c.getAttribute('data-lm-sex')) === state.sex) &&
-                 (!state.morph || slug(c.getAttribute('data-lm-morph')) === state.morph);
-        c.hidden = !ok;
-        if (ok) shown++;
-      });
-      var sorted = cards.slice().sort(function (a, b) {
-        var pa = parseFloat(a.getAttribute('data-lm-price')) || 0, pb = parseFloat(b.getAttribute('data-lm-price')) || 0;
-        if (state.sort === 'price-asc') return pa - pb;
-        if (state.sort === 'price-desc') return pb - pa;
-        return a.getAttribute('data-lm-index') - b.getAttribute('data-lm-index');
-      });
-      sorted.forEach(function (c) { grid.appendChild(c); });
-      document.querySelectorAll('.lm-chip').forEach(function (b) {
-        var key = b.closest('[data-lm-filter]').getAttribute('data-lm-filter');
-        b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === state[key]));
-      });
-      if (countEl) countEl.textContent = shown === cards.length
-        ? cards.length + (cards.length === 1 ? ' gecko' : ' geckos')
-        : shown + ' of ' + cards.length + ' geckos';
-      if (emptyEl && cards.length) emptyEl.hidden = shown > 0;
-      sortEl.value = state.sort;
-      var q = new URLSearchParams(location.search);
-      ['sex', 'morph'].forEach(function (k) { state[k] ? q.set(k, state[k]) : q.delete(k); });
-      state.sort !== 'featured' ? q.set('sort', state.sort) : q.delete('sort');
-      var qs = q.toString();
-      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
-    }
-
-    buildChips('sex', ['female', 'male', 'unsexed']);
-    buildChips('morph');
-    sortEl.addEventListener('change', function () { state.sort = sortEl.value; render(); });
-    var reset = document.querySelector('[data-lm-reset]');
-    if (reset) reset.addEventListener('click', function () { state.sex = ''; state.morph = ''; render(); });
-    render();
-  })();
-</script>
-{% endif %}
-
-{% else %}
-{% comment %}
-  Use page name from Custo if it's been customized, otherwise use the localized default.
-{% endcomment %}
-{% assign page_title = t['navigation.products'] %}
-{% if page.full_url contains "search=" %}
-  {% assign page_title = t['products.search_results'] %}
-{% elsif page.name != 'Products' %}
-  {% assign page_title = page.name %}
-{% endif %}
-
-<div class="products-header">
-  <h1 class="page-title">{{ page_title }}</h1>
-  <nav class="category-navigation" aria-label="Browse categories">
-    <ul>
-      <li><a href="/products">{{ t['navigation.all'] }}</a></li>
-      {% for category in categories.active %}
-        <li class="page{% if page.full_url contains category.url %} selected{% endif %}">{{ category | link_to }}</li>
-      {% endfor %}
-    </ul>
-  </nav>
-</div>
-{% paginate products from products.current by theme.products_per_page %}
-  {% if products != blank %}
-    <div class="product-list-container">
-      <div class="product-list {% if products.size < 3 %}product-list--center{% endif %}">
-        {% for product in products %}
-          {% assign image_width = product.image.width | times: 1.0 %}
-          {% assign image_height = product.image.height | times: 1.0 %}
-          {% assign aspect_ratio = image_width | divided_by: image_height %}
-          {% assign product_status = '' %}
-          {% case product.status %}
-            {% when 'active' %}
-              {% if product.on_sale %}
-                {% assign product_status = t['products.on_sale'] %}
-              {% endif %}
-            {% when 'sold-out' %}
-              {% assign product_status = t['products.sold_out'] %}
-            {% when 'coming-soon' %}
-              {% assign product_status = t['products.coming_soon'] %}
-          {% endcase %}
-          {% capture image_class %}
-            {% if product.image.height > product.image.width %}
-              image-tall
-            {% elsif product.image.height < product.image.width %}
-              image-wide
-            {% else %}
-              image-square
-            {% endif %}
-          {% endcapture %}
-          {% capture status_class %}{% if product.status == 'active' and product.on_sale %}status-primary{% else %}status-secondary{% endif %}{% endcapture %}
-          <div class="product-list-thumb {{ product.css_class }}">
-            <a class="product-list-link product-list-link--{{ theme.product_grid_info }}" href="{{ product.url }}" title="{{ t['navigation.view'] }} {{ product.name | escape }}">
-              <div class="product-list-image-container product-list-image-container-{{ theme.grid_image_style }}">
-                <img
-                  alt=""
-                  class="blur-up product-list-image lazyload grid-{{ theme.grid_image_style }}"
-                  src="{{ product.image | product_image_url | constrain: 20 }}"
-                  {% unless theme.grid_image_style == 'default' %}data-aspectratio="{{ aspect_ratio }}"{% endunless %}
-                  data-srcset="
-                    {{ product.image | product_image_url | constrain: 240 }} 240w,
-                    {{ product.image | product_image_url | constrain: 320 }} 320w,
-                    {{ product.image | product_image_url | constrain: 400 }} 400w,
-                    {{ product.image | product_image_url | constrain: 540 }} 540w,
-                    {{ product.image | product_image_url | constrain: 600 }} 600w,
-                    {{ product.image | product_image_url | constrain: 800 }} 800w,
-                    {{ product.image | product_image_url | constrain: 960 }} 960w
-                  "
-                  data-sizes="auto"
-                >
-                {% if product_status != blank %}<div class="product-list-thumb-status {{ status_class }}">{{ product_status }}</div>{% endif %}
-              </div>
-              <div class="product-list-thumb-info">
-                <div class="product-list-thumb-name{% if theme.truncate_product_names_two_lines %} product-list-thumb-name--truncate{% endif %}">{{ product.name }}</div>
-                <div class="product-list-thumb-price">
-                  {% assign hide_price = false %}
-                  {% if product.status == 'sold-out' and theme.show_sold_out_product_prices == false %}
-                    {% assign hide_price = true %}
-                  {% endif -%}
-                  {% if product.status == 'coming-soon' and theme.show_coming_soon_product_prices == false %}
-                    {% assign hide_price = true %}
-                  {% endif %}
-                  {% if product.has_password_protection and theme.show_password_protected_product_prices == false %}
-                    {% assign hide_price = true %}
-                  {% endif %}
-
-                  {% unless hide_price %}
-                    {{ product | product_price: theme.money_format, theme.product_variable_pricing_display_format }}
-
-                    {% if product.price_suffix != blank %}
-                      {% assign variable_price_shown = true %}
-                      {% if theme.product_variable_pricing_display_format == "min_only" or theme.product_variable_pricing_display_format == "max_only" %}
-                        {% assign variable_price_shown = false %}
-                      {% endif %}
-
-                      {% if product.variable_pricing and variable_price_shown %}
-                        {% assign formatted_suffix = '(' | append: product.price_suffix | append: ')' %}
-                      {% else %}
-                        {% assign formatted_suffix = product.price_suffix %}
-                      {% endif %}
-                      <span class="price-suffix">{{ formatted_suffix }}</span>
-                    {% endif %}
-                  {% endunless %}
-                </div>
-                {% unless hide_price %}
-                  {% if product.options.size > 1 and theme.show_product_variant_count_in_grid %}
-                    <div class="product-list-thumb-options-description">
-                      {{ product.options.size }} {{ t['products.variants'] }}
-                    </div>
-                  {% endif %}
-                {% endunless %}
-              </div>
-            </a>
+  {% paginate products from products.current by 100 %}
+  <div class="lm-list__body">
+    <aside class="lm-list__side">
+      <div class="lm-filters" id="lm-filters" data-lm-filters aria-label="Filter geckos">
+        <div class="lm-filters__head">
+          <span class="lm-label">Filter &amp; sort</span>
+          <button type="button" class="lm-filters__close" data-lm-filters-close aria-label="Close filters">&times;</button>
+        </div>
+        {% comment %} Groups are filled in by the script below from each tile's data {% endcomment %}
+        <div class="lm-filters__group" data-lm-group="sex" hidden><p class="lm-label lm-muted"><span class="lm-num">I</span> · Sex</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group" data-lm-group="morph" hidden><p class="lm-label lm-muted"><span class="lm-num">II</span> · Morph</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group" data-lm-group="base" hidden><p class="lm-label lm-muted"><span class="lm-num">III</span> · Base</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group lm-filters__group--sort"><p class="lm-label lm-muted">Sort</p>
+          <div class="lm-filters__chips lm-filters__chips--row">
+            <button type="button" class="lm-chip lm-chip--sm" aria-pressed="true" data-lm-sort="featured"><span>Featured</span></button>
+            <button type="button" class="lm-chip lm-chip--sm" aria-pressed="false" data-lm-sort="asc"><span>Price ↑</span></button>
+            <button type="button" class="lm-chip lm-chip--sm" aria-pressed="false" data-lm-sort="desc"><span>Price ↓</span></button>
           </div>
+        </div>
+        <button type="button" class="lm-btn lm-btn--block lm-filters__done" data-lm-filters-close>Show geckos</button>
+      </div>
+      <div class="lm-ship">
+        <p class="lm-ship__head"><span class="lm-ship__price">{{ lm_ship_price }}</span><span class="lm-label lm-label--sm">{{ lm_ship_title }}</span></p>
+        <div class="lm-dash"></div>
+        <ul class="lm-ship__list">
+          {% for point in lm_ship_points %}<li>{{ lm_star }}<span>{{ point }}</span></li>{% endfor %}
+        </ul>
+      </div>
+    </aside>
+
+    <div class="lm-list__main">
+      <div class="lm-list__bar">
+        <p class="lm-label lm-muted" data-lm-count>{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %} · all entities</p>
+        <div class="lm-list__sort" data-lm-sort-slot></div>
+      </div>
+      <div class="lm-quick" data-lm-quick></div>
+
+      {% if products.size > 0 %}
+      <div class="lm-grid" data-lm-grid>
+        {% for product in products %}
+          {% comment %} First description line: "Morph · Sex · RTB" (separators · ✦ |) {% endcomment %}
+          {% assign lm_first = product.description | replace: '<br />', '<br>' | replace: '<br/>', '<br>' | replace: '</p>', '<br>' | split: '<br>' | first | strip_html | strip %}
+          {% assign lm_first = lm_first | replace: '✦', '·' | replace: '|', '·' %}
+          {% assign lm_bits = lm_first | split: '·' %}
+          {% assign lm_sex = '' %}{% assign lm_traits = '' %}
+          {% for bit in lm_bits %}
+            {% assign b = bit | strip %}{% assign bd = b | downcase %}
+            {% if bd == 'male' or bd == 'female' or bd == 'unsexed' %}{% assign lm_sex = b %}{% endif %}
+          {% endfor %}
+          {% assign lm_morphs = '' %}{% assign lm_bases = '' %}
+          {% for category in product.categories %}
+            {% unless category.permalink == 'live-geckos' %}
+              {% assign cn = category.name | downcase %}
+              {% if cn contains ' base' %}{% assign lm_bases = lm_bases | append: category.name | append: '|' %}{% else %}{% assign lm_morphs = lm_morphs | append: category.name | append: '|' %}{% endif %}
+            {% endunless %}
+          {% endfor %}
+          <a class="lm-tile{% if product.status != 'active' %} lm-tile--{{ product.status }}{% endif %}" href="{{ product.url }}" data-lm-tile data-lm-i="{{ forloop.index0 }}" data-lm-price="{{ product.default_price }}" data-lm-sex="{{ lm_sex | escape }}" data-lm-morph="{{ lm_morphs | escape }}" data-lm-base="{{ lm_bases | escape }}">
+            <div class="lm-tile__card">
+              <div class="lm-tile__top"><span>777</span><span class="lm-tile__n" data-lm-n>{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
+              <div class="lm-tile__img">
+                {% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" srcset="{{ product.image | product_image_url | constrain: 400 }} 400w, {{ product.image | product_image_url | constrain: 700 }} 700w, {{ product.image | product_image_url | constrain: 1000 }} 1000w" sizes="(max-width: 600px) 92vw, (max-width: 1100px) 45vw, 300px" alt="{{ product.name | escape }}" loading="{% if forloop.index > 3 %}lazy{% else %}eager{% endif %}">{% endif %}
+                {% if product.status == 'sold-out' %}<span class="lm-tile__flag">Claimed</span>{% elsif product.status == 'coming-soon' %}<span class="lm-tile__flag">Coming soon</span>{% endif %}
+              </div>
+            </div>
+            <div class="lm-tile__meta">
+              <p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{% if product.status == 'sold-out' %}Claimed{% else %}{{ product | product_price }}{% endif %}</span></p>
+              {% if lm_first != blank %}<p class="lm-tile__traits">{{ lm_bits | join: ' · ' | strip }}</p>{% endif %}
+            </div>
+          </a>
         {% endfor %}
       </div>
+      <p class="lm-list__empty" data-lm-empty hidden>No geckos match those filters. <button type="button" data-lm-reset>Show all geckos</button></p>
+      {% else %}
+      <p class="lm-list__empty">The next clutch is still in the egg. Check back soon.</p>
+      {% endif %}
     </div>
-    {% if paginate.pages > 1 %}
-      <nav class="pagination" aria-label="Pagination">
-        {% if paginate.previous.is_link %}
-          <a aria-label="Go to previous page" class="page-link previous-page-link" href="{{ paginate.previous.url }}">
-            <svg aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0.23 0.77 7.51 13.5"><path d="M0.46875 6.96875L6.46875 1C6.75 0.6875 7.21875 0.6875 7.53125 1C7.8125 1.28125 7.8125 1.75 7.53125 2.03125L2.03125 7.5L7.5 13C7.8125 13.2812 7.8125 13.75 7.5 14.0312C7.21875 14.3438 6.75 14.3438 6.46875 14.0312L0.46875 8.03125C0.15625 7.75 0.15625 7.28125 0.46875 6.96875Z"></path></svg>
-            <span>{{ t['navigation.previous'] }}</span>
-          </a>
-        {% else %}
-          <span class="page-link previous-page-link disabled">
-            <svg aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0.23 0.77 7.51 13.5"><path d="M0.46875 6.96875L6.46875 1C6.75 0.6875 7.21875 0.6875 7.53125 1C7.8125 1.28125 7.8125 1.75 7.53125 2.03125L2.03125 7.5L7.5 13C7.8125 13.2812 7.8125 13.75 7.5 14.0312C7.21875 14.3438 6.75 14.3438 6.46875 14.0312L0.46875 8.03125C0.15625 7.75 0.15625 7.28125 0.46875 6.96875Z"></path></svg>
-            <span>{{ t['navigation.previous'] }}</span>
-          </span>
-        {% endif %}
-        {{ paginate | default_pagination, 'page-numbers', 'page-numbers' }}
+  </div>
 
-        {% if paginate.next.is_link %}
-          <a aria-label="Go to next page" class="page-link next-page-link" href="{{ paginate.next.url }}">
-            <span>{{ t['navigation.next'] }}</span>
-            <svg aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0.23 0.77 7.51 13.5"><path d="M7.53125 6.96875C7.8125 7.28125 7.8125 7.75 7.53125 8.03125L1.53125 14.0312C1.21875 14.3438 0.75 14.3438 0.46875 14.0312C0.15625 13.75 0.15625 13.2812 0.46875 13L5.9375 7.53125L0.46875 2.03125C0.15625 1.75 0.15625 1.28125 0.46875 1C0.75 0.6875 1.21875 0.6875 1.5 1L7.53125 6.96875Z"></path></svg>
-          </a>
-        {% else %}
-          <span class="page-link next-page-link disabled">
-            <span>{{ t['navigation.next'] }}</span>
-            <svg aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0.23 0.77 7.51 13.5"><path d="M7.53125 6.96875C7.8125 7.28125 7.8125 7.75 7.53125 8.03125L1.53125 14.0312C1.21875 14.3438 0.75 14.3438 0.46875 14.0312C0.15625 13.75 0.15625 13.2812 0.46875 13L5.9375 7.53125L0.46875 2.03125C0.15625 1.75 0.15625 1.28125 0.46875 1C0.75 0.6875 1.21875 0.6875 1.5 1L7.53125 6.96875Z"></path></svg>
-          </span>
-        {% endif %}
-      </nav>
-    {% endif %}
-  {% else %}
-    <div class="message-banner message-banner--centered message-banner--no-bg">{{ t['products.no_products'] }}</div>
-  {% endif %}
-{% endpaginate %}
+  <div class="lm-mbar">
+    <p><span class="lm-mbar__count" data-lm-mcount>{{ products.size }} geckos</span><span class="lm-label lm-label--sm lm-muted" data-lm-mstate>All entities</span></p>
+    <button type="button" class="lm-mbar__btn" data-lm-filters-open aria-controls="lm-filters">Filter &amp; sort</button>
+  </div>
+  {% endpaginate %}
+</div>
 
+<script>
+  /* Geckos listing: build filter chips with counts from the tiles, filter (one choice per group), sort */
+  (function () {
+    var root = document.querySelector('[data-lm-list]'); if (!root) return;
+    var grid = root.querySelector('[data-lm-grid]'); if (!grid) return;
+    var tiles = [].slice.call(grid.querySelectorAll('[data-lm-tile]'));
+    var roman = '{{ lm_roman | join: "," }}'.split(',');
+    var state = { sex: '', morph: '', base: '', sort: 'featured' };
+    var values = function (tile, group) {
+      var v = tile.getAttribute('data-lm-' + group) || '';
+      return v.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
+    };
+    var chip = function (group, value, label, n) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'lm-chip'; b.setAttribute('aria-pressed', value === state[group] ? 'true' : 'false');
+      b.setAttribute('data-lm-pick', group); b.setAttribute('data-lm-value', value);
+      b.innerHTML = '<span><span></span><b></b></span>';
+      b.querySelector('span span').textContent = label; b.querySelector('b').textContent = n;
+      return b;
+    };
+    ['sex', 'morph', 'base'].forEach(function (group) {
+      var counts = {}, order = [];
+      tiles.forEach(function (t) { values(t, group).forEach(function (v) { if (!counts[v]) { counts[v] = 0; order.push(v); } counts[v]++; }); });
+      if (!order.length) return;
+      if (group === 'sex') order.sort(); else order.sort(function (a, b) { return a.localeCompare(b); });
+      var box = root.querySelector('[data-lm-group="' + group + '"]');
+      box.hidden = false;
+      var list = box.querySelector('.lm-filters__chips');
+      list.appendChild(chip(group, '', 'All', tiles.length));
+      order.forEach(function (v) { list.appendChild(chip(group, v, v, counts[v])); });
+      if (group === 'morph') {
+        var quick = root.querySelector('[data-lm-quick]');
+        quick.appendChild(chip(group, '', 'All', tiles.length));
+        order.forEach(function (v) { quick.appendChild(chip(group, v, v, counts[v])); });
+      }
+    });
+    var sortSlot = root.querySelector('[data-lm-sort-slot]');
+    var sortGroup = root.querySelector('.lm-filters__group--sort');
+    var placeSort = function () {
+      var desk = window.matchMedia('(min-width: 761px)').matches;
+      if (desk && sortGroup.parentNode !== sortSlot) { sortSlot.appendChild(sortGroup); }
+      if (!desk && sortGroup.parentNode === sortSlot) { root.querySelector('.lm-filters__done').before(sortGroup); }
+    };
+    placeSort(); window.addEventListener('resize', placeSort);
+
+    var apply = function () {
+      var shown = tiles.filter(function (t) {
+        return ['sex', 'morph', 'base'].every(function (g) { return !state[g] || values(t, g).indexOf(state[g]) > -1; });
+      });
+      var ordered = shown.slice();
+      if (state.sort !== 'featured') ordered.sort(function (a, b) {
+        var d = parseFloat(a.getAttribute('data-lm-price')) - parseFloat(b.getAttribute('data-lm-price'));
+        return state.sort === 'asc' ? d : -d;
+      });
+      tiles.forEach(function (t) { t.hidden = ordered.indexOf(t) < 0; });
+      ordered.forEach(function (t, i) { grid.appendChild(t); t.querySelector('[data-lm-n]').textContent = roman[i] || (i + 1); });
+      root.querySelectorAll('[data-lm-pick]').forEach(function (b) {
+        b.setAttribute('aria-pressed', state[b.getAttribute('data-lm-pick')] === b.getAttribute('data-lm-value') ? 'true' : 'false');
+      });
+      root.querySelectorAll('[data-lm-sort]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-lm-sort') === state.sort ? 'true' : 'false'); });
+      var picked = [state.sex, state.morph, state.base].filter(Boolean);
+      var label = picked.length ? picked.join(' · ') : 'all entities';
+      var n = shown.length + (shown.length === 1 ? ' gecko' : ' geckos');
+      root.querySelector('[data-lm-count]').textContent = n + ' · ' + label;
+      root.querySelector('[data-lm-mcount]').textContent = n;
+      root.querySelector('[data-lm-mstate]').textContent = picked.length ? picked.join(' · ') : 'All entities';
+      root.querySelector('[data-lm-empty]').hidden = shown.length > 0;
+    };
+    root.addEventListener('click', function (e) {
+      var pick = e.target.closest('[data-lm-pick]'), sort = e.target.closest('[data-lm-sort]');
+      if (pick) { state[pick.getAttribute('data-lm-pick')] = pick.getAttribute('data-lm-value'); apply(); }
+      if (sort) { state.sort = sort.getAttribute('data-lm-sort'); apply(); }
+      if (e.target.closest('[data-lm-reset]')) { state.sex = state.morph = state.base = ''; apply(); }
+      if (e.target.closest('[data-lm-filters-open]')) { root.classList.add('is-filtering'); }
+      if (e.target.closest('[data-lm-filters-close]')) { root.classList.remove('is-filtering'); }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') root.classList.remove('is-filtering'); });
+    apply();
+  })();
+</script>
+
+{% else %}
+{% comment %} Placeholder listing for merch / all wares / search until their phases are built {% endcomment %}
+<div class="lm-list">
+  <section class="lm-hero lm-hero--center">
+    <div class="lm-sigil" aria-hidden="true"></div>
+    <p class="lm-eyebrow">{% if lm_layout == 'merch' %}Available artifacts{% elsif lm_layout == 'search' %}Search{% else %}The wares{% endif %}</p>
+    <h1 class="lm-display">{% if lm_layout == 'merch' %}Choose Your Talisman{% elsif lm_layout == 'search' %}What you seek{% else %}All Wares{% endif %}</h1>
+  </section>
+  {% paginate products from products.current by 100 %}
+  <div class="lm-wrap lm-list__plain">
+    <div class="lm-grid">
+      {% for product in products %}
+        <a class="lm-tile" href="{{ product.url }}">
+          <div class="lm-tile__card">
+            <div class="lm-tile__top"><span>777</span><span class="lm-tile__n">{{ lm_roman[forloop.index0] }}</span><span>777</span></div>
+            <div class="lm-tile__img">{% if product.image %}<img src="{{ product.image | product_image_url | constrain: 700 }}" alt="{{ product.name | escape }}" loading="lazy">{% endif %}</div>
+          </div>
+          <div class="lm-tile__meta"><p class="lm-tile__row"><span class="lm-tile__name">{{ product.name }}</span><span class="lm-tile__price">{{ product | product_price }}</span></p></div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endpaginate %}
+</div>
 {% endif %}
