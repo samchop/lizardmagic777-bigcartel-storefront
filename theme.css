@@ -272,6 +272,7 @@ ul, ol { padding: 0; list-style: none; }
 .lm-tile__meta { display: flex; flex-direction: column; gap: 8px; }
 /* Name + price under every product thumbnail (listings, home rows, related, search) */
 .lm-tile__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 12px; }
+@media (max-width: 640px) { .lm-tile__row { column-gap: 8px; } }
 .lm-tile__name { font: 400 30px/1 var(--f-serif); }
 .lm-tile__price { font: 400 26px/1 var(--f-serif); white-space: nowrap; }
 .lm-tile__traits { font: 400 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
@@ -505,7 +506,6 @@ ul, ol { padding: 0; list-style: none; }
   .lm-gk__care, .lm-gk__all { align-self: stretch; }
   .lm-gk__related { padding: 56px var(--pad) 64px; gap: 28px; }
   .lm-mini-grid { gap: 24px 16px; }
-  .lm-mini .lm-tile__row { flex-direction: column; }
   .lm-mini .lm-tile__name { font-size: 22px; }
   .lm-mini .lm-tile__price { font-size: 20px; }
 }
@@ -805,7 +805,6 @@ ul, ol { padding: 0; list-style: none; }
   .lm-grid--4 { grid-template-columns: 1fr 1fr; gap: 24px 14px; }
   .lm-grid--4 .lm-tile__name { font-size: 22px; }
   .lm-grid--4 .lm-tile__price { font-size: 20px; }
-  .lm-grid--4 .lm-tile__row { flex-direction: column; gap: 6px; }
   .lm-grid--4 .lm-tile__traits { font-size: 7.5px; letter-spacing: 1.6px; }
   .lm-home__rites { padding: 56px var(--pad) 32px; }
   .lm-home__ritestitle { font-size: 52px; }
