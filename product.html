@@ -400,7 +400,10 @@
   {% endcase %}
 {% endfor %}
 {% assign lm_paras = lm_paras | split: '%%LM%%' %}
-{% assign lm_tags = lm_first | replace: '✦', '·' | replace: '|', '·' | split: '·' %}
+{% comment %} Tags: the gecko's categories (traits, then bases) plus Male/Female from the first line. Nothing else from the first line. {% endcomment %}
+{% assign lm_sex = '' %}
+{% assign lm_bits = lm_first | replace: '✦', '·' | replace: '|', '·' | split: '·' %}
+{% for b in lm_bits %}{% assign bd = b | strip | downcase %}{% if bd == 'male' or bd == 'female' %}{% assign lm_sex = b | strip | capitalize %}{% endif %}{% endfor %}
 {% assign lm_pron = 'Their' %}{% assign lm_firstd = lm_first | downcase %}
 {% if lm_firstd contains 'female' %}{% assign lm_pron = 'Her' %}{% elsif lm_firstd contains 'male' %}{% assign lm_pron = 'His' %}{% endif %}
 {% if lm_age == blank and lm_weight != blank %}
@@ -479,11 +482,9 @@
       <div class="lm-gk__title">
         <p class="lm-eyebrow">{{ lm_g_eyebrow }}</p>
         <h1 class="lm-gk__name">{{ product.name }}</h1>
-        {% if lm_first != blank %}
-          <div class="lm-gk__tags">
-            {% for tag in lm_tags %}{% assign t = tag | strip %}{% if t != blank %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ t | url_encode }}"><span>{{ t }}</span></a>{% endif %}{% endfor %}
-          </div>
-        {% endif %}
+        {% capture lm_tag_html %}{% for c in product.categories %}{% unless c.permalink == 'live-geckos' or c.permalink == 'merch' %}{% assign cn = c.name | downcase %}{% unless cn contains ' base' %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ c.name | url_encode }}"><span>{{ c.name }}</span></a>{% endunless %}{% endunless %}{% endfor %}{% for c in product.categories %}{% assign cn = c.name | downcase %}{% if cn contains ' base' %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ c.name | url_encode }}"><span>{{ c.name }}</span></a>{% endif %}{% endfor %}{% if lm_sex != blank %}<a class="lm-gk__tag" href="{{ lm_crumb.url }}#{{ lm_sex }}"><span>{{ lm_sex }}</span></a>{% endif %}{% endcapture %}
+        {% assign lm_tag_html = lm_tag_html | strip %}
+        {% if lm_tag_html != blank %}<div class="lm-gk__tags">{{ lm_tag_html }}</div>{% endif %}
       </div>
 
       {% if lm_age != blank or lm_weight != blank or lm_hatched != blank %}
