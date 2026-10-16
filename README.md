@@ -71,6 +71,10 @@ The `assets/` folder is published to Cloudflare Pages, so the store loads files 
 `claude/big-cartel-home-page-7vwp4t` redeploys. Pages settings: framework preset None, no build
 command, build output directory `assets`. `assets/_headers` allows cross-origin loading.
 
+If new files stop showing up, check **Deployments**: the newest one should match the latest commit. If
+Cloudflare loses its GitHub connection, reconnect it under **Settings > Build > Git repository > Manage**.
+Then push any commit; "Retry deployment" only rebuilds the old commit.
+
 - `art/`: pentacle, barbed wire, flower and flames ornaments
 - `icons/`: gecko hand, Astroicons and moon phases
 - `photos/elixir.jpg`: the Elixir photo on the home page. **Not uploaded yet.** Until it is, that
