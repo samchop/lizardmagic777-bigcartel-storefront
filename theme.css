@@ -197,8 +197,8 @@ ul, ol { padding: 0; list-style: none; }
 .lm-foot__row--base { padding-top: 0; }
 .lm-foot__links { display: flex; flex-wrap: wrap; gap: 12px 32px; }
 .lm-foot__links--end { justify-content: flex-end; }
-.lm-foot__links a { transition: color .2s ease; }
-.lm-foot__links a:hover { color: var(--ink); }
+.lm-foot__links a { color: var(--ink); transition: color .2s ease; }
+.lm-foot__links a:hover { color: var(--acc); }
 .lm-foot__year { display: flex; align-items: center; gap: 18px; }
 .lm-foot__planets { display: flex; gap: 6px; color: var(--acc); font-size: 12px; }
 .lm-foot__place { text-align: right; }
@@ -274,7 +274,7 @@ ul, ol { padding: 0; list-style: none; }
 .lm-tile__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 12px; }
 .lm-tile__name { font: 400 30px/1 var(--f-serif); }
 .lm-tile__price { font: 400 26px/1 var(--f-serif); white-space: nowrap; }
-.lm-tile__traits { font: var(--w-label) 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
+.lm-tile__traits { font: 400 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; color: var(--muted); }
 
 /* Mobile filter bar + sheet */
 .lm-mbar { display: none; }

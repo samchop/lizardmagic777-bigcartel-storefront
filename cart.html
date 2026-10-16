@@ -56,10 +56,10 @@
 
         <aside class="lm-cartpage__sum">
           <div class="lm-cartpage__card">
-            <p class="lm-label lm-muted">The reckoning</p>
+            <p class="lm-label">The reckoning</p>
             {% if lm_any_gecko %}<p class="lm-satchel__live"><svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>Live arrival · ships overnight Mon–Wed, weather permitting.</p>{% endif %}
             {% if theme.cart_text != blank %}<p class="lm-satchel__note">{{ theme.cart_text }}</p>{% endif %}
-            <p class="lm-satchel__sub"><span class="lm-label lm-muted">Subtotal</span><b data-lm-total>{{ cart.total | money: theme.money_format }}</b></p>
+            <p class="lm-satchel__sub"><span class="lm-label">Subtotal</span><b data-lm-total>{{ cart.total | money: theme.money_format }}</b></p>
             <p class="lm-satchel__note">Shipping &amp; taxes calculated at checkout.</p>
             <button type="submit" name="checkout" value="1" class="lm-btn lm-btn--block">Checkout →</button>
             <button type="submit" class="lm-cartpage__update" data-lm-update hidden>Update satchel</button>

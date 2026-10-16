@@ -60,10 +60,10 @@
           <button type="button" class="lm-filters__close" data-lm-filters-close aria-label="Close filters">&times;</button>
         </div>
         {% comment %} Groups are filled in by the script below from each tile's data {% endcomment %}
-        <div class="lm-filters__group" data-lm-group="sex" hidden><p class="lm-label lm-muted"><span class="lm-num">I</span> · Sex</p><div class="lm-filters__chips"></div></div>
-        <div class="lm-filters__group" data-lm-group="morph" hidden><p class="lm-label lm-muted"><span class="lm-num">II</span> · Morph</p><div class="lm-filters__chips"></div></div>
-        <div class="lm-filters__group" data-lm-group="base" hidden><p class="lm-label lm-muted"><span class="lm-num">III</span> · Base</p><div class="lm-filters__chips"></div></div>
-        <div class="lm-filters__group lm-filters__group--sort"><p class="lm-label lm-muted">Sort</p>
+        <div class="lm-filters__group" data-lm-group="sex" hidden><p class="lm-label"><span class="lm-num">I</span> · Sex</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group" data-lm-group="morph" hidden><p class="lm-label"><span class="lm-num">II</span> · Morph</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group" data-lm-group="base" hidden><p class="lm-label"><span class="lm-num">III</span> · Base</p><div class="lm-filters__chips"></div></div>
+        <div class="lm-filters__group lm-filters__group--sort"><p class="lm-label">Sort</p>
           <div class="lm-filters__chips lm-filters__chips--row">
             <button type="button" class="lm-chip lm-chip--sm" aria-pressed="true" data-lm-sort="featured"><span>Featured</span></button>
             <button type="button" class="lm-chip lm-chip--sm" aria-pressed="false" data-lm-sort="asc"><span>Price ↑</span></button>
@@ -83,7 +83,7 @@
 
     <div class="lm-list__main">
       <div class="lm-list__bar">
-        <p class="lm-label lm-muted" data-lm-count>{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %} · all entities</p>
+        <p class="lm-label" data-lm-count>{{ products.size }} {% if products.size == 1 %}gecko{% else %}geckos{% endif %} · all entities</p>
         <div class="lm-list__sort" data-lm-sort-slot></div>
       </div>
       <div class="lm-quick" data-lm-quick></div>
@@ -130,7 +130,7 @@
   </div>
 
   <div class="lm-mbar">
-    <p><span class="lm-mbar__count" data-lm-mcount>{{ products.size }} geckos</span><span class="lm-label lm-label--sm lm-muted" data-lm-mstate>All entities</span></p>
+    <p><span class="lm-mbar__count" data-lm-mcount>{{ products.size }} geckos</span><span class="lm-label lm-label--sm" data-lm-mstate>All entities</span></p>
     <button type="button" class="lm-mbar__btn" data-lm-filters-open aria-controls="lm-filters">Filter &amp; sort</button>
   </div>
   {% endpaginate %}
@@ -237,7 +237,7 @@
   </section>
   {% paginate products from products.current by 100 %}
   <section class="lm-merch">
-    <div class="lm-list__bar"><p class="lm-label lm-muted">{{ products.size }} {% if products.size == 1 %}artifact{% else %}artifacts{% endif %}</p><p class="lm-label lm-muted">{{ lm_m_sizes }}</p></div>
+    <div class="lm-list__bar"><p class="lm-label">{{ products.size }} {% if products.size == 1 %}artifact{% else %}artifacts{% endif %}</p><p class="lm-label">{{ lm_m_sizes }}</p></div>
     {% if products.size > 0 %}
     <div class="lm-grid">
       {% for product in products %}
@@ -337,7 +337,7 @@
         <div class="lm-seekpage__doors"><a class="lm-btn" href="/category/live-geckos">Entities →</a><a class="lm-btn lm-btn--ghost" href="/category/merch">Artifacts →</a></div>
       </div>
     {% else %}
-      <p class="lm-label lm-muted lm-seekpage__count">{{ products.size }} {% if products.size == 1 %}result{% else %}results{% endif %}</p>
+      <p class="lm-label lm-seekpage__count">{{ products.size }} {% if products.size == 1 %}result{% else %}results{% endif %}</p>
       <div class="lm-grid">
         {% for product in products %}
           {% assign lm_is_gecko = false %}

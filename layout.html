@@ -129,7 +129,7 @@
               <button type="button" class="lm-gm__node" style="left:50%;top:10%" data-lm-node="4" aria-label="Rite V, Aether"><svg class="lm-ico"><use href="#lm-i-aether"/></svg><span>V</span></button>
             </div>
             <div class="lm-gm__rite" aria-live="polite">
-              <p class="lm-gm__ritehead"><span class="lm-eyebrow">The Five Rites</span><span class="lm-gm__rule"></span><span class="lm-label lm-muted">Rite <span data-lm-r="roman">III</span> of V · <span data-lm-r="element">Water</span></span></p>
+              <p class="lm-gm__ritehead"><span class="lm-eyebrow">The Five Rites</span><span class="lm-gm__rule"></span><span class="lm-label">Rite <span data-lm-r="roman">III</span> of V · <span data-lm-r="element">Water</span></span></p>
               <div class="lm-gm__ritetitle"><h2 data-lm-r="name">The Mist</h2><p data-lm-r="sub">Mist at dusk, dry by dawn</p></div>
               <p class="lm-gm__ritebody"><span data-lm-r="body">Offer water two ways. Mist the enclosure at dusk so your gecko can lap droplets off the leaves, and keep a shallow dish of fresh water out at all times. Let the enclosure dry out between mistings to prevent mold and skin trouble.</span> <strong data-lm-r="bold"></strong> <span data-lm-r="post"></span></p>
               <dl class="lm-gm__specs" data-lm-r="specs"><div><dt>Baseline</dt><dd>50–60%</dd></div><div><dt>After mist</dt><dd>70–80%</dd></div></dl>
@@ -166,7 +166,7 @@
                 </button>
               {% endfor %}
             </div>
-            <p class="lm-label lm-label--sm lm-muted lm-gm__count" data-lm-omen-count>0 of 6 omens read</p>
+            <p class="lm-label lm-label--sm lm-gm__count" data-lm-omen-count>0 of 6 omens read</p>
           </section>
 
           <section class="lm-gm__tools" id="lm-tools">
@@ -295,13 +295,13 @@
     <dialog class="lm-satchel" id="lm-satchel" aria-label="Cart" data-lm-satchel>
       <div class="lm-satchel__panel">
         <div class="lm-satchel__head">
-          <div><p class="lm-label lm-label--sm lm-muted" data-lm-sat-count>0 items</p><h2 class="lm-satchel__title">Your Satchel</h2></div>
+          <div><p class="lm-label lm-label--sm" data-lm-sat-count>0 items</p><h2 class="lm-satchel__title">Your Satchel</h2></div>
           <button type="button" class="lm-seek__close" aria-label="Close cart" data-lm-sat-close>&times;</button>
         </div>
         <div class="lm-satchel__body" data-lm-sat-body><p class="lm-satchel__loading">Gathering your things…</p></div>
         <div class="lm-satchel__foot" data-lm-sat-foot hidden>
           <p class="lm-satchel__live" data-lm-sat-live hidden><svg class="lm-star" viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0,-9Q1.2,-1.2 9,0Q1.2,1.2 0,9Q-1.2,1.2 -9,0Q-1.2,-1.2 0,-9Z"/></svg>Live arrival · ships overnight Mon–Wed, weather permitting.</p>
-          <p class="lm-satchel__sub"><span class="lm-label lm-muted">Subtotal</span><b data-lm-sat-total></b></p>
+          <p class="lm-satchel__sub"><span class="lm-label">Subtotal</span><b data-lm-sat-total></b></p>
           <p class="lm-satchel__note">Shipping &amp; taxes calculated at checkout.</p>
           <form method="post" action="/cart"><button type="submit" name="checkout" value="1" class="lm-btn lm-btn--block">Checkout →</button></form>
           <a class="lm-satchel__full" href="/cart">View full cart</a>
@@ -419,8 +419,8 @@
             var g = hits.filter(isGecko), m = hits.filter(function (p) { return !isGecko(p); });
             if (!hits.length) { out.innerHTML = '<p class="lm-seek__none">Nothing answers to “' + esc(input.value) + '” yet. <a href="/contact">Ask me</a> and I’ll keep watch.</p>'; return; }
             var html = '';
-            if (g.length) html += '<div class="lm-seek__group"><p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-jupiter"/></svg>Entities <span>' + g.length + '</span></p>' + g.slice(0, 6).map(row).join('') + '</div>';
-            if (m.length) html += '<div class="lm-seek__group"><p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-venus"/></svg>Artifacts <span>' + m.length + '</span></p>' + m.slice(0, 6).map(row).join('') + '</div>';
+            if (g.length) html += '<div class="lm-seek__group"><p class="lm-label"><svg class="lm-ico"><use href="#lm-i-jupiter"/></svg>Entities <span>' + g.length + '</span></p>' + g.slice(0, 6).map(row).join('') + '</div>';
+            if (m.length) html += '<div class="lm-seek__group"><p class="lm-label"><svg class="lm-ico"><use href="#lm-i-venus"/></svg>Artifacts <span>' + m.length + '</span></p>' + m.slice(0, 6).map(row).join('') + '</div>';
             if (q) html += '<a class="lm-seek__all" href="/products?search=' + encodeURIComponent(input.value.trim()) + '">See every result for “' + esc(input.value.trim()) + '” →</a>';
             out.innerHTML = html;
           };

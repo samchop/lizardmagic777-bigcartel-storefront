@@ -77,7 +77,7 @@
     <div class="lm-gk__buy" id="lm-buy">
       <nav class="lm-crumbs" aria-label="Breadcrumb"><a href="{% if lm_crumb %}{{ lm_crumb.url }}{% else %}/products{% endif %}">{% if lm_crumb %}{{ lm_crumb.name }}{% else %}Wares{% endif %}</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span></nav>
       <div class="lm-gk__title">
-        <p class="lm-label lm-muted">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
+        <p class="lm-label">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
         <h1 class="lm-gk__name lm-gk__name--md">{{ product.name }}</h1>
         <div class="lm-gk__tags">{% for tag in lm_tee_tags %}<span class="lm-gk__tag"><span>{{ tag }}</span></span>{% endfor %}</div>
       </div>
@@ -89,9 +89,9 @@
         {% else %}
           <input type="hidden" name="cart[add][id]" value="" data-lm-variant>
           <noscript><select name="cart[add][id]" class="lm-tee__fallback">{% for option in product.options %}<option value="{{ option.id }}"{% if option.sold_out %} disabled{% endif %}>{{ option.name }}</option>{% endfor %}</select></noscript>
-          <div class="lm-tee__step" data-lm-age-step hidden><p class="lm-label lm-muted"><span class="lm-num" data-lm-n></span> · Wearer</p><div class="lm-tee__chips" data-lm-age></div></div>
-          <div class="lm-tee__step lm-tee__step--tight" data-lm-style-step hidden><p class="lm-label lm-muted"><span class="lm-num" data-lm-n></span> · Choose your vessel</p><div class="lm-gk__claims lm-tee__vessels" data-lm-styles></div><dl class="lm-gk__table" data-lm-specs></dl></div>
-          <div class="lm-tee__step" data-lm-size-step hidden><div class="lm-tee__stephead"><p class="lm-label lm-muted"><span class="lm-num" data-lm-n></span> · Select a size</p><span class="lm-tee__fit" data-lm-fit></span></div><div class="lm-tee__chips" data-lm-sizes></div></div>
+          <div class="lm-tee__step" data-lm-age-step hidden><p class="lm-label"><span class="lm-num" data-lm-n></span> · Wearer</p><div class="lm-tee__chips" data-lm-age></div></div>
+          <div class="lm-tee__step lm-tee__step--tight" data-lm-style-step hidden><p class="lm-label"><span class="lm-num" data-lm-n></span> · Choose your vessel</p><div class="lm-gk__claims lm-tee__vessels" data-lm-styles></div><dl class="lm-gk__table" data-lm-specs></dl></div>
+          <div class="lm-tee__step" data-lm-size-step hidden><div class="lm-tee__stephead"><p class="lm-label"><span class="lm-num" data-lm-n></span> · Select a size</p><span class="lm-tee__fit" data-lm-fit></span></div><div class="lm-tee__chips" data-lm-sizes></div></div>
         {% endif %}
         {% if product.status == 'active' %}
           <button type="submit" class="lm-gk__cta" data-lm-cta><span data-lm-cta-label>Add to cart</span><span data-lm-cta-price>{{ product | product_price }}</span></button>
@@ -108,7 +108,7 @@
 
   <section class="lm-tee__chart" data-lm-chart hidden aria-labelledby="lm-chart-title">
     <div class="lm-tee__charthead">
-      <div><p class="lm-label lm-muted"><span class="lm-num" data-lm-chart-n>IV</span> · Doublecheck the digits</p><h2 class="lm-gk__notetitle" id="lm-chart-title" data-lm-chart-title></h2><p class="lm-muted lm-tee__small">Measured flat, garment laid out.</p></div>
+      <div><p class="lm-label"><span class="lm-num" data-lm-chart-n>IV</span> · Doublecheck the digits</p><h2 class="lm-gk__notetitle" id="lm-chart-title" data-lm-chart-title></h2><p class="lm-muted lm-tee__small">Measured flat, garment laid out.</p></div>
       <div class="lm-tee__chips" role="group" aria-label="Units" data-lm-units>
         <button type="button" class="lm-chip lm-chip--size" data-unit="in" aria-pressed="true"><span>Inches</span></button>
         <button type="button" class="lm-chip lm-chip--size" data-unit="cm" aria-pressed="false"><span>CM</span></button>
@@ -121,7 +121,7 @@
       </figure>
       <div class="lm-tee__data">
         <div class="lm-tee__tablewrap"><table class="lm-tee__table" data-lm-table></table></div>
-        <div class="lm-tee__compare"><p class="lm-label lm-muted" data-lm-compare-title></p><div data-lm-compare></div><p class="lm-tee__small lm-muted" data-lm-fit-2></p></div>
+        <div class="lm-tee__compare"><p class="lm-label" data-lm-compare-title></p><div data-lm-compare></div><p class="lm-tee__small lm-muted" data-lm-fit-2></p></div>
       </div>
     </div>
   </section>
@@ -130,7 +130,7 @@
   <section class="lm-gk__note">
     <div class="lm-sigil lm-sigil--blue lm-gk__notesigil" aria-hidden="true"></div>
     <div class="lm-gk__notehead">
-      <p class="lm-label lm-muted">⬡ About the artifact</p>
+      <p class="lm-label">⬡ About the artifact</p>
       <h2 class="lm-gk__notetitle">On {{ product.name }}</h2>
       <svg class="lm-gk__sigil" aria-hidden="true" viewBox="-100 -100 200 200" fill="none" stroke-width=".7"><circle r="87" opacity=".35" stroke-dasharray="7 2 1 2"/><g opacity=".16"><circle cx="29" cy="0" r="29"/><circle cx="14.5" cy="25.11" r="29"/><circle cx="-14.5" cy="25.11" r="29"/><circle cx="-29" cy="0" r="29"/><circle cx="-14.5" cy="-25.11" r="29"/><circle cx="14.5" cy="-25.11" r="29"/><circle r="29"/><circle r="58"/></g><path d="M-10.77,68.16L-64.16,-46.39M-10.77,68.16L10.77,15.84M-10.77,68.16L64.16,-37.61M-64.16,-46.39L10.77,15.84M-64.16,-46.39L64.16,-37.61M10.77,15.84L64.16,-37.61" stroke-width=".9" stroke-linejoin="round"/><path class="lm-flare-s" d="M10.77,-68.16L64.16,46.39M10.77,-68.16L-10.77,-15.84M10.77,-68.16L-64.16,37.61M64.16,46.39L-10.77,-15.84M64.16,46.39L-64.16,37.61M-10.77,-15.84L-64.16,37.61" stroke-width=".9" stroke-linejoin="round"/><circle r="21" stroke-width="1" class="lm-bg-f"/><circle r="25" opacity=".5" stroke-dasharray="1 2.2"/><svg x="-12" y="-12" width="24" height="24" viewBox="0 0 24 24" class="lm-gk__sigilglyph"><use href="#lm-i-sun"/></svg></svg>
     </div>
@@ -539,7 +539,7 @@
   <section class="lm-gk__note">
     <div class="lm-sigil lm-sigil--blue lm-gk__notesigil" aria-hidden="true"></div>
     <div class="lm-gk__notehead">
-      <p class="lm-label lm-muted">○ Catalogue note</p>
+      <p class="lm-label">○ Catalogue note</p>
       <h2 class="lm-gk__notetitle">On {{ product.name }}</h2>
       <svg class="lm-gk__sigil" aria-hidden="true" viewBox="-100 -100 200 200" fill="none" stroke-width=".7"><circle r="87" opacity=".35" stroke-dasharray="7 2 1 2"/><g opacity=".16"><circle cx="29" cy="0" r="29"/><circle cx="14.5" cy="25.11" r="29"/><circle cx="-14.5" cy="25.11" r="29"/><circle cx="-29" cy="0" r="29"/><circle cx="-14.5" cy="-25.11" r="29"/><circle cx="14.5" cy="-25.11" r="29"/><circle r="29"/><circle r="58"/></g><path d="M-10.77,68.16L-64.16,-46.39M-10.77,68.16L10.77,15.84M-10.77,68.16L64.16,-37.61M-64.16,-46.39L10.77,15.84M-64.16,-46.39L64.16,-37.61M10.77,15.84L64.16,-37.61" stroke-width=".9" stroke-linejoin="round"/><path class="lm-flare-s" d="M10.77,-68.16L64.16,46.39M10.77,-68.16L-10.77,-15.84M10.77,-68.16L-64.16,37.61M64.16,46.39L-10.77,-15.84M64.16,46.39L-64.16,37.61M-10.77,-15.84L-64.16,37.61" stroke-width=".9" stroke-linejoin="round"/><path d="M-12.57,68.16a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-65.96,-46.39a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M8.97,15.84a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M62.36,-37.61a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0" stroke="none" fill="currentColor"/><path class="lm-flare-f" d="M8.97,-68.16a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M62.36,46.39a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-12.57,-15.84a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0M-65.96,37.61a1.8,1.8 0 1,0 3.6,0a1.8,1.8 0 1,0 -3.6,0" stroke="none"/><circle r="21" stroke-width="1" class="lm-bg-f"/><circle r="25" opacity=".5" stroke-dasharray="1 2.2"/><svg x="-12" y="-12" width="24" height="24" viewBox="0 0 24 24" class="lm-gk__sigilglyph"><use href="#lm-i-sun" data-lm-sign-use/></svg></svg>
     </div>
@@ -557,18 +557,18 @@
   {% if lm_hatched != blank or lm_sire != blank or lm_dam != blank %}
   <section class="lm-gk__duo{% if lm_sire == blank and lm_dam == blank %} lm-gk__duo--sky{% endif %}" data-lm-duo>
     <div class="lm-gk__sky" data-lm-sky hidden>
-      <p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-sun" data-lm-sign-use/></svg> {{ lm_pron }} sky at hatching</p>
+      <p class="lm-label"><svg class="lm-ico"><use href="#lm-i-sun" data-lm-sign-use/></svg> {{ lm_pron }} sky at hatching</p>
       <svg class="lm-gk__skymap" viewBox="4 24 92 52" data-lm-skymap aria-hidden="true"></svg>
       <p class="lm-gk__skynote" data-lm-skynote></p>
     </div>
     {% if lm_sire != blank or lm_dam != blank %}
     <div class="lm-gk__lineage">
-      <p class="lm-label lm-muted"><svg class="lm-ico"><use href="#lm-i-sun"/></svg> <svg class="lm-ico"><use href="#lm-i-moon"/></svg> Lineage</p>
+      <p class="lm-label"><svg class="lm-ico"><use href="#lm-i-sun"/></svg> <svg class="lm-ico"><use href="#lm-i-moon"/></svg> Lineage</p>
       <div class="lm-gk__parents{% unless lm_parent_photo %} lm-gk__parents--text{% endunless %}">
         {% if lm_parent_photo %}<div class="lm-gk__parentphoto"><img src="{{ product.images.last | product_image_url | constrain: 800 }}" alt="{{ lm_sire_name | escape }} and {{ lm_dam_name | escape }}, the parents" loading="lazy"></div>{% endif %}
         <div class="lm-gk__parentlist">
-          {% if lm_sire != blank %}<div><p class="lm-label lm-muted">Sire <svg class="lm-ico"><use href="#lm-i-mars"/></svg></p><p class="lm-gk__parent">{{ lm_sire_name }}</p>{% if lm_sire_morph != blank %}<p class="lm-muted">{{ lm_sire_morph }}</p>{% endif %}</div>{% endif %}
-          {% if lm_dam != blank %}<div><p class="lm-label lm-muted">Dam <svg class="lm-ico"><use href="#lm-i-venus"/></svg></p><p class="lm-gk__parent">{{ lm_dam_name }}</p>{% if lm_dam_morph != blank %}<p class="lm-muted">{{ lm_dam_morph }}</p>{% endif %}</div>{% endif %}
+          {% if lm_sire != blank %}<div><p class="lm-label">Sire <svg class="lm-ico"><use href="#lm-i-mars"/></svg></p><p class="lm-gk__parent">{{ lm_sire_name }}</p>{% if lm_sire_morph != blank %}<p class="lm-muted">{{ lm_sire_morph }}</p>{% endif %}</div>{% endif %}
+          {% if lm_dam != blank %}<div><p class="lm-label">Dam <svg class="lm-ico"><use href="#lm-i-venus"/></svg></p><p class="lm-gk__parent">{{ lm_dam_name }}</p>{% if lm_dam_morph != blank %}<p class="lm-muted">{{ lm_dam_morph }}</p>{% endif %}</div>{% endif %}
         </div>
       </div>
     </div>
@@ -577,7 +577,7 @@
   {% endif %}
 
   <section class="lm-gk__transit">
-    <p class="lm-label lm-muted"><svg class="lm-ico-inline" aria-hidden="true" viewBox="-10 -10 20 20" fill="none" stroke-width="1.4" stroke-linecap="round"><path d="M-3.6,-9.2A3.6,3.6 0 0 0 3.6,-9.2"/><circle cx="0" cy="-2.4" r="3.6"/><path d="M0,1.2L0,9.4M-3,5.6L3,5.6"/></svg>Initiating transit · From my hands to yours</p>
+    <p class="lm-label"><svg class="lm-ico-inline" aria-hidden="true" viewBox="-10 -10 20 20" fill="none" stroke-width="1.4" stroke-linecap="round"><path d="M-3.6,-9.2A3.6,3.6 0 0 0 3.6,-9.2"/><circle cx="0" cy="-2.4" r="3.6"/><path d="M0,1.2L0,9.4M-3,5.6L3,5.6"/></svg>Initiating transit · From my hands to yours</p>
     <ol class="lm-gk__steps">
       <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">I</span>{{ lm_solid1 }}</div><h3>Claim</h3><p>Pay in full or place a deposit to claim your gecko. I’ll email within 48 hrs to plan shipping.</p></li>
       <li><div class="lm-gk__steptop"><span class="lm-gk__stepn">II</span>{{ lm_solid2 }}</div><h3>Prepare</h3><p>Set up the enclosure a week ahead and hold temps at 72–78°F.</p></li>
