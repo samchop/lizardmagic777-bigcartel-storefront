@@ -12,6 +12,9 @@
 {% assign lm_merch_lede = 'Limited edition tees & talismans to carry the good vibes with you. This ain’t your average brand tee!!' %}
 {% assign lm_elixir_text = 'All our geckos are given a recipe of rotating brands and flavors. Recently we’ve been adding Gargeer to the mix!' %}
 {% assign lm_elixir_caption = 'Gargeer · Gentle Geck Tropical Diet' %}
+{% assign lm_ribbon_ask = 'Make or sell crested gecko food?' %}
+{% assign lm_ribbon_text = 'Your blend could be the next Elixir featured here.' %}
+{% assign lm_ribbon_link = 'Get in touch' %}
 {% assign lm_elixir_link = 'https://gargeer.com/products/gargeer-2oz-complete-crested-gecko-food-diet-premium-mix-ready-to-use-freshly-made-powder-unique-formula-developed-made-in-the-usa-enjoy-tropical-insects-protein?variant=43611931246835' %}
 {% assign lm_cdn = 'https://lizardmagic-assets.pages.dev' %}
 
@@ -107,7 +110,7 @@
     <h2 class="lm-display lm-home__ritestitle">The Five Rites</h2>
     <p class="lm-italic lm-muted lm-home__riteslede">Five elements rule the keeping of a crested gecko. <strong>Tap each one</strong> to learn its secret.</p>
     <div class="lm-rites">
-      {% assign lm_rites = 'I~Air~air~The Vessel~Give it room to rise~Adult enclosure~18×18×24 in~Build tall, not wide, with plenty of cover up high.|II~Fire~fire~The Hearth~Hold the warmth~Day temperature~72–78°F~Heat lamps are NOT needed. Never above 82°F.|III~Water~water~The Mist~Mist at dusk~Humidity~50–60%~Mist at dusk and keep a water dish out at all times.|IV~Earth~earth~The Feast~Feed the body well~Complete diet~2–3× a week~Remove old food every 24–48 hours.|V~Aether~aether~The Bond~Earn the trust~Settle-in~2 weeks~Let them settle before handling. Never grab the tail.' | split: '|' %}
+      {% assign lm_rites = 'I~Air~air~The Vessel~Give it room to rise~Adult enclosure~18×18×24 in~Build tall, not wide, with plenty of cover up high.|II~Fire~fire~The Hearth~Hold the warmth~Day temperature~72–78°F~Heat lamps are NOT needed. Never above 82°F.|III~Water~water~The Mist~Mist at dusk~Humidity~50–60%~Mist at dusk and keep a water dish out at all times.|IV~Earth~earth~The Feast~Feed the body well~Complete diet~2–3× a week~Remove old food every <span style="white-space: nowrap">24–48</span> hours.|V~Aether~aether~The Bond~Earn the trust~Settle-in~2 weeks~Let them settle before handling. Never grab the tail.' | split: '|' %}
       {% for rite in lm_rites %}{% assign r = rite | split: '~' %}
         <button type="button" class="lm-rite lm-rite--{{ forloop.index }}" aria-pressed="false" data-lm-rite>
           <span class="lm-rite__inner">
@@ -156,11 +159,17 @@
         <li><p><svg class="lm-ico"><use href="#lm-i-water"/></svg><span></span></p><b>Dissolve</b><span>Stir the powder into the water until smooth.</span></li>
         <li><p><svg class="lm-ico"><use href="#lm-i-earth"/></svg><span></span></p><b>Bind</b><span>Let it rest a few minutes to thicken.</span></li>
         <li><p><svg class="lm-ico"><use href="#lm-i-venus"/></svg><span></span></p><b>Offer</b><span>Place it in a food cup on a ledge, or down low.</span></li>
-        <li><p><svg class="lm-ico"><use href="#lm-i-saturn"/></svg><span></span></p><b>Banish</b><span>Remove old food every 24–48 hours.</span></li>
+        <li><p><svg class="lm-ico"><use href="#lm-i-saturn"/></svg><span></span></p><b>Banish</b><span>Remove old food every <span style="white-space: nowrap">24–48</span> hours.</span></li>
       </ol>
       <a class="lm-btn lm-home__jar" href="{{ lm_elixir_link }}" target="_blank" rel="noopener">Procure a jar</a>
     </div>
   </section>
+
+  <aside class="lm-ribbon" aria-label="Feature your gecko food">
+    <div class="lm-ribbon__wrap"><div class="lm-ribbon__band">
+      <p><em>{{ lm_ribbon_ask }}</em> <span>{{ lm_ribbon_text }}</span> <a href="/contact">{{ lm_ribbon_link }} →</a></p>
+    </div></div>
+  </aside>
 
   <section class="lm-home__reviews">
     <p class="lm-home__kicker">{{ lm_star }}From other keepers{{ lm_star }}</p>
