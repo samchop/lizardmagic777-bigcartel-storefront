@@ -77,8 +77,10 @@ Then push any commit; "Retry deployment" only rebuilds the old commit.
 
 - `art/`: pentacle, barbed wire, flower and flames ornaments
 - `icons/`: gecko hand, Astroicons and moon phases
-- `photos/elixir.jpg`: the Elixir photo on the home page. **Not uploaded yet.** Until it is, that
-  section shows without a photo.
+- `photos/elixir.webp` + `photos/elixir-rings.png`: the Elixir pouch on the home page (transparent) and the
+  double outline traced around its shape, which CSS fills with the accent blue. To swap in a new product
+  photo, run `tools/elixir-rings.py` on a transparent PNG (instructions at the top of the script); it keeps
+  the same file names, so nothing else needs to change.
 
 ## Astro icons
 

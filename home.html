@@ -1,7 +1,7 @@
 {% comment %}
   Home page.
   Hero photo: the "Welcome image" in Customize (falls back to the first gecko's photo).
-  Elixir photo: assets/photos/elixir.jpg on Cloudflare (lizardmagic-assets.pages.dev/photos/elixir.jpg).
+  Elixir photo: assets/photos/elixir.webp (transparent) with its traced outline assets/photos/elixir-rings.png, on Cloudflare.
   Copy for each section is in the settings below.
 {% endcomment %}
 {% assign lm_hero_eyebrow = 'Welcome' %}
@@ -140,7 +140,7 @@
 
   <section class="lm-home__elixir">
     <figure class="lm-home__arch">
-      <div class="lm-home__archframe"><div class="lm-home__archin"><div class="lm-home__archphoto"><img src="{{ lm_cdn }}/photos/elixir.jpg" alt="" loading="lazy" onerror="this.remove()"></div></div></div>
+      <div class="lm-home__pouch"><img src="{{ lm_cdn }}/photos/elixir.webp" width="430" height="630" alt="{{ lm_elixir_caption | escape }}" loading="lazy" onerror="this.parentNode.remove()"><span class="lm-home__pouchrings" aria-hidden="true"></span></div>
       <figcaption>{{ lm_elixir_caption }}</figcaption>
     </figure>
     <div class="lm-home__elixirtext">

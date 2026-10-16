@@ -407,7 +407,11 @@ ul, ol { padding: 0; list-style: none; }
 .lm-gk__duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .lm-gk__duo:not(.has-sky) .lm-gk__lineage { grid-column: 1 / -1; }
 .lm-gk__duo--sky:not(.has-sky) { display: none; }
-.lm-gk__duo--sky.has-sky .lm-gk__sky { grid-column: 1 / -1; max-width: 760px; }
+.lm-gk__duo--sky.has-sky .lm-gk__sky { grid-column: 1 / -1; width: 100%; max-width: 760px; margin: 0 auto; border-right: 0; align-items: center; text-align: center; }
+/* Only lineage (no full hatch date): centre it */
+.lm-gk__duo:not(.has-sky) .lm-gk__lineage { width: 100%; max-width: 980px; margin: 0 auto; align-items: center; }
+.lm-gk__duo:not(.has-sky) .lm-gk__parents--text .lm-gk__parentlist { justify-content: center; text-align: center; }
+.lm-gk__duo:not(.has-sky) .lm-gk__parents--text .lm-gk__parentlist .lm-label { justify-content: center; }
 .lm-gk__sky { padding: 56px var(--pad); display: flex; flex-direction: column; gap: 20px; border-right: 1px solid var(--line); }
 .lm-gk__sky[hidden] { display: none; }
 .lm-gk__sky .lm-label, .lm-gk__lineage > .lm-label { display: flex; align-items: center; gap: 6px; }
@@ -505,8 +509,13 @@ ul, ol { padding: 0; list-style: none; }
   .lm-mini .lm-tile__name { font-size: 22px; }
   .lm-mini .lm-tile__price { font-size: 20px; }
 }
-.lm-gk__duo:not(.has-sky) .lm-gk__parents { grid-template-columns: minmax(0, 400px) minmax(0, 1fr); gap: 56px; }
-@media (max-width: 760px) { .lm-gk__duo:not(.has-sky) .lm-gk__parents { grid-template-columns: 1fr; gap: 28px; } }
+.lm-gk__duo:not(.has-sky) .lm-gk__parents:not(.lm-gk__parents--text) { grid-template-columns: minmax(0, 400px) auto; justify-content: center; gap: 56px; }
+@media (max-width: 760px) {
+  .lm-gk__duo:not(.has-sky) .lm-gk__parents { width: 100%; }
+  .lm-gk__duo:not(.has-sky) .lm-gk__parents:not(.lm-gk__parents--text) { grid-template-columns: 1fr; gap: 28px; }
+  .lm-gk__duo:not(.has-sky) .lm-gk__parentlist { align-items: center; text-align: center; }
+  .lm-gk__duo:not(.has-sky) .lm-gk__parentlist .lm-label { justify-content: center; }
+}
 @media (max-width: 760px) { .lm-gk__facts dd { font-size: 20px; } .lm-gk__facts div { padding-left: 12px; } }
 
 /* ==========================================================================
@@ -701,10 +710,10 @@ ul, ol { padding: 0; list-style: none; }
 /* Elixir */
 .lm-home__elixir { position: relative; padding: 48px var(--pad) 96px; display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 80px; align-items: center; }
 .lm-home__arch { display: flex; flex-direction: column; align-items: center; gap: 22px; }
-.lm-home__archframe { width: 100%; border: 1px solid var(--acc); border-radius: 999px 999px 0 0; padding: 10px; }
-.lm-home__archin { border: 1px solid color-mix(in srgb, var(--acc) 40%, transparent); border-radius: 999px 999px 0 0; padding: 8px; }
-.lm-home__archphoto { position: relative; aspect-ratio: 4 / 5; border-radius: 999px 999px 0 0; overflow: hidden; background: var(--plate); }
-.lm-home__archphoto img { width: 100%; height: 100%; object-fit: cover; }
+/* The Elixir pouch: transparent photo + the arch's double line traced around its shape (elixir-rings.png used as a mask) */
+.lm-home__pouch { position: relative; width: 100%; aspect-ratio: 860 / 1261; }
+.lm-home__pouch img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lm-home__pouchrings { position: absolute; inset: 0; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/photos/elixir-rings.png) center / 100% 100% no-repeat; mask: url(https://lizardmagic-assets.pages.dev/photos/elixir-rings.png) center / 100% 100% no-repeat; pointer-events: none; }
 .lm-home__arch figcaption { font: italic 400 19px/1.3 var(--f-serif); color: var(--muted); text-align: center; }
 .lm-home__elixirtext { display: flex; flex-direction: column; gap: 30px; }
 .lm-home__elixirtitle { font-size: 72px; margin-top: -16px; }
