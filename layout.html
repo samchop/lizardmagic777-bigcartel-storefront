@@ -18,6 +18,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;600&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
     <link href="{{ theme | theme_css_url }}" media="screen" rel="stylesheet" type="text/css">
+    <script>
+      /* Price formatter: Big Cartel's money filter prints a bare number ("400.00"); pages show "$400". */
+      window.lmMoney = function (n) {
+        n = +String(n).replace(/[^\d.]/g, '') || 0;
+        try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: '{{ store.currency.code | default: 'USD' }}', minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }).format(n); }
+        catch (e) { return '$' + (n % 1 ? n.toFixed(2) : n); }
+      };
+    </script>
     {{ head_content }}
   </head>
   <body id="{{ page.permalink }}" class="lm-page lm-page--{{ page.permalink }}" data-bc-page-type="{% if page.category == 'custom' %}custom{% else %}{{ page.permalink }}{% endif %}">
@@ -311,12 +319,7 @@
       window.bigcartel.account.moneyFormat = "{{ theme.money_format }}";
       /* Big Cartel's money filter prints a bare number ("400.00"); show "$400" instead. */
       (function () {
-        var code = window.bigcartel.account.currency || 'USD';
-        var fmt = function (n) {
-          try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: code, minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }).format(n); }
-          catch (e) { return '$' + (n % 1 ? n.toFixed(2) : n); }
-        };
-        window.lmMoney = fmt;
+        var fmt = window.lmMoney;
         document.querySelectorAll('[data-currency-amount]').forEach(function (s) { s.textContent = fmt(+s.getAttribute('data-currency-amount')); });
         document.querySelectorAll('[data-price]').forEach(function (b) { var v = b.getAttribute('data-price'); if (/^[\d.,]+$/.test(v)) b.setAttribute('data-price', fmt(+v.replace(/,/g, ''))); });
       })();

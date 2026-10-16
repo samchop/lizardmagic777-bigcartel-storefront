@@ -639,7 +639,7 @@
     function render() {
       claims.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lm-claim') === mode)); });
       var picked = root.querySelector('[data-lm-claim="' + mode + '"]');
-      if (picked) price.textContent = picked.getAttribute('data-price');
+      if (picked) { var pv = picked.getAttribute('data-price'); price.textContent = /^[\d.,]+$/.test(pv) && window.lmMoney ? lmMoney(pv) : pv; }
       label.textContent = mode === 'hold' ? 'Hold ' + name : added ? 'Claimed ✦ in your cart' : 'Claim ' + name;
     }
     claims.forEach(function (b) { b.addEventListener('click', function () { mode = b.getAttribute('data-lm-claim'); render(); }); });
