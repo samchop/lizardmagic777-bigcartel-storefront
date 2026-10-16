@@ -717,31 +717,31 @@ ul, ol { padding: 0; list-style: none; }
 .lm-home__arch figcaption { font: italic 400 19px/1.3 var(--f-serif); color: var(--muted); text-align: center; }
 .lm-home__elixirtext { display: flex; flex-direction: column; gap: 30px; }
 
-/* Ribbon under the Elixir: notched red band with folded tails */
+/* Ribbon under the Elixir: notched blue band with folded tails and a button to Contact */
 .lm-ribbon { display: flex; justify-content: center; padding: 0 calc(var(--pad) + 52px) 96px; }
-.lm-ribbon__wrap { position: relative; max-width: 900px; }
-.lm-ribbon__band { position: relative; z-index: 1; padding: 18px 44px 17px; background: var(--ember); color: var(--bg); text-align: center; }
-.lm-ribbon__wrap::before, .lm-ribbon__wrap::after { content: ''; position: absolute; top: 12px; bottom: -12px; width: 64px; background: color-mix(in srgb, var(--ember) 72%, #000); }
+.lm-ribbon__wrap { position: relative; max-width: 940px; }
+.lm-ribbon__band { position: relative; z-index: 1; display: flex; align-items: center; gap: 28px; padding: 16px 16px 16px 36px; background: var(--acc); color: var(--onacc); }
+.lm-ribbon__wrap::before, .lm-ribbon__wrap::after { content: ''; position: absolute; top: 12px; bottom: -12px; width: 64px; background: color-mix(in srgb, var(--acc) 62%, #000); }
 .lm-ribbon__wrap::before { left: -52px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 18px 50%); }
 .lm-ribbon__wrap::after { right: -52px; clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 50%, 100% 100%, 0 100%); }
-.lm-ribbon__band p { position: relative; font: 400 15px/1.45 var(--f-body); text-wrap: balance; }
 /* the folds where each tail tucks behind the band */
-.lm-ribbon__band p::before, .lm-ribbon__band p::after { content: ''; position: absolute; bottom: -29px; width: 12px; height: 12px; background: color-mix(in srgb, var(--ember) 45%, #000); }
-.lm-ribbon__band p::before { left: -44px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
-.lm-ribbon__band p::after { right: -44px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.lm-ribbon__band::before, .lm-ribbon__band::after { content: ''; position: absolute; top: 100%; width: 12px; height: 12px; background: color-mix(in srgb, var(--acc) 38%, #000); }
+.lm-ribbon__band::before { left: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.lm-ribbon__band::after { right: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.lm-ribbon__band p { flex: 1; font: 400 15px/1.45 var(--f-body); text-wrap: balance; }
 .lm-ribbon em { font: italic 400 21px/1.2 var(--f-serif); }
-.lm-ribbon a { white-space: nowrap; font: var(--w-label) 9.5px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; transition: color .2s ease; }
-.lm-ribbon a:hover { color: var(--ink); }
+.lm-ribbon__btn { flex: none; padding: 15px 22px; background: var(--bg); color: var(--ink); font-size: 9.5px; letter-spacing: 2.6px; white-space: nowrap; }
+.lm-ribbon__btn:hover { box-shadow: 6px 6px 0 -1px var(--acc), 6px 6px 0 0 var(--ink); }
 @media (max-width: 760px) {
   .lm-ribbon { padding: 0 calc(var(--pad) + 30px) 64px; }
-  .lm-ribbon__band { padding: 16px 20px 15px; }
+  .lm-ribbon__band { flex-direction: column; gap: 14px; padding: 18px 18px 16px; text-align: center; }
   .lm-ribbon__wrap::before, .lm-ribbon__wrap::after { width: 40px; top: 10px; bottom: -10px; }
   .lm-ribbon__wrap::before { left: -30px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 12px 50%); }
   .lm-ribbon__wrap::after { right: -30px; clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%); }
-  .lm-ribbon__band p::before, .lm-ribbon__band p::after { bottom: -25px; width: 10px; height: 10px; }
-  .lm-ribbon__band p::before { left: -20px; } .lm-ribbon__band p::after { right: -20px; }
+  .lm-ribbon__band::before, .lm-ribbon__band::after { width: 10px; height: 10px; }
   .lm-ribbon__band p { font-size: 14px; }
   .lm-ribbon em { display: block; font-size: 20px; margin-bottom: 4px; }
+  .lm-ribbon__btn { align-self: stretch; }
 }
 .lm-home__elixirtitle { font-size: 72px; margin-top: -16px; }
 .lm-home__body { font-size: 16px; line-height: 1.65; color: var(--body); max-width: 560px; text-wrap: pretty; margin-top: -16px; }
