@@ -7,7 +7,7 @@
 {% assign lm_hero_eyebrow = 'Welcome' %}
 {% assign lm_hero_title = 'Lizardry, Wizardry,<br>& Much More' %}
 {% assign lm_hero_lede = 'Small Texas shop raising cresties with care, and designing limited-run merch for the people who love them.' %}
-{% assign lm_vows = 'Live arrival, guaranteed~Overnight shipping, insulated + insured. Shipped Mon–Wed when temps & schedules allow.|Lifetime support~Lineage & lifetime support come with each gecko. Get questions answered anytime.|Local pickup~Skip the shipping and meet your gecko in the Houston or Beaumont, TX areas.' | split: '|' %}
+{% assign lm_vows = 'Local pickup HTX|Overnight shipping nationwide|Live arrival guaranteed' | split: '|' %}
 {% assign lm_geckos_lede = 'Whether you’re looking to add to a rad breeding project, or searching for a beautiful new pet, the perfect gecko has been conjured up just for you.' %}
 {% assign lm_merch_lede = 'Limited edition tees & talismans to carry the good vibes with you. This ain’t your average brand tee!!' %}
 {% assign lm_elixir_text = 'All our geckos are given a recipe of rotating brands and flavors. Recently we’ve been adding Gargeer to the mix!' %}
@@ -53,9 +53,7 @@
   </section>
 
   <div class="lm-home__vows">
-    {% for vow in lm_vows %}{% assign v = vow | split: '~' %}
-      <div class="lm-home__vow">{{ lm_star }}<p><b>{{ v[0] }}</b><span>{{ v[1] }}</span></p></div>
-    {% endfor %}
+    {% for vow in lm_vows %}{% unless forloop.first %}{{ lm_star }}{% endunless %}<span>{{ vow }}</span>{% endfor %}
   </div>
 
   {% if lm_geckos and lm_geckos.products.size > 0 %}

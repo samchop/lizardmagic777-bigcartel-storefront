@@ -668,13 +668,10 @@ ul, ol { padding: 0; list-style: none; }
 .lm-home__flames { position: absolute; left: 50%; top: 50%; width: 820px; height: 820px; margin: -410px 0 0 -410px; z-index: -1; pointer-events: none; background: var(--acc); -webkit-mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; mask: url(https://lizardmagic-assets.pages.dev/art/flames.svg) center / contain no-repeat; animation: lm-spin 240s linear infinite; }
 .lm-home__photo { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--plate); box-shadow: inset 0 0 0 .5px var(--acc); }
 .lm-home__photo img { width: 100%; height: 100%; object-fit: cover; }
-.lm-home__vows { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 var(--pad); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 75%, transparent); }
-.lm-home__vow { display: flex; gap: 14px; padding: 22px 24px; border-left: 1px solid var(--line); }
-.lm-home__vow:first-child { padding-left: 0; border-left: 0; }
-.lm-home__vow .lm-star { margin-top: 5px; stroke-width: 1.3; }
-.lm-home__vow p { display: flex; flex-direction: column; gap: 6px; }
-.lm-home__vow b { font: var(--w-label) 9px var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; }
-.lm-home__vow span { font-size: 14px; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+.lm-home__vows { position: relative; display: flex; justify-content: center; align-items: center; gap: 36px; margin: 0 var(--pad); padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 75%, transparent); font: var(--w-label) 9.5px var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; color: var(--ink); text-align: center; }
+.lm-home__vows .lm-star { width: 9px; height: 9px; stroke-width: 1.3; }
+.lm-home__vows span { white-space: nowrap; }
+@media (min-width: 761px) and (max-width: 1100px) { .lm-home__vows { gap: 22px; font-size: 8.5px; letter-spacing: 2px; } }
 .lm-home__row { padding: 72px var(--pad); display: flex; flex-direction: column; gap: 36px; }
 .lm-home__row + .lm-home__row { border-top: 1px solid var(--line); }
 .lm-home__rowhead { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
@@ -818,9 +815,8 @@ ul, ol { padding: 0; list-style: none; }
   .lm-home__flames { width: 480px; height: 480px; margin: -240px 0 0 -240px; }
   .lm-home__title { font-size: 48px; line-height: 1; }
   .lm-home__ctas, .lm-home__ctas .lm-btn { width: 100%; }
-  .lm-home__vows { grid-template-columns: 1fr; }
-  .lm-home__vow, .lm-home__vow:first-child { padding: 18px 0; border-left: 0; }
-  .lm-home__vow + .lm-home__vow { border-top: 1px solid var(--line); }
+  .lm-home__vows { flex-direction: column; gap: 12px; padding: 20px 0; font-size: 8.5px; letter-spacing: 2.2px; }
+  .lm-home__vows .lm-star { width: 8px; height: 8px; }
   .lm-home__row { padding: 48px var(--pad); gap: 24px; }
   .lm-home__rowhead { flex-direction: column; align-items: stretch; }
   .lm-home__rowcta { flex-direction: row; justify-content: space-between; order: 2; }
