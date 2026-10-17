@@ -1140,7 +1140,14 @@ ul, ol { padding: 0; list-style: none; }
   .lm-gm__day:nth-child(n+5) { border-top: 1px solid var(--line); }
   .lm-gm__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lm-gm__tools { grid-template-columns: 1fr; gap: 40px; }
-  .lm-gm__toolhead { position: static; }
+  .lm-gm__toolhead { position: static; display: contents; } /* its children join the section grid, so the meter below can stay pinned through the whole checklist */
+  .lm-gm__tools { gap: 22px; }
+  .lm-gm__list { margin-top: 18px; }
+  .lm-gm__progress { position: sticky; top: var(--lm-pin, 0px); z-index: 15; margin: 0 calc(var(--pad) * -1); padding: 12px var(--pad); gap: 16px; border-bottom: 1px solid transparent; transition: background .2s, border-color .2s; }
+  .lm-gm__progress.is-pinned { background: var(--bg); border-bottom-color: var(--line); }
+  .lm-gm__dial { width: 64px; height: 64px; }
+  .lm-gm__dial > span { width: 56px; height: 56px; font-size: 22px; }
+  .lm-gm__progress p { font-size: 22px; max-width: none; }
 }
 @media (max-width: 760px) {
   .lm-gm__title { font-size: 56px; }
@@ -1169,6 +1176,7 @@ ul, ol { padding: 0; list-style: none; }
   .lm-omen { height: 340px; }
   .lm-omen__arch { width: 120px; height: 150px; }
   .lm-gm__tools { padding: 56px var(--pad) 72px; }
+  .lm-gm__progress { --lm-pin: 72px; padding-top: 21px; margin-top: -9px; } /* flush under the sticky phone header; its wire hangs over the top 9px */
   .lm-tool__text b { font-size: 22px; }
   .lm-gm__end { padding: 80px var(--pad) 96px; }
   .lm-gm__endtitle { font-size: 60px; }

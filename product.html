@@ -76,7 +76,7 @@
     <div class="lm-gk__buy" id="lm-buy">
       <nav class="lm-crumbs" aria-label="Breadcrumb"><a href="{% if lm_crumb %}{{ lm_crumb.url }}{% else %}/products{% endif %}">{% if lm_crumb %}{{ lm_crumb.name }}{% else %}Wares{% endif %}</a><span aria-hidden="true">/</span><span aria-current="page">{{ product.name }}</span></nav>
       <div class="lm-gk__title">
-        <p class="lm-label">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
+        <p class="lm-eyebrow">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
         <h1 class="lm-gk__name lm-gk__name--md" data-lm-fitname>{{ product.name }}</h1>
       </div>
 

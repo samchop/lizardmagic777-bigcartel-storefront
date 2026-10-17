@@ -425,6 +425,10 @@
             g.querySelectorAll('[data-lm-go]').forEach(function (b) { b.addEventListener('click', function () { show(sel + +b.getAttribute('data-lm-go')); }); });
             show(0);
             var today = g.querySelector('[data-lm-day="' + new Date().getDay() + '"]'); if (today) { today.classList.add('is-today'); var strip = today.parentNode; if (strip.scrollWidth > strip.clientWidth) strip.scrollLeft = today.offsetLeft - strip.offsetLeft - (strip.clientWidth - today.clientWidth) / 2; }
+            var pin = g.querySelector('.lm-gm__progress'), pinTick;
+            var pinCheck = function () { pinTick = 0; var cs = getComputedStyle(pin); pin.classList.toggle('is-pinned', cs.position === 'sticky' && pin.getBoundingClientRect().top <= parseFloat(cs.top) + 1 && pin.closest('.lm-gm__tools').getBoundingClientRect().top < parseFloat(cs.top)); };
+            window.addEventListener('scroll', function () { if (!pinTick) pinTick = requestAnimationFrame(pinCheck); }, { passive: true });
+            window.addEventListener('resize', pinCheck); pinCheck();
             var oc = g.querySelector('[data-lm-omen-count]');
             g.querySelectorAll('[data-lm-omen]').forEach(function (b) { b.addEventListener('click', function () {
               b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
