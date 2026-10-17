@@ -62,7 +62,9 @@ python3 -c "print(len(open('theme.css', encoding='utf-8').read()))"
 
 The logo is NCL Enigmatic and the headings are TAN Sometimes. Both are commercial fonts, so they are not
 committed to this public repo. Paste each one's `@font-face` rule into Customize Design's **Custom CSS** box.
-Without them, both fall back to Instrument Serif. Labels and body text use Space Mono from Google Fonts.
+Without them, both fall back to Instrument Serif.
+TAN Sometimes draws its capitals about twice as tall as most fonts, so its rule includes `size-adjust: 50%`. That
+brings it to NCL Enigmatic's visual size, which every heading size and line height in `theme.css` was tuned for. Labels and body text use Space Mono from Google Fonts.
 
 ## Hosted assets (Cloudflare Pages)
 
