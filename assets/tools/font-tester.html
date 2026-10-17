@@ -25,7 +25,8 @@
     --f-body: 'Schibsted Grotesk', sans-serif;
     --serif-italic: italic;
     --scale: 1;
-    --track: .02em;
+    --track: 0em;
+    --lh: 1;
     --ui: 'Schibsted Grotesk', system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
@@ -106,7 +107,7 @@
   .pv-wordmark { font: 400 30px/1 var(--f-wordmark); letter-spacing: .02em; word-spacing: -.1em; white-space: nowrap; }
 
   .eyebrow { font: var(--w-label, 500) 9.5px/1.5 var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; color: var(--acc); margin: 0; }
-  .display { font: 400 calc(var(--size) * var(--scale))/.95 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; color: var(--ink); margin: 0; text-wrap: balance; }
+  .display { font: 400 calc(var(--size) * var(--scale))/var(--lh) var(--f-display); letter-spacing: var(--track); color: var(--ink); margin: 0; text-wrap: balance; }
   .italic { font: var(--serif-italic) 400 21px/1.35 var(--f-serif); color: var(--body); margin: 0; max-width: 560px; }
   .body { font: 400 15px/1.6 var(--f-body); color: var(--body); margin: 0; max-width: 560px; }
   .btn { display: inline-block; font: var(--w-label, 500) 10px/1 var(--f-label); letter-spacing: 2.2px; text-transform: uppercase; background: var(--acc); color: #fff; padding: 16px 22px; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); }
@@ -118,7 +119,7 @@
   .pv-gk { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 48px; align-items: start; }
   .pv-photo { aspect-ratio: 1; background: var(--plate); box-shadow: inset 0 0 0 1px var(--line); }
   .pv-gk__info { display: grid; gap: 18px; min-width: 0; }
-  .gkname { font: 400 calc(var(--size) * var(--scale))/.95 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; color: var(--ink); margin: 0; text-shadow: 4px 3px 0 var(--ember), -4px -3px 0 color-mix(in srgb, var(--acc) 25%, transparent); overflow-wrap: break-word; }
+  .gkname { font: 400 calc(var(--size) * var(--scale))/var(--lh) var(--f-display); letter-spacing: var(--track); color: var(--ink); margin: 0; text-shadow: 4px 3px 0 var(--ember), -4px -3px 0 color-mix(in srgb, var(--acc) 25%, transparent); overflow-wrap: break-word; }
   .pv-price { font: 400 44px/1 var(--f-serif); }
   .pv-tags { display: flex; gap: 8px; flex-wrap: wrap; }
   .pv-tags span { font: var(--w-label, 500) 9px/1 var(--f-label); letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--line); padding: 8px 10px; }
@@ -146,7 +147,7 @@
   .pv-phone .pv-photo { margin-bottom: 4px; }
   .pv-phone .pv-price { font-size: 34px; }
 
-  .pv-own { font: 400 calc(96px * var(--scale))/1 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; outline: none; border-bottom: 1px dashed var(--line); padding-bottom: 8px; overflow-wrap: anywhere; }
+  .pv-own { font: 400 calc(96px * var(--scale))/var(--lh) var(--f-display); letter-spacing: var(--track); outline: none; border-bottom: 1px dashed var(--line); padding-bottom: 8px; overflow-wrap: anywhere; }
   .pv-own:focus { border-bottom-color: var(--acc); }
   .pv-abc { font: 400 calc(48px * var(--scale))/1.25 var(--f-display); letter-spacing: var(--track); color: var(--body); overflow-wrap: anywhere; }
 
@@ -179,7 +180,8 @@
     <div class="ft-current">
       <select data-style aria-label="Style of the current font" disabled><option>Style</option></select>
       <label class="ft-slider">Heading size <input type="range" min="50" max="150" value="100" data-scale><output data-scale-out>100%</output></label>
-      <label class="ft-slider">Letter spacing <input type="range" min="-6" max="16" value="2" data-track><output data-track-out>0.02</output></label>
+      <label class="ft-slider">Line height <input type="range" min="60" max="160" value="95" data-lh><output data-lh-out>0.95</output></label>
+      <label class="ft-slider">Letter spacing <input type="range" min="-6" max="16" value="0" data-track><output data-track-out>0.00</output></label>
     </div>
   </div>
 
@@ -240,7 +242,7 @@
     </div>
     <div class="pv-phone">
       <p class="eyebrow">Welcome to Lizard Magic</p>
-      <h2 class="display" style="--size: 48px; line-height: 1">Cool Conjured Cresties &amp; More</h2>
+      <h2 class="display" style="--size: 48px">Cool Conjured Cresties &amp; More</h2>
       <p class="eyebrow" style="margin-top: 18px">The Crested Gecko Care Guide</p>
       <h2 class="display" style="--size: 56px">The Keeper’s Grimoire</h2>
     </div>
@@ -511,16 +513,18 @@
   });
   $('[data-hud-star]').addEventListener('click', function () { var p = picks[active]; if (p) toggleFav(p.fam); });
 
-  var scale = $('[data-scale]'), track = $('[data-track]');
+  var scale = $('[data-scale]'), track = $('[data-track]'), lh = $('[data-lh]');
   var sliders = function () {
     root.style.setProperty('--scale', scale.value / 100);
     root.style.setProperty('--track', (track.value / 100) + 'em');
     $('[data-scale-out]').textContent = scale.value + '%';
     $('[data-track-out]').textContent = (track.value / 100).toFixed(2);
-    store.set('sliders', [scale.value, track.value]);
+    root.style.setProperty('--lh', lh.value / 100);
+    $('[data-lh-out]').textContent = (lh.value / 100).toFixed(2);
+    store.set('sliders', [scale.value, track.value, lh.value]);
   };
-  var sv = store.get('sliders', null); if (sv) { scale.value = sv[0]; track.value = sv[1]; }
-  scale.addEventListener('input', sliders); track.addEventListener('input', sliders);
+  var sv = store.get('sliders', null); if (sv) { scale.value = sv[0]; track.value = sv[1]; if (sv[2]) lh.value = sv[2]; }
+  scale.addEventListener('input', sliders); track.addEventListener('input', sliders); lh.addEventListener('input', sliders);
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;

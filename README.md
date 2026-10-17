@@ -58,11 +58,11 @@ the save just doesn't happen). It's about 95,000 now. Check before pasting:
 python3 -c "print(len(open('theme.css', encoding='utf-8').read()))"
 ```
 
-## NCL Enigmatic
+## Commercial fonts (NCL Enigmatic, TAN Sometimes)
 
-The headline font is a commercial font, so it is not committed to this public repo. Paste its
-`@font-face` rule into Customize Design's **Custom CSS** box. Without it, headings fall back to
-Instrument Serif.
+The logo is NCL Enigmatic and the headings are TAN Sometimes. Both are commercial fonts, so they are not
+committed to this public repo. Paste each one's `@font-face` rule into Customize Design's **Custom CSS** box.
+Without them, both fall back to Instrument Serif. Labels and body text use Space Mono from Google Fonts.
 
 ## Hosted assets (Cloudflare Pages)
 
