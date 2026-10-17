@@ -75,7 +75,7 @@ pyftsubset TAN.woff2 --unicodes="U+0020-007E,U+00A0-00FF,U+2013-2014,U+2018-201E
 ```
 
 Then base64 each file into `src: url(data:font/woff2;base64,…) format('woff2')`. A character outside these sets
-shows in Instrument Serif. Labels and body text use Space Mono from Google Fonts.
+shows in Instrument Serif. Labels and body text use Martian Mono from Google Fonts (every weight from 100 to 800).
 
 ## Hosted assets (Cloudflare Pages)
 

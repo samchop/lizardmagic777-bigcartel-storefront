@@ -24,9 +24,9 @@
   --f-logo: 'NCL Enigmatic', 'Instrument Serif', serif;
   --f-display: 'TAN Sometimes', 'Instrument Serif', serif;
   --f-serif: 'Instrument Serif', serif;
-  --f-label: 'Space Mono', monospace;
-  --w-label: 400; /* Space Mono weight for labels, nav and buttons (400 regular, 700 bold) */
-  --f-body: 'Space Mono', monospace;
+  --f-label: 'Martian Mono', monospace;
+  --w-label: 500; /* Martian Mono weight for labels, nav and buttons (any from 100 thin to 800 extra bold) */
+  --f-body: 'Martian Mono', monospace;
 
   --pad: 56px;
   --max: 1280px;
