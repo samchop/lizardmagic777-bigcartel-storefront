@@ -83,7 +83,7 @@ Then push any commit; "Retry deployment" only rebuilds the old commit.
   the same file names, so nothing else needs to change.
 
 - `tools/font-tester.html`: tries the fonts installed on your computer on mock-ups of the store
-  (https://lizardmagic-assets.pages.dev/tools/font-tester.html). Open it in desktop Chrome or Edge and press
+  (https://lizardmagic-assets.pages.dev/tools/font-tester). Open it in desktop Chrome or Edge and press
   "Load my fonts". Nothing is uploaded, and favourites are saved in that browser only.
 
 ## Astro icons
