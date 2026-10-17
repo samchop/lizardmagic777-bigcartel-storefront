@@ -165,11 +165,12 @@ ul, ol { padding: 0; list-style: none; }
 .lm-head__nav a:hover, .lm-head__right a:hover, .lm-head__right button:hover, .lm-head__nav [aria-current="page"] { color: var(--ink); }
 .lm-head__cart { color: var(--ink); }
 .lm-wordmark { font: 400 30px/1 var(--f-display); letter-spacing: 0.02em; word-spacing: -0.1em; color: var(--ink); text-transform: none; white-space: nowrap; }
+.lm-head .lm-wordmark { font-size: 48px; }
 .lm-head__menu { display: none; }
 @media (max-width: 760px) {
   .lm-head { position: sticky; top: 0; grid-template-columns: 44px 1fr 44px; padding: 10px 12px 14px; background: var(--bg); }
   .lm-head__nav, .lm-head__search, .lm-head__cart-word { display: none; }
-  .lm-head .lm-wordmark { text-align: center; font-size: 32px; }
+  .lm-head .lm-wordmark { text-align: center; }
   .lm-head__menu { display: flex; flex-direction: column; justify-content: center; gap: 6px; width: 44px; height: 44px; padding-left: 8px; }
   .lm-head__menu span { display: block; width: 20px; height: 1px; background: var(--ink); }
   .lm-head__menu span + span { width: 14px; }

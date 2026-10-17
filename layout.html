@@ -152,15 +152,15 @@
             <div class="lm-gm__star">
               <svg class="lm-gm__ring" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="lm-gm-ring" d="M50,1.5 a48.5,48.5 0 1,1 0,97 a48.5,48.5 0 1,1 0,-97"/></defs><text><textPath href="#lm-gm-ring" textLength="302" lengthAdjust="spacing">SOLVE ET COAGULA ✦ AS ABOVE SO BELOW ✦ MIST AT DUSK ✦ DRY BY DAWN ✦ FEED THE BODY WELL ✦ EARN THE TRUST ✦ ROOM TO RISE ✦</textPath></text></svg>
               <svg class="lm-gm__lines" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45.5" class="lm-gm__c1"/><circle cx="50" cy="50" r="40" class="lm-gm__c2"/><circle cx="50" cy="50" r="15" class="lm-gm__c1"/><path d="M50,10 L73.51,82.36 L11.96,37.64 L88.04,37.64 L26.49,82.36 Z" class="lm-gm__c3"/></svg>
-              <div class="lm-gm__core" aria-hidden="true"><svg class="lm-ico" data-lm-core-ico><use href="#lm-i-water"/></svg><span data-lm-core-el>Water</span></div>
+              <div class="lm-gm__core" aria-hidden="true"><svg class="lm-ico" data-lm-core-ico><use href="#lm-i-air"/></svg><span data-lm-core-el>Air</span></div>
               <button type="button" class="lm-gm__node" style="left:11.96%;top:37.64%" data-lm-node="0" aria-label="Rite I, Air"><svg class="lm-ico"><use href="#lm-i-air"/></svg><span>I</span></button>
               <button type="button" class="lm-gm__node" style="left:73.51%;top:82.36%" data-lm-node="1" aria-label="Rite II, Fire"><svg class="lm-ico"><use href="#lm-i-fire"/></svg><span>II</span></button>
-              <button type="button" class="lm-gm__node" style="left:88.04%;top:37.64%" data-lm-node="2" aria-label="Rite III, Water"><svg class="lm-ico"><use href="#lm-i-water"/></svg><span>III</span></button>
+              <button type="button" class="lm-gm__node" style="left:50%;top:10%" data-lm-node="2" aria-label="Rite III, Water"><svg class="lm-ico"><use href="#lm-i-water"/></svg><span>III</span></button>
               <button type="button" class="lm-gm__node" style="left:26.49%;top:82.36%" data-lm-node="3" aria-label="Rite IV, Earth"><svg class="lm-ico"><use href="#lm-i-earth"/></svg><span>IV</span></button>
-              <button type="button" class="lm-gm__node" style="left:50%;top:10%" data-lm-node="4" aria-label="Rite V, Aether"><svg class="lm-ico"><use href="#lm-i-aether"/></svg><span>V</span></button>
+              <button type="button" class="lm-gm__node" style="left:88.04%;top:37.64%" data-lm-node="4" aria-label="Rite V, Aether"><svg class="lm-ico"><use href="#lm-i-aether"/></svg><span>V</span></button>
             </div>
             <div class="lm-gm__ritewrap" aria-live="polite">
-              <article class="lm-gm__rite" data-lm-rite="0" data-el="Air" data-ico="air" hidden>
+              <article class="lm-gm__rite" data-lm-rite="0" data-el="Air" data-ico="air">
                 <p class="lm-gm__ritehead"><span class="lm-eyebrow">The Five Rites</span><span class="lm-gm__rule"></span><span class="lm-label">Rite I of V · Air</span></p>
                 <div class="lm-gm__ritetitle"><h2>The Vessel<span class="lm-gm__kw">Crested Gecko Enclosure Setup</span></h2><p>Give it room to rise</p></div>
                 <p class="lm-gm__ritebody">Crested geckos are arboreal. They live up high, so build tall rather than wide. Fill the top half with branches, cork and dense leaves for cover, and use a vent, mesh, or multiple holes in the enclosure for proper airflow while still retaining humidity.</p>
@@ -182,7 +182,7 @@
                 </div>
                 <div class="lm-gm__ritefoot"><p class="lm-gm__aff">“I hold the warmth steady and the heat at bay.”</p><div class="lm-gm__arrows"><button type="button" data-lm-go="-1" aria-label="Previous rite">←</button><button type="button" data-lm-go="1" aria-label="Next rite" class="is-acc">→</button></div></div>
               </article>
-              <article class="lm-gm__rite" data-lm-rite="2" data-el="Water" data-ico="water">
+              <article class="lm-gm__rite" data-lm-rite="2" data-el="Water" data-ico="water" hidden>
                 <p class="lm-gm__ritehead"><span class="lm-eyebrow">The Five Rites</span><span class="lm-gm__rule"></span><span class="lm-label">Rite III of V · Water</span></p>
                 <div class="lm-gm__ritetitle"><h2>The Mist<span class="lm-gm__kw">Crested Gecko Humidity &amp; Misting</span></h2><p>Mist at dusk, dry by dawn</p></div>
                 <p class="lm-gm__ritebody">Offer water two ways. Mist the enclosure at dusk so your gecko can lap droplets off the leaves, and keep a shallow dish of fresh water out at all times. Let the enclosure dry out between mistings to prevent mold and skin trouble.</p>
@@ -412,7 +412,7 @@
           /* Care guide: rites star, today in the week, omen cards, the summoning checklist (remembered on this device) */
           (function () {
             var g = document.querySelector('[data-lm-grimoire]'); if (!g) return;
-            var rites = g.querySelectorAll('[data-lm-rite]'), sel = 2;
+            var rites = g.querySelectorAll('[data-lm-rite]'), sel = 0;
             var show = function (i) {
               sel = (i + 5) % 5;
               rites.forEach(function (r) { r.hidden = +r.getAttribute('data-lm-rite') !== sel; });
@@ -423,7 +423,7 @@
             };
             g.querySelectorAll('[data-lm-node]').forEach(function (b) { b.addEventListener('click', function () { show(+b.getAttribute('data-lm-node')); }); });
             g.querySelectorAll('[data-lm-go]').forEach(function (b) { b.addEventListener('click', function () { show(sel + +b.getAttribute('data-lm-go')); }); });
-            show(2);
+            show(0);
             var today = g.querySelector('[data-lm-day="' + new Date().getDay() + '"]'); if (today) { today.classList.add('is-today'); var strip = today.parentNode; if (strip.scrollWidth > strip.clientWidth) strip.scrollLeft = today.offsetLeft - strip.offsetLeft - (strip.clientWidth - today.clientWidth) / 2; }
             var oc = g.querySelector('[data-lm-omen-count]');
             g.querySelectorAll('[data-lm-omen]').forEach(function (b) { b.addEventListener('click', function () {

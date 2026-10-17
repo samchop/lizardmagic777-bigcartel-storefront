@@ -32,7 +32,6 @@
 {% if lm_kind == 'merch' %}
 {% comment %} ---- Merch page settings ---- {% endcomment %}
 {% assign lm_eyebrow = 'Available for a limited time' %}
-{% assign lm_tee_tags = 'Limited run|Unisex|Hatchling sizes' | split: '|' %}
 {% assign lm_limited_title = 'Limited Edition' %}
 {% assign lm_limited_text = 'Retired to The Vault when the drop window closes' %}
 
@@ -79,7 +78,6 @@
       <div class="lm-gk__title">
         <p class="lm-label">{% if product.status == 'sold-out' %}Sold out{% elsif product.status == 'coming-soon' %}Coming soon{% else %}{{ lm_eyebrow }}{% endif %}</p>
         <h1 class="lm-gk__name lm-gk__name--md" data-lm-fitname>{{ product.name }}</h1>
-        <div class="lm-gk__tags">{% for tag in lm_tee_tags %}<span class="lm-gk__tag"><span>{{ tag }}</span></span>{% endfor %}</div>
       </div>
 
       <form class="lm-gk__form lm-tee__form" method="post" action="/cart" accept-charset="utf8" data-lm-form>
