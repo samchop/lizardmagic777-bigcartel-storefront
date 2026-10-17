@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lizard Magic Font Tester</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;600&family=Unbounded:wght@400;500;600&display=swap" rel="stylesheet">
+<!--
+  Font tester for the Lizard Magic theme. Open it in desktop Chrome or Edge, press "Load my fonts"
+  and allow access. It lists the fonts installed on this computer and tries them on mock-ups of the
+  store. Nothing is uploaded: the fonts are read by the browser and stay on this machine.
+-->
+<style id="ft-faces"></style>
+<style>
+  :root {
+    --bg: #26181d; --bg2: #2a1c22; --plate: #32252b; --line: #463b41; --dim: #675e65;
+    --muted: #a7a5ae; --body: #d0d1db; --ink: #f0f4ff; --acc: #4271ff; --ember: #ff4a1c;
+    --f-display: 'NCL Enigmatic', 'Instrument Serif', serif;
+    --f-wordmark: 'NCL Enigmatic', 'Instrument Serif', serif;
+    --f-label: 'Unbounded', sans-serif;
+    --f-serif: 'Instrument Serif', serif;
+    --f-body: 'Schibsted Grotesk', sans-serif;
+    --serif-italic: italic;
+    --scale: 1;
+    --track: .02em;
+    --ui: 'Schibsted Grotesk', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 14px/1.5 var(--ui); -webkit-font-smoothing: antialiased; display: grid; grid-template-columns: 340px minmax(0, 1fr); overflow: hidden; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+
+  /* ---------- Control panel ---------- */
+  .ft-panel { height: 100vh; display: flex; flex-direction: column; background: #1d1216; border-right: 1px solid var(--line); min-width: 0; }
+  .ft-panel__top { padding: 18px 18px 12px; display: grid; gap: 12px; border-bottom: 1px solid var(--line); }
+  .ft-h { margin: 0; font: 600 11px/1 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .ft-title { margin: 0; font: italic 400 26px/1 'Instrument Serif', serif; }
+  .ft-btn { border: 1px solid var(--line); background: var(--plate); border-radius: 8px; padding: 8px 12px; font-weight: 500; }
+  .ft-btn:hover { border-color: var(--muted); }
+  .ft-btn--acc { background: var(--acc); border-color: var(--acc); color: #fff; }
+  .ft-btn--acc:hover { border-color: #fff; }
+  .ft-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ft-status { margin: 0; color: var(--muted); font-size: 12.5px; }
+  .ft-status b { color: var(--ink); font-weight: 600; }
+
+  .ft-roles { display: grid; gap: 4px; }
+  .ft-role { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; text-align: left; border: 1px solid transparent; background: none; border-radius: 8px; padding: 7px 8px; }
+  .ft-role:hover { background: var(--bg2); }
+  .ft-role[aria-pressed="true"] { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 14%, transparent); }
+  .ft-role kbd { font: 600 10px/1 var(--ui); color: var(--dim); border: 1px solid var(--line); border-radius: 4px; padding: 3px 0; text-align: center; }
+  .ft-role b { display: block; font-weight: 600; font-size: 13px; }
+  .ft-role small { display: block; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ft-role span.ft-reset { font-size: 11px; color: var(--muted); text-decoration: underline; padding: 2px; }
+  .ft-role span.ft-reset[hidden] { display: none; }
+
+  .ft-current { display: grid; gap: 8px; }
+  .ft-current select { width: 100%; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; }
+  .ft-slider { display: grid; grid-template-columns: 92px minmax(0, 1fr) 40px; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
+  .ft-slider output { text-align: right; color: var(--ink); }
+  .ft-slider input { accent-color: var(--acc); }
+
+  .ft-search { display: grid; gap: 8px; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+  .ft-search input[type=search] { width: 100%; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  .ft-search input[type=search]:focus, .ft-current select:focus { outline: 2px solid var(--acc); outline-offset: -1px; }
+  .ft-tabs { display: flex; gap: 4px; }
+  .ft-tabs button { flex: 1; border: 1px solid var(--line); background: none; border-radius: 6px; padding: 5px; font-size: 12.5px; color: var(--muted); }
+  .ft-tabs button[aria-pressed="true"] { background: var(--plate); color: var(--ink); border-color: var(--muted); }
+  .ft-check { display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); }
+
+  .ft-list { flex: 1; overflow-y: auto; padding: 6px 8px 40px; margin: 0; list-style: none; }
+  .ft-list li { display: grid; grid-template-columns: minmax(0, 1fr) 26px; align-items: center; border-radius: 6px; }
+  .ft-list li:hover { background: var(--bg2); }
+  .ft-list li.is-on { background: color-mix(in srgb, var(--acc) 22%, transparent); }
+  .ft-list .ft-fam { text-align: left; background: none; border: 0; padding: 6px 8px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 17px; line-height: 1.3; }
+  .ft-list .ft-fam small { font: 400 11px var(--ui); color: var(--dim); margin-left: 6px; }
+  .ft-star { background: none; border: 0; color: var(--dim); font-size: 15px; padding: 0; }
+  .ft-star[aria-pressed="true"] { color: #ffc94a; }
+  .ft-empty { padding: 16px 10px; color: var(--muted); font-size: 13px; }
+
+  .ft-manual { display: grid; gap: 8px; }
+  .ft-manual textarea { width: 100%; min-height: 90px; background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 12.5px; resize: vertical; }
+  .ft-manual[hidden] { display: none; }
+
+  /* ---------- HUD ---------- */
+  .ft-hud { position: fixed; left: 356px; right: 16px; bottom: 14px; z-index: 5; display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: rgba(20, 12, 15, .92); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
+  .ft-hud b { font-weight: 600; }
+  .ft-hud .ft-keys { color: var(--muted); font-size: 12px; }
+  .ft-hud kbd { font: 600 11px var(--ui); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: var(--ink); }
+  .ft-hud .ft-starbig { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; color: var(--muted); }
+  .ft-hud .ft-starbig[aria-pressed="true"] { color: #ffc94a; border-color: #ffc94a; }
+
+  /* ---------- Store preview (mirrors theme.css) ---------- */
+  .pv { height: 100vh; overflow-y: auto; padding: 0 0 120px; }
+  .pv-cap { font: 600 10.5px/1 var(--ui); letter-spacing: .16em; text-transform: uppercase; color: var(--dim); padding: 36px 56px 14px; display: flex; gap: 10px; align-items: center; }
+  .pv-cap::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .pv-sec { padding: 8px 56px 40px; }
+
+  .pv-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 22px 56px; border-bottom: 1px solid var(--line); }
+  .pv-nav { display: flex; gap: 26px; }
+  .pv-nav span, .pv-cart { font: var(--w-label, 500) 10px/1 var(--f-label); letter-spacing: 2.2px; text-transform: uppercase; }
+  .pv-cart { justify-self: end; }
+  .pv-wordmark { font: 400 30px/1 var(--f-wordmark); letter-spacing: .02em; word-spacing: -.1em; white-space: nowrap; }
+
+  .eyebrow { font: var(--w-label, 500) 9.5px/1.5 var(--f-label); letter-spacing: 2.6px; text-transform: uppercase; color: var(--acc); margin: 0; }
+  .display { font: 400 calc(var(--size) * var(--scale))/.95 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; color: var(--ink); margin: 0; text-wrap: balance; }
+  .italic { font: var(--serif-italic) 400 21px/1.35 var(--f-serif); color: var(--body); margin: 0; max-width: 560px; }
+  .body { font: 400 15px/1.6 var(--f-body); color: var(--body); margin: 0; max-width: 560px; }
+  .btn { display: inline-block; font: var(--w-label, 500) 10px/1 var(--f-label); letter-spacing: 2.2px; text-transform: uppercase; background: var(--acc); color: #fff; padding: 16px 22px; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); }
+
+  .pv-hero { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; align-items: center; }
+  .pv-hero > div { display: grid; gap: 22px; justify-items: start; }
+  .pv-orb { aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #4d3a42, var(--plate) 60%); box-shadow: 0 0 0 1px var(--line), 0 0 80px -10px color-mix(in srgb, var(--acc) 60%, transparent); }
+
+  .pv-gk { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 48px; align-items: start; }
+  .pv-photo { aspect-ratio: 1; background: var(--plate); box-shadow: inset 0 0 0 1px var(--line); }
+  .pv-gk__info { display: grid; gap: 18px; min-width: 0; }
+  .gkname { font: 400 calc(var(--size) * var(--scale))/.95 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; color: var(--ink); margin: 0; text-shadow: 4px 3px 0 var(--ember), -4px -3px 0 color-mix(in srgb, var(--acc) 25%, transparent); overflow-wrap: break-word; }
+  .pv-price { font: 400 44px/1 var(--f-serif); }
+  .pv-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pv-tags span { font: var(--w-label, 500) 9px/1 var(--f-label); letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--line); padding: 8px 10px; }
+  .pv-table { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; margin: 4px 0 0; }
+  .pv-table dt { font: var(--w-label, 500) 9px/1.8 var(--f-label); letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .pv-table dd { margin: 0; font: 400 20px/1.2 var(--f-serif); }
+
+  .pv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+  .tile { display: grid; gap: 10px; }
+  .tile__img { aspect-ratio: 1; background: var(--plate); box-shadow: inset 0 0 0 1px var(--line); }
+  .tile__row { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+  .tile__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--w-label, 500) 11px/1.5 var(--f-label); letter-spacing: 2.4px; text-transform: uppercase; }
+  .tile__price { flex: none; font: 400 26px/1 var(--f-serif); white-space: nowrap; }
+  .tile__traits { font: 400 9px/1.6 var(--f-label); letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); }
+  .pv-grid--serif .tile__name { font: 400 30px/1.1 var(--f-serif); letter-spacing: normal; text-transform: none; }
+
+  .pv-gm { display: grid; gap: 22px; max-width: 900px; }
+  .pv-gm sup { font: 400 36px var(--f-serif); color: var(--acc); vertical-align: top; position: relative; top: .3em; margin-left: 4px; }
+  .pv-faq { display: grid; gap: 0; border-top: 1px solid var(--line); max-width: 760px; }
+  .pv-faq p { margin: 0; padding: 16px 0; border-bottom: 1px solid var(--line); font: 400 22px/1.3 var(--f-serif); display: flex; justify-content: space-between; gap: 20px; }
+  .pv-faq p::after { content: '+'; color: var(--acc); }
+
+  .pv-phones { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .pv-phone { width: 375px; max-width: 100%; border: 1px solid var(--line); border-radius: 28px; padding: 30px 22px 34px; display: grid; gap: 16px; background: var(--bg); }
+  .pv-phone .pv-photo { margin-bottom: 4px; }
+  .pv-phone .pv-price { font-size: 34px; }
+
+  .pv-own { font: 400 calc(96px * var(--scale))/1 var(--f-display); letter-spacing: var(--track); word-spacing: -.1em; outline: none; border-bottom: 1px dashed var(--line); padding-bottom: 8px; overflow-wrap: anywhere; }
+  .pv-own:focus { border-bottom-color: var(--acc); }
+  .pv-abc { font: 400 calc(48px * var(--scale))/1.25 var(--f-display); letter-spacing: var(--track); color: var(--body); overflow-wrap: anywhere; }
+
+  @media (max-width: 1000px) {
+    body { grid-template-columns: 290px minmax(0, 1fr); }
+    .ft-hud { left: 306px; }
+    .pv-hero, .pv-gk { grid-template-columns: 1fr; }
+    .pv-orb, .pv-gk .pv-photo { max-width: 280px; }
+    .pv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<aside class="ft-panel" aria-label="Font controls">
+  <div class="ft-panel__top">
+    <p class="ft-title">Font tester</p>
+    <div class="ft-row">
+      <button class="ft-btn ft-btn--acc" type="button" data-load>Load my fonts</button>
+      <button class="ft-btn" type="button" data-manual-toggle>Type names instead</button>
+    </div>
+    <p class="ft-status" data-status>Uses desktop Chrome or Edge. The fonts stay on this computer.</p>
+    <div class="ft-manual" data-manual hidden>
+      <textarea data-manual-text placeholder="One font name per line, exactly as it appears in your font app"></textarea>
+      <button class="ft-btn" type="button" data-manual-go>Use these</button>
+    </div>
+
+    <p class="ft-h">Trying fonts for</p>
+    <div class="ft-roles" data-roles></div>
+
+    <div class="ft-current">
+      <select data-style aria-label="Style of the current font" disabled><option>Style</option></select>
+      <label class="ft-slider">Heading size <input type="range" min="50" max="150" value="100" data-scale><output data-scale-out>100%</output></label>
+      <label class="ft-slider">Letter spacing <input type="range" min="-6" max="16" value="2" data-track><output data-track-out>0.02</output></label>
+    </div>
+  </div>
+
+  <div class="ft-search">
+    <input type="search" placeholder="Search fonts" data-search aria-label="Search fonts" autocomplete="off" spellcheck="false">
+    <div class="ft-tabs">
+      <button type="button" aria-pressed="true" data-tab="all">All <span data-count-all></span></button>
+      <button type="button" aria-pressed="false" data-tab="fav">Favourites <span data-count-fav></span></button>
+    </div>
+    <label class="ft-check"><input type="checkbox" data-sample checked> Show each name in its own font</label>
+  </div>
+  <ul class="ft-list" data-list><li class="ft-empty">Press “Load my fonts” to see the fonts on this computer.</li></ul>
+</aside>
+
+<main class="pv" data-preview>
+  <header class="pv-head">
+    <nav class="pv-nav"><span>Geckos</span><span>Merch</span><span>Care Guide</span></nav>
+    <span class="pv-wordmark">Lizard Magic</span>
+    <span class="pv-cart">Cart (0)</span>
+  </header>
+
+  <p class="pv-cap">Home hero</p>
+  <section class="pv-sec pv-hero">
+    <div>
+      <p class="eyebrow">Welcome to Lizard Magic</p>
+      <h1 class="display" style="--size: 88px">Cool Conjured Cresties &amp; More</h1>
+      <p class="italic">Hand-raised crested geckos from a small Houston collection, plus merch drops for the keepers who love them.</p>
+      <span class="btn">Meet the geckos</span>
+    </div>
+    <div class="pv-orb" aria-hidden="true"></div>
+  </section>
+
+  <p class="pv-cap">Gecko page</p>
+  <section class="pv-sec pv-gk">
+    <div class="pv-photo" aria-hidden="true"></div>
+    <div class="pv-gk__info">
+      <p class="eyebrow">Lilly White · Male · RTB</p>
+      <h2 class="gkname" style="--size: 120px">Chronos</h2>
+      <p class="pv-price">$400</p>
+      <div class="pv-tags"><span>Lilly White</span><span>Tricolor</span><span>Red Base</span><span>Male</span></div>
+      <dl class="pv-table"><dt>Hatched</dt><dd>05/05/2024</dd><dt>Weight</dt><dd>42g</dd><dt>Sire</dt><dd>Dr Whoo · Yellow Harlequin</dd><dt>Dam</dt><dd>Nirvana · Lilly White</dd></dl>
+    </div>
+  </section>
+
+  <p class="pv-cap">Longer gecko names</p>
+  <section class="pv-sec" style="display: grid; gap: 28px">
+    <h2 class="gkname" style="--size: 92px">Wind Blows</h2>
+    <h2 class="gkname" style="--size: 92px">Tangie · Forrest · Peanut</h2>
+  </section>
+
+  <p class="pv-cap">On a phone</p>
+  <section class="pv-sec pv-phones">
+    <div class="pv-phone">
+      <div class="pv-photo" aria-hidden="true"></div>
+      <p class="eyebrow">Extreme Harlequin · Female</p>
+      <h2 class="gkname" style="--size: 72px">Tangie</h2>
+      <p class="pv-price">$475</p>
+    </div>
+    <div class="pv-phone">
+      <p class="eyebrow">Welcome to Lizard Magic</p>
+      <h2 class="display" style="--size: 48px; line-height: 1">Cool Conjured Cresties &amp; More</h2>
+      <p class="eyebrow" style="margin-top: 18px">The Crested Gecko Care Guide</p>
+      <h2 class="display" style="--size: 56px">The Keeper’s Grimoire</h2>
+    </div>
+  </section>
+
+  <p class="pv-cap">Home tiles</p>
+  <section class="pv-sec pv-grid">
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Chronos</span><span class="tile__price">$400</span></p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Wind Blows</span><span class="tile__price">$222</span></p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Dragon Rage</span><span class="tile__price">$33–$44</span></p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Golden Gecko Pocket Tee</span><span class="tile__price">$44</span></p></div>
+  </section>
+
+  <p class="pv-cap">Gecko listing</p>
+  <section class="pv-sec pv-grid pv-grid--serif">
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Tangie</span><span class="tile__price">$475</span></p><p class="tile__traits">Extreme Harlequin · Dark Base</p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Chronos</span><span class="tile__price">$400</span></p><p class="tile__traits">Lilly White · Tricolor</p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Forrest</span><span class="tile__price">$350</span></p><p class="tile__traits">Tricolor · Dark Base</p></div>
+    <div class="tile"><div class="tile__img"></div><p class="tile__row"><span class="tile__name">Wind Blows</span><span class="tile__price">$222</span></p><p class="tile__traits">Quadstripe · Dark Base</p></div>
+  </section>
+
+  <p class="pv-cap">Care guide</p>
+  <section class="pv-sec pv-gm">
+    <p class="eyebrow">The Crested Gecko Care Guide · For New + Seasoned Keepers</p>
+    <h2 class="display" style="--size: 104px">The Keeper’s Grimoire<sup>*</sup></h2>
+    <p class="body">* A starting point for your crestie’s care, not a rulebook. Your own gecko may have preferences that dip outside standard practice, and that’s okay. ♡</p>
+    <h3 class="display" style="--size: 56px; margin-top: 28px">Whispered Questions</h3>
+    <div class="pv-faq"><p>How often should I feed my crested gecko?</p><p>Do crested geckos need a heat lamp?</p><p>Why did my gecko drop its tail?</p></div>
+  </section>
+
+  <p class="pv-cap">Your own words (click to type)</p>
+  <section class="pv-sec" style="display: grid; gap: 24px">
+    <div class="pv-own" contenteditable="true" spellcheck="false" data-own>Nirvana &amp; Dr Whoo</div>
+    <p class="pv-abc">AaBbCcDdEeFfGgHhIiJjKkLlMm<br>NnOoPpQqRrSsTtUuVvWwXxYyZz<br>0123456789 $ & ? ! · –</p>
+  </section>
+</main>
+
+<div class="ft-hud" aria-live="polite">
+  <span><span data-hud-role>Headings</span>: <b data-hud-font>NCL Enigmatic (site default)</b></span>
+  <span class="ft-row">
+    <button class="ft-starbig" type="button" aria-pressed="false" data-hud-star disabled>★ Favourite</button>
+    <span class="ft-keys"><kbd>↑</kbd> <kbd>↓</kbd> font · <kbd>←</kbd> <kbd>→</kbd> style · <kbd>F</kbd> favourite · <kbd>R</kbd> random · <kbd>1</kbd>–<kbd>5</kbd> role</span>
+  </span>
+</div>
+
+<script>
+(function () {
+  var ROLES = [
+    { id: 'display', label: 'Headings', hint: 'Gecko names, page titles', def: "'NCL Enigmatic', 'Instrument Serif', serif", defName: 'NCL Enigmatic' },
+    { id: 'wordmark', label: 'Wordmark', hint: 'The logo in the header', def: "'NCL Enigmatic', 'Instrument Serif', serif", defName: 'NCL Enigmatic' },
+    { id: 'label', label: 'Labels', hint: 'Nav, eyebrows, buttons, tags', def: "'Unbounded', sans-serif", defName: 'Unbounded' },
+    { id: 'serif', label: 'Serif', hint: 'Prices, listing names, FAQ', def: "'Instrument Serif', serif", defName: 'Instrument Serif' },
+    { id: 'body', label: 'Body', hint: 'Paragraphs', def: "'Schibsted Grotesk', sans-serif", defName: 'Schibsted Grotesk' }
+  ];
+  var $ = function (s) { return document.querySelector(s); };
+  var root = document.documentElement;
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem('lmft.' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem('lmft.' + k, JSON.stringify(v)); } catch (e) {} }
+  };
+
+  var families = [];          // [{ name, faces: [{ ps, full, style }] }]
+  var byName = {};
+  var favs = store.get('favs', []);
+  var picks = store.get('picks', {});  // role id -> { fam, ps }
+  var active = 'display';
+  var tab = 'all';
+  var shown = [];             // filtered family list
+  var faceN = 0;
+  var faceCss = {};           // role id -> @font-face text
+
+  var esc = function (s) { return String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"'); };
+  var html = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var role = function (id) { return ROLES.filter(function (r) { return r.id === id; })[0]; };
+
+  // ---------- Applying a font to a role ----------
+  var apply = function (id) {
+    var r = role(id), p = picks[id], stack = r.def;
+    if (p && p.fam) {
+      if (p.ps) {
+        // A named face via local() so every style (Bold, Italic, Condensed…) can be tried, not just the family's regular.
+        var alias = 'ft-' + id + '-' + (++faceN);
+        faceCss[id] = '@font-face { font-family: "' + alias + '"; src: local("' + esc(p.ps) + '")' + (p.full ? ', local("' + esc(p.full) + '")' : '') + '; font-weight: 1 1000; }';
+        stack = '"' + alias + '", "' + esc(p.fam) + '", ' + r.def;
+      } else {
+        delete faceCss[id];
+        stack = '"' + esc(p.fam) + '", ' + r.def;
+      }
+    } else delete faceCss[id];
+    $('#ft-faces').textContent = Object.keys(faceCss).map(function (k) { return faceCss[k]; }).join('\n');
+    root.style.setProperty('--f-' + id, stack);
+    if (id === 'serif') root.style.setProperty('--serif-italic', p && p.fam ? 'normal' : 'italic');
+  };
+
+  var label = function (id) {
+    var p = picks[id];
+    if (!p || !p.fam) return role(id).defName + ' (site default)';
+    return p.fam + (p.styleName && !/^(regular|normal|roman|book)$/i.test(p.styleName) ? ' · ' + p.styleName : '');
+  };
+
+  var pick = function (fam, faceIndex, keepScroll) {
+    var f = byName[fam]; if (!f) return;
+    var face = f.faces[faceIndex || 0];
+    picks[active] = { fam: fam, ps: face ? face.ps : null, full: face ? face.full : null, styleName: face ? face.style : null };
+    store.set('picks', picks);
+    apply(active); renderRoles(); renderStyles(); markList(!keepScroll); renderHud();
+  };
+
+  var reset = function (id) { delete picks[id]; store.set('picks', picks); apply(id); renderRoles(); renderStyles(); markList(true); renderHud(); };
+
+  // ---------- Panels ----------
+  var renderRoles = function () {
+    $('[data-roles]').innerHTML = ROLES.map(function (r, i) {
+      var custom = picks[r.id] && picks[r.id].fam;
+      return '<button type="button" class="ft-role" data-role="' + r.id + '" aria-pressed="' + (r.id === active) + '"><kbd>' + (i + 1) + '</kbd><span><b>' + r.label + '</b><small>' + html(custom ? label(r.id) : r.hint) + '</small></span><span class="ft-reset" data-reset="' + r.id + '"' + (custom ? '' : ' hidden') + ' title="Back to the site font">reset</span></button>';
+    }).join('');
+  };
+
+  var renderStyles = function () {
+    var sel = $('[data-style]'), p = picks[active], f = p && byName[p.fam];
+    if (!f || !f.faces.length) { sel.innerHTML = '<option>' + (p && p.fam ? 'Styles need “Load my fonts”' : 'Style') + '</option>'; sel.disabled = true; return; }
+    sel.disabled = false;
+    sel.innerHTML = f.faces.map(function (face, i) { return '<option value="' + i + '"' + (face.ps === p.ps ? ' selected' : '') + '>' + html(face.style) + '</option>'; }).join('');
+  };
+
+  var renderHud = function () {
+    var p = picks[active];
+    $('[data-hud-role]').textContent = role(active).label;
+    $('[data-hud-font]').textContent = label(active);
+    var star = $('[data-hud-star]');
+    star.disabled = !(p && p.fam);
+    star.setAttribute('aria-pressed', !!(p && p.fam && favs.indexOf(p.fam) > -1));
+  };
+
+  var counts = function () {
+    $('[data-count-all]').textContent = families.length ? '(' + families.length + ')' : '';
+    $('[data-count-fav]').textContent = favs.length ? '(' + favs.length + ')' : '';
+  };
+
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var b = e.target; io.unobserve(b);
+      if ($('[data-sample]').checked) b.style.fontFamily = '"' + esc(b.getAttribute('data-fam')) + '", var(--ui)';
+    });
+  }, { root: null, rootMargin: '300px 0px' }) : null;
+
+  var renderList = function () {
+    var q = $('[data-search]').value.trim().toLowerCase();
+    var src = tab === 'fav' ? favs.map(function (n) { return byName[n] || { name: n, faces: [] }; }) : families;
+    shown = src.filter(function (f) { return !q || f.name.toLowerCase().indexOf(q) > -1; });
+    var list = $('[data-list]');
+    if (io) io.disconnect();
+    if (!shown.length) {
+      list.innerHTML = '<li class="ft-empty">' + (!families.length && tab === 'all' ? 'Press “Load my fonts” to see the fonts on this computer.' : tab === 'fav' && !favs.length ? 'No favourites yet. Press F or the star to save the current font.' : 'No fonts match “' + html(q) + '”.') + '</li>';
+      return;
+    }
+    list.innerHTML = shown.map(function (f, i) {
+      var n = f.faces.length;
+      return '<li data-i="' + i + '"><button type="button" class="ft-fam" data-fam="' + html(f.name) + '">' + html(f.name) + (n > 1 ? '<small>' + n + ' styles</small>' : '') + '</button><button type="button" class="ft-star" data-star="' + html(f.name) + '" aria-pressed="' + (favs.indexOf(f.name) > -1) + '" aria-label="Favourite ' + html(f.name) + '">★</button></li>';
+    }).join('');
+    if (io && $('[data-sample]').checked) list.querySelectorAll('.ft-fam').forEach(function (b) { io.observe(b); });
+    markList(true);
+  };
+
+  var currentIndex = function () {
+    var p = picks[active]; if (!p) return -1;
+    for (var i = 0; i < shown.length; i++) if (shown[i].name === p.fam) return i;
+    return -1;
+  };
+
+  var markList = function (scroll) {
+    var list = $('[data-list]'), on = list.querySelector('.is-on'); if (on) on.classList.remove('is-on');
+    var i = currentIndex(); if (i < 0) return;
+    var li = list.querySelector('li[data-i="' + i + '"]'); if (!li) return;
+    li.classList.add('is-on');
+    if (scroll) li.scrollIntoView({ block: 'nearest' });
+  };
+
+  var step = function (d) {
+    if (!shown.length) return;
+    var i = currentIndex();
+    i = i < 0 ? (d > 0 ? 0 : shown.length - 1) : (i + d + shown.length) % shown.length;
+    pick(shown[i].name, defaultFace(shown[i]));
+  };
+
+  var stepStyle = function (d) {
+    var p = picks[active], f = p && byName[p.fam]; if (!f || f.faces.length < 2) return;
+    var i = 0; f.faces.forEach(function (face, j) { if (face.ps === p.ps) i = j; });
+    pick(p.fam, (i + d + f.faces.length) % f.faces.length, true);
+  };
+
+  var defaultFace = function (f) {
+    for (var i = 0; i < f.faces.length; i++) if (/^(regular|normal|roman|book)$/i.test(f.faces[i].style)) return i;
+    return 0;
+  };
+
+  var toggleFav = function (name) {
+    if (!name) return;
+    var i = favs.indexOf(name);
+    if (i > -1) favs.splice(i, 1); else { favs.push(name); favs.sort(function (a, b) { return a.localeCompare(b); }); }
+    store.set('favs', favs);
+    counts(); renderHud();
+    if (tab === 'fav') renderList();
+    else document.querySelectorAll('[data-star]').forEach(function (b) { if (b.getAttribute('data-star') === name) b.setAttribute('aria-pressed', i < 0); });
+  };
+
+  // ---------- Loading fonts ----------
+  var useFonts = function (fonts) {
+    byName = {}; families = [];
+    fonts.forEach(function (f) {
+      var fam = byName[f.family];
+      if (!fam) { fam = byName[f.family] = { name: f.family, faces: [] }; families.push(fam); }
+      if (f.postscriptName || f.style) fam.faces.push({ ps: f.postscriptName, full: f.fullName, style: f.style || 'Regular' });
+    });
+    families.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    var w = function (s) { s = s.toLowerCase(); return (/thin|hairline/.test(s) ? 1 : /extralight|ultralight/.test(s) ? 2 : /light/.test(s) ? 3 : /medium/.test(s) ? 5 : /semibold|demibold/.test(s) ? 6 : /extrabold|ultrabold/.test(s) ? 8 : /black|heavy/.test(s) ? 9 : /bold/.test(s) ? 7 : 4) + (/italic|oblique/.test(s) ? .5 : 0); };
+    families.forEach(function (f) { f.faces.sort(function (a, b) { return w(a.style) - w(b.style) || a.style.localeCompare(b.style); }); });
+    // Saved picks from a previous visit point at faces that may need refreshing.
+    Object.keys(picks).forEach(function (id) { if (picks[id] && byName[picks[id].fam]) apply(id); });
+    counts(); renderList(); renderStyles(); renderHud();
+  };
+
+  $('[data-load]').addEventListener('click', function () {
+    var st = $('[data-status]');
+    if (!('queryLocalFonts' in window)) {
+      st.innerHTML = 'This browser can’t list installed fonts. Open this page in desktop <b>Chrome</b> or <b>Edge</b>, or type font names instead.';
+      $('[data-manual]').hidden = false; return;
+    }
+    st.textContent = 'Asking for permission…';
+    window.queryLocalFonts().then(function (fonts) {
+      if (!fonts.length) { st.innerHTML = 'No fonts came back. If you clicked “Block”, allow <b>Fonts</b> for this page in the address bar’s site settings and try again.'; return; }
+      useFonts(fonts);
+      st.innerHTML = '<b>' + families.length.toLocaleString() + '</b> families, ' + fonts.length.toLocaleString() + ' styles. Click one or use the arrow keys.';
+    }).catch(function (e) {
+      st.innerHTML = 'Font access was blocked (' + html(e.name || 'error') + '). Allow <b>Fonts</b> for this page in the address bar’s site settings, then try again.';
+    });
+  });
+
+  $('[data-manual-toggle]').addEventListener('click', function () { var m = $('[data-manual]'); m.hidden = !m.hidden; if (!m.hidden) $('[data-manual-text]').focus(); });
+  $('[data-manual-go]').addEventListener('click', function () {
+    var names = $('[data-manual-text]').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!names.length) return;
+    useFonts(names.map(function (n) { return { family: n }; }));
+    $('[data-status]').innerHTML = '<b>' + families.length + '</b> typed names. A font that isn’t installed falls back to the site font.';
+  });
+
+  // ---------- Events ----------
+  $('[data-roles]').addEventListener('click', function (e) {
+    var rs = e.target.closest('[data-reset]'); if (rs) { reset(rs.getAttribute('data-reset')); return; }
+    var b = e.target.closest('[data-role]'); if (!b) return;
+    active = b.getAttribute('data-role'); renderRoles(); renderStyles(); markList(true); renderHud();
+  });
+  $('[data-list]').addEventListener('click', function (e) {
+    var s = e.target.closest('[data-star]'); if (s) { toggleFav(s.getAttribute('data-star')); return; }
+    var b = e.target.closest('[data-fam]'); if (!b) return;
+    var f = byName[b.getAttribute('data-fam')]; if (f) pick(f.name, defaultFace(f), true);
+  });
+  $('[data-style]').addEventListener('change', function (e) { var p = picks[active]; if (p) pick(p.fam, +e.target.value, true); });
+  $('[data-search]').addEventListener('input', renderList);
+  $('[data-sample]').addEventListener('change', renderList);
+  document.querySelectorAll('[data-tab]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      tab = b.getAttribute('data-tab');
+      document.querySelectorAll('[data-tab]').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      renderList();
+    });
+  });
+  $('[data-hud-star]').addEventListener('click', function () { var p = picks[active]; if (p) toggleFav(p.fam); });
+
+  var scale = $('[data-scale]'), track = $('[data-track]');
+  var sliders = function () {
+    root.style.setProperty('--scale', scale.value / 100);
+    root.style.setProperty('--track', (track.value / 100) + 'em');
+    $('[data-scale-out]').textContent = scale.value + '%';
+    $('[data-track-out]').textContent = (track.value / 100).toFixed(2);
+    store.set('sliders', [scale.value, track.value]);
+  };
+  var sv = store.get('sliders', null); if (sv) { scale.value = sv[0]; track.value = sv[1]; }
+  scale.addEventListener('input', sliders); track.addEventListener('input', sliders);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target, inSearch = t.matches && t.matches('[data-search]');
+    var typing = t.isContentEditable || (t.matches && t.matches('textarea, input:not([type=range]):not([type=checkbox])')) || t.tagName === 'SELECT';
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (typing && !inSearch) return; e.preventDefault(); step(e.key === 'ArrowDown' ? 1 : -1); return; }
+    if (e.key === 'Enter' && inSearch) { e.preventDefault(); step(1); return; }
+    if (e.key === 'Escape' && inSearch) { t.value = ''; t.blur(); renderList(); return; }
+    if (typing) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); stepStyle(e.key === 'ArrowRight' ? 1 : -1); }
+    else if (e.key === 'f' || e.key === 'F') { var p = picks[active]; if (p) toggleFav(p.fam); }
+    else if (e.key === 'r' || e.key === 'R') { if (shown.length) { var f = shown[Math.floor(Math.random() * shown.length)]; pick(f.name, defaultFace(f)); } }
+    else if (e.key === '/') { e.preventDefault(); $('[data-search]').focus(); }
+    else if (/^[1-5]$/.test(e.key)) { active = ROLES[+e.key - 1].id; renderRoles(); renderStyles(); markList(true); renderHud(); }
+  });
+
+  // ---------- Start ----------
+  ROLES.forEach(function (r) { if (picks[r.id] && picks[r.id].fam) apply(r.id); });
+  sliders(); renderRoles(); counts(); renderList(); renderHud();
+  if (!('queryLocalFonts' in window)) $('[data-status]').innerHTML = 'This browser can’t list installed fonts. Use desktop <b>Chrome</b> or <b>Edge</b>, or type font names instead.';
+})();
+</script>
+</body>
+</html>

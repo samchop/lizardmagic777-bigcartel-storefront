@@ -82,6 +82,10 @@ Then push any commit; "Retry deployment" only rebuilds the old commit.
   photo, run `tools/elixir-rings.py` on a transparent PNG (instructions at the top of the script); it keeps
   the same file names, so nothing else needs to change.
 
+- `tools/font-tester.html`: tries the fonts installed on your computer on mock-ups of the store
+  (https://lizardmagic-assets.pages.dev/tools/font-tester.html). Open it in desktop Chrome or Edge and press
+  "Load my fonts". Nothing is uploaded, and favourites are saved in that browser only.
+
 ## Astro icons
 
 `assets/icons/astro/` holds the [Astroicons](https://github.com/marcmarine/astroicons) set, copied from
